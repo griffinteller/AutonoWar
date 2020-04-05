@@ -2,8 +2,6 @@
 Battle royale with autonomous, user-programmed players
 
 GitHub is being uncooperative with large files, so until I beat it into submission, I am just going to keep links to builds here:<br><br>
-Mac 0.0.3: https://developer.cloud.unity3d.com/share/share.html?shareId=ZJQqY1oAoB<br>
-Windows 0.0.3: https://developer.cloud.unity3d.com/share/share.html?shareId=Wk_UsksRir<br><br>
 Mac 0.0.2: https://developer.cloud.unity3d.com/share/share.html?shareId=-10PBxgAoB<br>
 <br>
 <br>
