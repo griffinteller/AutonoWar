@@ -25,7 +25,7 @@ Documentation (0.0.3): <br><br>
    
   * `state_dict["gyroscope"]`: Sensor containing rotation information of the robot:
   
-    * `state_dict["gyroscope"]["right"]`: Unit vector pointing right RELATIVE to the robot. For example, if the robot was facing in the default direction, its right vector would be <1, 0, 0> because its right direction is east. If the robot turned 90 degees counterclockwise, its right vector would be <0, 0, 1>. If the robot was facing a bering of 45 degrees and was climbing a 20 degree grade, its right vector would be <cos(45), sin(20), sin(45)>.
+    * `state_dict["gyroscope"]["right"]`: Unit vector pointing right RELATIVE to the robot. For example, if the robot was facing in the default direction, its right vector would be <1, 0, 0> because its right direction is east. If the robot turned 90 degees counterclockwise, its right vector would be <0, 0, 1>. If the robot was facing a bering of 45 degrees and was climbing a 20 degree grade, its right vector would be <cos(45), sin(20), sin(45)> / sqrt(cos(45)^2 + sin(20)^2 + sin(45)^2).
     
     * `state_dict["gyroscope"]["up"]`: Unit vector pointing up RELATIVE to the robot. Same idea as before.
     
