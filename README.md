@@ -2,7 +2,7 @@
 Battle royale with autonomous, user-programmed players
 <br>
 <br>
-Documentation (ABR v0.1.2, abrconnection v0.1.0): <br><br>
+Documentation (ABR v0.1.3, abrconnection v0.1.0): <br><br>
 
 * Coordinate system is left-handed, with x being east, y being upwards, and z being north.
 
