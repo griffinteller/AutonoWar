@@ -12,6 +12,8 @@ Documentation (ABR v0.1.3, abrconnection v0.1.0): <br><br>
 
 * `RobotConnection.set_tire_steering(tire_name, bering)`: sets tire `tire_name` to `bering`. All angles/berings are clockwise off of vertical (unity's coordinate system is left-handed).
 
+* `RobotConnection.flip_coordinates`: flips relative coordiates 180 degrees around the forward axis to facilitate steering in the case that the robot lands upside-down (or you just feel like it ¯\_(ツ)_/¯) 
+
 * `RobotConnection.sensors`: Dictionary/Hashtable containing information about the state of the robot.  
 
   * Vectors are stored as dictionaries with keys `"x"`, `"y"`, and `"z"`.
