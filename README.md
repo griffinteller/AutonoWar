@@ -34,5 +34,6 @@ Documentation (AutonoWar v0.2.1, abrconnection v0.1.0): <br><br>
   * `sensors["radar"]["pings"]`: array of vectors representing opponent locations
   * `sensors["radar"]["itPing"]`: location of "it" in classic tag.
   * `sensors["altimeter"]["altitude"]`: distance to ground in world space (i.e. NOT normal to robot)
-  * `sensors["isIt"]`: boolean indicating whether the player is "it".
+  * `sensors["isIt"]`: boolean indicating whether the player is "it"
+  * `sensors["timestamp"]`: UTC-milliseconds indicating the time of the last sensor update
   
