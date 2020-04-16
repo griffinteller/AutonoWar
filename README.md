@@ -1,8 +1,8 @@
-# autonomous-battle-royale
+# AutonoWar
 Battle royale with autonomous, user-programmed players
 <br>
 <br>
-Documentation (ABR v0.1.3, abrconnection v0.1.0): <br><br>
+Documentation (AutonoWar v0.2.1, abrconnection v0.1.0): <br><br>
 
 * Coordinate system is left-handed, with x being east, y being upwards, and z being north.
 
@@ -32,4 +32,7 @@ Documentation (ABR v0.1.3, abrconnection v0.1.0): <br><br>
     
   * `sensors["lidar"]["distanceArray"]`: Array containing distance to any object at 1 degree increments. `state_dict["lidar"]["distanceArray"][0]` would describe how many meters of clearance the robot has in front of itself, `state_dict["lidar"]["distanceArray"][90]` would describe its clearance to the right, and so on. If the robot has more than 100 meters of clearance in a particular direction, the value will capped at 100. In future updates, lidar upgrades might include an increase in range or density for in-game currency. Vertical FOV will be coming soon.
   * `sensors["radar"]["pings"]`: array of vectors representing opponent locations
+  * `sensors["radar"]["itPing"]`: location of "it" in classic tag.
   * `sensors["altimeter"]["altitude"]`: distance to ground in world space (i.e. NOT normal to robot)
+  * `sensors["isIt"]`: boolean indicating whether the player is "it".
+  
