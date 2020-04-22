@@ -1,0 +1,7 @@
+<WorldCreator Version="2.0">
+  <Textures Preview="preview.png" Tags="snow" Description="" Publisher="GameTextures" Website="https://www.gametextures.com/" Guid="b7b4db11-0d28-4bb7-89bc-1ce5c7e0fdf0">
+    <Diffuse File="Ground_ClumpySnow_col.png" Time="131899138420000000" />
+    <Normal File="Ground_ClumpySnow_norm.png" Time="131899141200000000" />
+    <Displacement File="" Time="132319673243559115" />
+  </Textures>
+</WorldCreator>

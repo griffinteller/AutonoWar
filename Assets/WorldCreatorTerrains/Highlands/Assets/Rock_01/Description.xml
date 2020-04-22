@@ -1,0 +1,7 @@
+<WorldCreator Version="2.0">
+  <Textures Preview="preview.png" Tags="rocky" Description="" Publisher="GameTextures" Website="https://www.gametextures.com/" Guid="a65c5d04-0480-491f-a106-352a5288dd41">
+    <Diffuse File="Ground_GuiRockyGroundRubble_col.png" Time="131957071340000000" />
+    <Normal File="Ground_GuiRockyGroundRubble_norm.png" Time="131957071340000000" />
+    <Displacement File="" Time="132319673242547639" />
+  </Textures>
+</WorldCreator>

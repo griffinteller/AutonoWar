@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5563761087889648862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5563761087889648861}
+  - component: {fileID: 5563761087889648860}
+  - component: {fileID: 5563761087889648863}
+  - component: {fileID: 5563761087889648850}
+  m_Layer: 0
+  m_Name: BuildTerrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &5563761087889648861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563761087889648862}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -100, y: 0, z: -100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!218 &5563761087889648860
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563761087889648862}
+  m_Enabled: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: 1194122f35ddd3d4faa3fddbb1b84aad, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ScaleInLightmap: 0.0256
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 1
+--- !u!154 &5563761087889648863
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563761087889648862}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: 1194122f35ddd3d4faa3fddbb1b84aad, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!114 &5563761087889648850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563761087889648862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335cca68f149de548b39b11347b96b04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrains:
+  - {fileID: 5563761087889648860}
+  preset:
+    brushSize: 16.801523
+    brushFallof: 0.6
+    brushSpacing: 0.15
+    downscale: 1
+    blur: 0.1
+    preserveDetail: 0
+    isErosion: 1
+    isNoise: 0
+    noise_seed: 12345
+    noise_amount: 20
+    noise_size: 200
+    noise_detail: 0.55
+    noise_uplift: 0.8
+    noise_ruffle: 1
+    erosion_iterations: 3
+    erosion_durability: 0.939628
+    erosion_fluidityIterations: 3
+    erosion_amount: 0.77670944
+    sediment_amount: 0.4037198
+    wind_amount: 0.75
+    erosion_smooth: 0.33493078
+    ruffle: 0.6393322
+    foreground:
+      apply: 1
+      opacity: 5.2364783
+      num: 1
+    background:
+      apply: 0
+      opacity: 1
+      num: 0
+    name: 
+    saveBrushSize: 0
+    saveBrushParams: 0
+    saveErosionNoiseParams: 0
+    saveSplatParams: 0
+  presets: []
+  guiSelectedPreset: 0
+  paint: 0
+  wasPaint: 0
+  moveDown: 0
+  moveTfm: {fileID: 0}
+  gen: 0
+  undo: 0
+  guiApplyIterations: 1
+  guiChannels: 
+  guiChannelNames: []
+  guiBrushColor: {r: 1, g: 0.7, b: 0.3, a: 1}
+  guiBrushThickness: 4
+  guiBrushNumCorners: 32
+  recordUndo: 1
+  unity5positioning: 0
+  focusOnBrush: 1
+  guiShowPreset: 1
+  guiShowBrush: 1
+  guiShowErosion: 1
+  guiShowNoise: 1
+  guiShowTextures: 1
+  guiShowGlobal: 0
+  guiShowSettings: 0
+  guiShowAbout: 0
+  guiMaxBrushSize: 100
+  guiSelectPresetsUsingNumkeys: 1
+  guiControlUsed: 0
+  applyCount: 0
+  currentUndoState: 6
+  referenceUndoState: 6
+  allowUndo: 0
