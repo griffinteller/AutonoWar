@@ -4,7 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UI.old
+namespace UI
 {
     public class InGameUIScript : MonoBehaviour
     {
