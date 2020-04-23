@@ -27,8 +27,8 @@ thumbs.db
 Thumbs.db
 desktop.ini
 Desktop.ini
+obj/**
 
 .idea/**
 Library/**
 Logs/**
-obj/**
