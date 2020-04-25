@@ -13,7 +13,6 @@ namespace Main
         public GameObject robotBody;
 
         public int internalNegation = 1; // Wheels should keep spinning in same direction regardless of user coord flipping
-        public int userNegation = 1;
         public int actorNumber;
         
         public float maxAngularVelocity;  // unity sets an unreasonably low limit of 7
@@ -74,13 +73,13 @@ namespace Main
         }
 
         // flips user coordinates around forward axis to facilitate steering and prevent turtleing, if the user wants
-        public void FlipUserCoordinates()
+        /*public void FlipUserCoordinates()
         {
             
             userNegation *= -1;
             _robotStateSender.robotStateDescription.gyroscope.orientationNegation *= -1; // flip user coordinates
 
-        }
+        }*/
 
         // gets and/or creates directory for game files
         private void InitDataDirectory()
@@ -127,7 +126,7 @@ namespace Main
 
             }
 
-            userNegation = 1;
+            //userNegation = 1;
             robotBody.transform.localRotation = Quaternion.identity;
 
         }
@@ -170,7 +169,7 @@ namespace Main
         {
 
             var tireObject = CachedFind(tireName);
-            tireObject.GetComponent<WheelCollider>().motorTorque = torque * internalNegation * userNegation;
+            tireObject.GetComponent<WheelCollider>().motorTorque = torque * internalNegation; //* userNegation;
 
         }
 
@@ -191,9 +190,9 @@ namespace Main
         {
             
             var tireObject = CachedFind(tireName);
-            tireObject.GetComponent<WheelCollider>().steerAngle = userNegation * internalNegation * bering;
+            tireObject.GetComponent<WheelCollider>().steerAngle = internalNegation * bering;
             CachedFind(tireName + "Vis").transform.localRotation = Quaternion.Euler(
-                0, bering * userNegation, 0);
+                0, bering, 0);
 
         }
 

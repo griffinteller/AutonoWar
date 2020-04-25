@@ -141,16 +141,16 @@ namespace Main
                     Set(argsList);
                     break;
                 
-                case "COORDINATES":
+                /*case "COORDINATES":
 
                     Coordinates(argsList);
-                    break;
+                    break;*/
                 
             }
 
         }
 
-        private void Coordinates(List<string> remainingCommand)
+        /*private void Coordinates(List<string> remainingCommand)
         {
 
             switch (remainingCommand[0])
@@ -163,7 +163,7 @@ namespace Main
                 
             }
 
-        }
+        }*/
 
         private void Set(List<string> remainingCommand)
         {

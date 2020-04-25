@@ -13,8 +13,16 @@ namespace Main.Building
         public void Start()
         {
 
-            _currentItemBuildComponent = currentItemPrefab.GetComponent<BuildObjectComponent>();
+            SetCurrentObject(currentItemPrefab); // updates the build component reference
 
+        }
+
+        public void SetCurrentObject(GameObject prefab)
+        {
+
+            currentItemPrefab = prefab;
+            _currentItemBuildComponent = currentItemPrefab.GetComponent<BuildObjectComponent>();
+            
         }
 
         public void Update()
@@ -43,14 +51,14 @@ namespace Main.Building
 
             // we can now be sure we are placing a new item
             
-            var newObjectRotation = Quaternion.FromToRotation(_currentItemBuildComponent.connectingFaceOutwardsDirection,
+            var newObjectRotation = Quaternion.FromToRotation(_currentItemBuildComponent.GetConnectingFaceOutwardsDirection(),
                 -connection.outwardsDirection); // rotate the item so that the two connecting faces are facing each other
             
-            Instantiate(currentItemPrefab, connection.newObjectCenter, newObjectRotation, transform);
-            
+            var tmp = Instantiate(currentItemPrefab, connection.newObjectCenter, newObjectRotation, transform);
+
         }
 
-        private void RemoveItemIfPossible()
+        private static void RemoveItemIfPossible()
         {
             
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);

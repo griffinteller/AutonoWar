@@ -1,6 +1,6 @@
 /target:library
 /nowarn:0169
-/out:Temp/Assembly-CSharp.dll
+/out:Temp/Unity.Settings.Editor.dll
 /debug:portable
 /optimize-
 /nostdlib+
@@ -67,39 +67,20 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.dll"
-/reference:Library/ScriptAssemblies/Unity.Timeline.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.TerrainTools.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.VSCode.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.dll
-/reference:Library/ScriptAssemblies/Unity.InputSystem.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll
-/reference:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
-/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
-/reference:Library/ScriptAssemblies/Unity.Timeline.dll
-/reference:Library/ScriptAssemblies/PhotonWebSocket.dll
-/reference:Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonRealtime.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.Rider.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.dll
-/reference:Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonChat.dll
-/reference:Library/ScriptAssemblies/Unity.TextMeshPro.dll
-/reference:Library/ScriptAssemblies/Unity.TerrainTools.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.Culling.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Editor.dll
 /reference:Library/ScriptAssemblies/UnityEditor.UI.dll
-/reference:Library/ScriptAssemblies/com.unity.quicksearch.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
+/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
+/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+/reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
+/reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
+/reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll"
+/reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll"
 /reference:Assets/Photon/PhotonLibs/Photon3Unity3D.dll
 /reference:Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll
 /reference:Assets/Plugins/Newtonsoft.Json.dll
 /reference:C:/Users/griff/AutonoWar/Library/PackageCache/com.unity.purchasing@2.0.6/UnityEngine.Purchasing.dll
+/reference:C:/Users/griff/AutonoWar/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll
+/reference:C:/Users/griff/AutonoWar/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/System.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/System.Core.dll"
@@ -244,6 +225,7 @@
 /define:ENABLE_AUDIO
 /define:ENABLE_CACHING
 /define:ENABLE_CLOTH
+/define:ENABLE_EVENT_QUEUE
 /define:ENABLE_MICROPHONE
 /define:ENABLE_MULTIPLE_DISPLAYS
 /define:ENABLE_PHYSICS
@@ -261,7 +243,6 @@
 /define:ENABLE_CLOUD_SERVICES_ADS
 /define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
 /define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
-/define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
 /define:ENABLE_CLOUD_SERVICES_PURCHASING
 /define:ENABLE_CLOUD_SERVICES_ANALYTICS
 /define:ENABLE_CLOUD_SERVICES_UNET
@@ -282,20 +263,19 @@
 /define:RENDER_SOFTWARE_CURSOR
 /define:ENABLE_VIDEO
 /define:PLATFORM_STANDALONE
-/define:PLATFORM_STANDALONE_OSX
-/define:UNITY_STANDALONE_OSX
+/define:PLATFORM_STANDALONE_WIN
+/define:UNITY_STANDALONE_WIN
 /define:UNITY_STANDALONE
-/define:ENABLE_GAMECENTER
 /define:ENABLE_RUNTIME_GI
 /define:ENABLE_MOVIES
 /define:ENABLE_NETWORK
 /define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+/define:ENABLE_OUT_OF_PROCESS_CRASH_HANDLER
 /define:ENABLE_CLUSTER_SYNC
 /define:ENABLE_CLUSTERINPUT
-/define:ENABLE_SPATIALTRACKING
 /define:ENABLE_WEBSOCKET_HOST
 /define:ENABLE_MONO
-/define:NET_STANDARD_2_0
+/define:NET_4_6
 /define:ENABLE_PROFILER
 /define:DEBUG
 /define:TRACE
@@ -321,90 +301,14 @@
 /define:CROSS_PLATFORM_INPUT
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-Assets\ErosionBrush\ErosionBrush.cs
-Assets\ErosionBrush\Scripts\ArrayTools.cs
-Assets\ErosionBrush\Scripts\Erosion.cs
-Assets\ErosionBrush\Scripts\Extensions.cs
-Assets\ErosionBrush\Scripts\Matrix.cs
-Assets\ErosionBrush\Scripts\Matrix2.cs
-Assets\ErosionBrush\Scripts\Noise.cs
-Assets\ErosionBrush\Scripts\WeldTerrains.cs
-Assets\Scripts\Main\ActionHandler.cs
-Assets\Scripts\Main\Building\BuildCameraMovement.cs
-Assets\Scripts\Main\Building\BuildHandler.cs
-Assets\Scripts\Main\Building\BuildObjectComponent.cs
-Assets\Scripts\Main\Building\BuildObjectShape.cs
-Assets\Scripts\Main\Building\ConnectionDescription.cs
-Assets\Scripts\Main\CameraMotionScript.cs
-Assets\Scripts\Main\ClassicTagScript.cs
-Assets\Scripts\Main\Lerper.cs
-Assets\Scripts\Main\Robot.cs
-Assets\Scripts\Main\RobotStateSender.cs
-Assets\Scripts\Main\ScriptEditorBehaviour.cs
-Assets\Scripts\Main\ScriptEditorButtonBehaviour.cs
-Assets\Scripts\Main\ScriptExecutor.cs
-Assets\Scripts\Main\Sensor\Altimeter.cs
-Assets\Scripts\Main\Sensor\GPS.cs
-Assets\Scripts\Main\Sensor\Gyroscope.cs
-Assets\Scripts\Main\Sensor\ISensor.cs
-Assets\Scripts\Main\Sensor\Lidar.cs
-Assets\Scripts\Main\Sensor\Radar.cs
-Assets\Scripts\Main\TireAnimation.cs
-Assets\Scripts\Main\UserScriptInterpreter.cs
-Assets\Scripts\Main\WheelColliderFlippingBehaviour.cs
-Assets\Scripts\Networking\PhotonEvent.cs
-Assets\Scripts\Networking\PlayerConnection.cs
-Assets\Scripts\Networking\RobotGrabber.cs
-Assets\Scripts\Networking\RobotNetworkBridge.cs
-Assets\Scripts\Tests\CameraPan.cs
-Assets\Scripts\UI\CooldownInput.cs
-Assets\Scripts\UI\InGameUIScript.cs
-Assets\Scripts\UI\MainMenuHandler.cs
-Assets\Scripts\UI\MultiplayerMenuScript.cs
-Assets\Scripts\UI\RoomJoiningBehavior.cs
-Assets\Scripts\UI\old\MainMenuScript.cs
-Assets\Scripts\UI\old\MenuBridge.cs
-Assets\Scripts\Utility\ArrayContainer.cs
-Assets\Scripts\Utility\TerrainUtility.cs
-Assets\Scripts\Utility\TimeUtility.cs
-"Assets\TextMesh Pro\Examples & Extras\Scripts\Benchmark01.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\Benchmark01_UGUI.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\Benchmark02.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\Benchmark03.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\Benchmark04.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\CameraController.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\ChatController.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\EnvMapAnimator.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\ObjectSpin.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\ShaderPropAnimator.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\SimpleScript.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\SkewTextExample.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_DigitValidator.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_ExampleScript_01.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_FrameRateCounter.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_PhoneNumberValidator.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_TextEventCheck.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_TextEventHandler.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_TextInfoDebugTool.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_TextSelector_A.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_TextSelector_B.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMP_UiFrameRateCounter.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TMPro_InstructionOverlay.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TeleType.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TextConsoleSimulator.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TextMeshProFloatingText.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\TextMeshSpawner.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\VertexColorCycler.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\VertexJitter.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\VertexShakeA.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\VertexShakeB.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\VertexZoom.cs"
-"Assets\TextMesh Pro\Examples & Extras\Scripts\WarpTextExample.cs"
-Assets\WorldCreatorUnityBridge\Source\BridgeEditor.cs
-Assets\WorldCreatorUnityBridge\Source\BridgeLogic.cs
-Assets\WorldCreatorUnityBridge\Source\BridgeSettings.cs
-Assets\WorldCreatorUnityBridge\Source\Importer.cs
-Assets\WorldCreatorUnityBridge\Source\MaterialType.cs
-Assets\WorldCreatorUnityBridge\Source\ObjectSettings.cs
-Assets\WorldCreatorUnityBridge\Source\UnityTerrainUtility.cs
-Assets\WorldCreatorUnityBridge\Source\Util.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\Attributes.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\ISettingsRepository.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\PackageSettingsRepository.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\Settings.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\SettingsDictionary.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\SettingsGUILayout.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSetting.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettings.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettingsProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettingsRepository.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\ValueWrapper.cs

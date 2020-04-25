@@ -356,7 +356,7 @@ PrefabInstance:
     - target: {fileID: 1467070168979876491, guid: f85e687a1917adf4ab681b85bd75db5f,
         type: 3}
       propertyPath: zoomSensitivity
-      value: 50
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 1467070168979876491, guid: f85e687a1917adf4ab681b85bd75db5f,
         type: 3}

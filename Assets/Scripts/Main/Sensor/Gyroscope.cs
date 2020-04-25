@@ -7,28 +7,32 @@ namespace Main.Sensor
     public class Gyroscope
     {
 
-        private GameObject _robot;
-
-        public int orientationNegation = 1;
+        private GameObject _robotBody;
 
         public Vector3 forward;
         public Vector3 right;
         public Vector3 up;
 
-        public Gyroscope(GameObject robot)
+        public bool isUpsideDown;
+
+        public Gyroscope(GameObject robotBody)
         {
 
-            _robot = robot;
+            _robotBody = robotBody;
             Update();
 
         }
 
         public void Update()
         {
+
+            var robotBodyTransform = _robotBody.transform;
                 
-            forward = _robot.transform.forward;
-            right = _robot.transform.right * orientationNegation;
-            up = _robot.transform.up * orientationNegation;
+            forward = robotBodyTransform.forward;
+            right = robotBodyTransform.right;
+            up = robotBodyTransform.up;
+
+            isUpsideDown = up.y < 0;
 
         }
 

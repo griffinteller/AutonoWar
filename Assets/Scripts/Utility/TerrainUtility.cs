@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Utility
 {
-    public class TerrainUtility
+    public static class TerrainUtility
     {
         
         [CanBeNull]

@@ -60,8 +60,8 @@ namespace Main.Sensor
                 {
 
                     var rayDirectionLocal = 
-                        Quaternion.AngleAxis(j * horizontalDensity * _actionHandler.userNegation, Vector3.up)
-                        * Quaternion.AngleAxis(verticalFOVBounds[0] + i * verticalDensity * _actionHandler.userNegation, Vector3.right)
+                        Quaternion.AngleAxis(j * horizontalDensity, Vector3.up)
+                        * Quaternion.AngleAxis(verticalFOVBounds[0] + i * verticalDensity, Vector3.right)
                         * Vector3.forward;
                     
                     var rayDirectionWorld = _robotBody.transform.TransformDirection(rayDirectionLocal);

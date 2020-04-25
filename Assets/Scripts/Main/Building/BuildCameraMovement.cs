@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Utility;
 
 namespace Main.Building
 {
@@ -11,8 +12,8 @@ namespace Main.Building
         private void Start()
         {
             moveSensitivity *= 0.5f;
-            lookSensitivity *= 20f;
-            Cursor.lockState = CursorLockMode.Locked;
+            lookSensitivity *= 10f;
+            
         }
 
         // Update is called once per frame
@@ -22,16 +23,22 @@ namespace Main.Building
             var deltaTime = Time.smoothDeltaTime;
 
             var t = transform;
-            transform.Rotate(t.right, -Input.GetAxis("Mouse Y") * lookSensitivity * deltaTime, Space.World);
-            if (t.up.y < 0)
+            var mouseDelta = InputUtility.GetMouseDelta();
+
+            if (Input.GetMouseButton(0))
             {
                 
-                transform.Rotate(t.right, Input.GetAxis("Mouse Y") * lookSensitivity * deltaTime, Space.World);
+                transform.Rotate(t.right, -mouseDelta.y * lookSensitivity * deltaTime, Space.World);
+                if (t.up.y < 0)
+                {
+                
+                    transform.Rotate(t.right, mouseDelta.y * lookSensitivity * deltaTime, Space.World);
+                
+                }
+            
+                transform.Rotate(Vector3.up, mouseDelta.x * lookSensitivity * deltaTime, Space.World);
                 
             }
-            
-            transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * lookSensitivity * deltaTime, Space.World);
-
             var rotatedForwardVector = Vector3.ProjectOnPlane(t.forward, Vector3.up).normalized;
             
             t.Translate(rotatedForwardVector * (Input.GetAxis("Vertical") * moveSensitivity * deltaTime), Space.World);

@@ -86,7 +86,7 @@ namespace Main
             if (Input.GetMouseButton(0))
             {
 
-                var mouseDelta = GetMouseDelta();
+                var mouseDelta = InputUtility.GetMouseDelta();
                 var horizRotation = Quaternion.Euler(0, mouseDelta.x * lookSensitivity, 0);
                 var vertRotation = Quaternion.AngleAxis(-mouseDelta.y * lookSensitivity, transform.right);
             
@@ -99,18 +99,11 @@ namespace Main
                 }
                 
             }
-
+            
             transform.position = viewCenter + rotDelta;
             _centerDelta = rotDelta;
             transform.LookAt(viewCenter);
 
-        }
-
-        private Vector2 GetMouseDelta()
-        {
-            
-            return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-            
         }
 
         private bool IsDeltaAngleTooHigh(Vector3 delta)

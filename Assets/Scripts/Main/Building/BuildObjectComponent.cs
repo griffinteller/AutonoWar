@@ -3,14 +3,12 @@ using UnityEngine;
 
 namespace Main.Building
 {
-    public class BuildObjectComponent : MonoBehaviour
+    public abstract class BuildObjectComponent : MonoBehaviour
     {
-
-        public BuildObjectShape shape;
 
         public bool removable = true;
 
-        [HideInInspector] public Vector3 connectingFaceOutwardsDirection;
+        private Vector3 connectingFaceOutwardsDirection;
 
         public void Start()
         {
@@ -19,7 +17,11 @@ namespace Main.Building
 
         }
 
-        public ConnectionDescription GetConnection(Vector3 hitpointWorldspace)
+        public abstract ConnectionDescription GetConnection(Vector3 hitPointWorldSpace);
+
+        public abstract Vector3 GetConnectingFaceOutwardsDirection();
+
+        /*public ConnectionDescription GetConnection(Vector3 hitpointWorldspace)
         {
 
             var hitpointLocalSpace = transform.InverseTransformPoint(hitpointWorldspace);
@@ -70,7 +72,6 @@ namespace Main.Building
             switch (shape)
             {
                 
-                
                 case BuildObjectShape.Cube:
 
                     return Vector3.down;
@@ -79,7 +80,7 @@ namespace Main.Building
             
             throw new NotImplementedException();
             
-        }
-        
+        }*/
+
     }
 }
