@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utility;
 
 namespace UI
 {
@@ -19,56 +20,21 @@ namespace UI
         
         }
 
-        public static void EnableCanvasGroup(CanvasGroup panel)
-        {
-
-            panel.alpha = 1;
-            panel.interactable = true;
-            panel.blocksRaycasts = true;
-
-        }
-    
-        private static void DisableCanvasGroup(CanvasGroup panel)
-        {
-
-            panel.alpha = 0;
-            panel.interactable = false;
-            panel.blocksRaycasts = false;
-
-        }
-
         public void DisplayPanel(CanvasGroup panel)
         {
             
             DisableAllMainPanels();
-            EnableCanvasGroup(panel);
+            UIUtility.EnableCanvasGroup(panel);
             
         }
 
         private void DisableAllMainPanels()
         {
 
-            foreach (var panel in mainPanels)
-            {
-                
-                DisableCanvasGroup(panel);
-                
-            }
+            UIUtility.DisableAllPanels(mainPanels);
 
         }
 
-        public static void DisableAllPanels(List<CanvasGroup> panels)
-        {
-            
-            foreach (var panel in panels)
-            {
-                
-                DisableCanvasGroup(panel);
-                
-            }
-            
-        }
-        
         public void StartSingleplayer()
         {
 
@@ -81,7 +47,7 @@ namespace UI
 
             //mainCamera.GetComponent<CameraPan>().enabled = true;
             DisableAllMainPanels();
-            EnableCanvasGroup(homePanel);
+            UIUtility.EnableCanvasGroup(homePanel);
 
         }
     

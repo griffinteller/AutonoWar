@@ -5,31 +5,32 @@ namespace Main.Building
 {
     public class BuildCubeComponent : BuildObjectComponent
     {
+
+        public float radius;
+        public float deadZone = 0.025f;
+
         public override ConnectionDescription GetConnection(Vector3 hitPointWorldSpace)
         {
             
             var hitPointLocalSpace = transform.InverseTransformPoint(hitPointWorldSpace);
             var distanceToNewCenter = new Vector3();
-            
-            const float deadZone = 0.025f;
-            const float sideLength = 0.5f;
 
-            if (Math.Abs(hitPointLocalSpace.x) - (sideLength / 2 - deadZone) > 0)
+            if (Math.Abs(hitPointLocalSpace.x) - (radius - deadZone) > 0)
             {
-                distanceToNewCenter.x = Mathf.Sign(hitPointLocalSpace.x) * sideLength;
+                distanceToNewCenter.x = Mathf.Sign(hitPointLocalSpace.x) * radius;
             }
             
-            if (Math.Abs(hitPointLocalSpace.y) - (sideLength / 2 - deadZone) > 0)
+            if (Math.Abs(hitPointLocalSpace.y) - (radius - deadZone) > 0)
             {
-                distanceToNewCenter.y = Mathf.Sign(hitPointLocalSpace.y) * sideLength;
+                distanceToNewCenter.y = Mathf.Sign(hitPointLocalSpace.y) * radius;
             }
             
-            if (Math.Abs(hitPointLocalSpace.z) - (sideLength / 2 - deadZone) > 0)
+            if (Math.Abs(hitPointLocalSpace.z) - (radius - deadZone) > 0)
             {
-                distanceToNewCenter.z = Mathf.Sign(hitPointLocalSpace.z) * sideLength;
+                distanceToNewCenter.z = Mathf.Sign(hitPointLocalSpace.z) * radius;
             }
 
-            if (distanceToNewCenter.magnitude - sideLength > float.Epsilon)
+            if (distanceToNewCenter.magnitude - radius > float.Epsilon)
             {
                 return null; // don't connect if we're on a corner
             }
@@ -46,6 +47,13 @@ namespace Main.Building
             
             return Vector3.down;
             
+        }
+
+        public override float GetRadius()
+        {
+
+            return radius;
+
         }
     }
 }

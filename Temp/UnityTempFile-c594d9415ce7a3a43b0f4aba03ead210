@@ -1,11 +1,16 @@
 /target:library
 /nowarn:0169
-/out:Temp/Unity.Settings.Editor.dll
+/out:Temp/Unity.2D.Sprite.Editor.dll
+/unsafe
 /debug:portable
 /optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:latest
+/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
+/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
+/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -67,10 +72,6 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.dll"
-/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
-/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
-/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
-/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll"
@@ -225,7 +226,6 @@
 /define:ENABLE_AUDIO
 /define:ENABLE_CACHING
 /define:ENABLE_CLOTH
-/define:ENABLE_EVENT_QUEUE
 /define:ENABLE_MICROPHONE
 /define:ENABLE_MULTIPLE_DISPLAYS
 /define:ENABLE_PHYSICS
@@ -243,6 +243,7 @@
 /define:ENABLE_CLOUD_SERVICES_ADS
 /define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
 /define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+/define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
 /define:ENABLE_CLOUD_SERVICES_PURCHASING
 /define:ENABLE_CLOUD_SERVICES_ANALYTICS
 /define:ENABLE_CLOUD_SERVICES_UNET
@@ -263,16 +264,17 @@
 /define:RENDER_SOFTWARE_CURSOR
 /define:ENABLE_VIDEO
 /define:PLATFORM_STANDALONE
-/define:PLATFORM_STANDALONE_WIN
-/define:UNITY_STANDALONE_WIN
+/define:PLATFORM_STANDALONE_OSX
+/define:UNITY_STANDALONE_OSX
 /define:UNITY_STANDALONE
+/define:ENABLE_GAMECENTER
 /define:ENABLE_RUNTIME_GI
 /define:ENABLE_MOVIES
 /define:ENABLE_NETWORK
 /define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
-/define:ENABLE_OUT_OF_PROCESS_CRASH_HANDLER
 /define:ENABLE_CLUSTER_SYNC
 /define:ENABLE_CLUSTERINPUT
+/define:ENABLE_SPATIALTRACKING
 /define:ENABLE_WEBSOCKET_HOST
 /define:ENABLE_MONO
 /define:NET_4_6
@@ -301,14 +303,33 @@
 /define:CROSS_PLATFORM_INPUT
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\Attributes.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\ISettingsRepository.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\PackageSettingsRepository.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\Settings.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\SettingsDictionary.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\SettingsGUILayout.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSetting.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettings.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettingsProvider.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\UserSettingsRepository.cs
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.settings-manager@1.0.0\Editor\ValueWrapper.cs
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\AssemblyInfo.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IAssetDatabase.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IEvent.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IGL.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IGUIUtility.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IHandles.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\ISpriteEditorDataProvider.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\ITexture.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\Interface\IUndoSystem.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\ShapeEditor\ShapeEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\ShapeEditor\ShapeEditorRectSelection.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteEditorHandles.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteEditorMenu.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteEditorUtility.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteEditorWindow.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteRect.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditor\SpriteUtilityWindow.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\ISpriteEditorModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteEditorData.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpriteFrameModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpriteFrameModuleBase.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpriteFrameModuleBaseView.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpriteFrameModuleView.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpritePolygonModeModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteFrameModule\SpritePolygonModeModuleView.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteOutlineModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpritePhysicsShapeModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\SpriteSecondaryTexturesModule.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\TextureImporterDataProvider.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.2d.sprite\Editor\SpriteEditorModule\TextureImporterDataProviderImplementation.cs"

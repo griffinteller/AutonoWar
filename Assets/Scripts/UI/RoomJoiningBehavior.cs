@@ -60,7 +60,7 @@ namespace UI
 
             Debug.Log("Finding Match");
             _findingRoom = true;
-            PhotonNetwork.NickName = PlayerPrefs.GetString(MultiplayerMenuScript.NickNameKey);
+            PhotonNetwork.NickName = PlayerPrefs.GetString(MultiPlayerMenuScript.NickNameKey);
             PhotonNetwork.GameVersion = _gameVersion;
             if (PhotonNetwork.IsConnected)
             {

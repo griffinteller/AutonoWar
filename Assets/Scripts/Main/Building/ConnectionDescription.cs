@@ -5,7 +5,7 @@ namespace Main.Building
     public class ConnectionDescription
     {
         
-        public Vector3 newObjectCenter;
+        public Vector3 connectionCenter;
         public Vector3 outwardsDirection;
 
         public static implicit operator bool(ConnectionDescription a)
@@ -15,10 +15,10 @@ namespace Main.Building
 
         }
 
-        public ConnectionDescription(Vector3 newObjectCenter, Vector3 outwardsDirection)
+        public ConnectionDescription(Vector3 connectionCenter, Vector3 outwardsDirection)
         {
 
-            this.newObjectCenter = newObjectCenter;
+            this.connectionCenter = connectionCenter;
             this.outwardsDirection = outwardsDirection;
 
         }

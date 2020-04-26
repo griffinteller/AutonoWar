@@ -2,10 +2,11 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 
 namespace UI
 {
-    public class MultiplayerMenuScript : MonoBehaviour
+    public class MultiPlayerMenuScript : MonoBehaviour
     {
 
         public List<CanvasGroup> panels;
@@ -19,7 +20,7 @@ namespace UI
         private void DisableAllPanels()
         {
             
-            MainMenuHandler.DisableAllPanels(panels);
+            UIUtility.DisableAllPanels(panels);
             
         }
 
@@ -27,7 +28,7 @@ namespace UI
         {
             
             DisableAllPanels();
-            MainMenuHandler.EnableCanvasGroup(panel);
+            UIUtility.EnableCanvasGroup(panel);
             
         }
 

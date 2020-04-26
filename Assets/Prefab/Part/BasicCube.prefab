@@ -58,9 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad6884d027f49209f883e239361dbce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shape: 0
   removable: 1
-  connectingFaceOutwardsDirection: {x: 0, y: 0, z: 0}
+  collider: {fileID: 718494814348611925}
+  radius: 0.25
 --- !u!1 &6195532150528114078
 GameObject:
   m_ObjectHideFlags: 0

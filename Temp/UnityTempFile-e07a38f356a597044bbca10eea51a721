@@ -1,43 +1,17 @@
 /target:library
 /nowarn:0169
-/out:Temp/Assembly-CSharp-Editor.dll
+/out:Temp/Unity.ProBuilder.AddOns.Editor.dll
 /debug:portable
 /optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:latest
-/reference:Library/ScriptAssemblies/Assembly-CSharp.dll
+/reference:Library/ScriptAssemblies/Unity.ProBuilder.dll
+/reference:Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll
+/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
+/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
 /reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
 /reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
-/reference:Library/ScriptAssemblies/Unity.Timeline.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.TerrainTools.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.VSCode.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.dll
-/reference:Library/ScriptAssemblies/Unity.InputSystem.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll
-/reference:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
-/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
-/reference:Library/ScriptAssemblies/Unity.Timeline.dll
-/reference:Library/ScriptAssemblies/PhotonWebSocket.dll
-/reference:Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonRealtime.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.Rider.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.dll
-/reference:Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonChat.dll
-/reference:Library/ScriptAssemblies/Unity.TextMeshPro.dll
-/reference:Library/ScriptAssemblies/Unity.TerrainTools.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Utilities.Culling.Editor.dll
-/reference:Library/ScriptAssemblies/PhotonUnityNetworking.Editor.dll
-/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
-/reference:Library/ScriptAssemblies/com.unity.quicksearch.dll
-/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -330,5 +304,4 @@
 /define:CROSS_PLATFORM_INPUT
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-Assets\ErosionBrush\Scripts\Editor\ErosionBrushEditor.cs
-Assets\ErosionBrush\Scripts\Editor\Layout.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.probuilder@4.2.3\Addons\Fbx.cs

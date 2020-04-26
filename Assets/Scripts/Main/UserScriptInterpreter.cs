@@ -127,7 +127,7 @@ namespace Main
             
         }
 
-        private void ExecuteCommand(string[] args)
+        private void ExecuteCommand(IEnumerable<string> args)
         {
 
             var argsList = new List<string>(args);
@@ -173,12 +173,12 @@ namespace Main
                 
                 case "tire":
                     
-                    _actionHandler.SetTireTorque(remainingCommand[1], float.Parse(remainingCommand[2]));
+                    _actionHandler.SetTireTorque(remainingCommand[1], (int) double.Parse(remainingCommand[2]));
                     break;
                 
                 case "steering":
                     
-                    _actionHandler.SetTireSteering(remainingCommand[1], float.Parse(remainingCommand[2]));
+                    _actionHandler.SetTireSteering(remainingCommand[1], (int) double.Parse(remainingCommand[2]));
                     break;
 
             }

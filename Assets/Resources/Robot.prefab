@@ -1021,9 +1021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotBody: {fileID: 3862314425481221679}
   internalNegation: 1
-  userNegation: 1
   actorNumber: 0
-  maxAngularVelocity: 300
   eventQueuePath: 
   robotStatePath: 
   dataDirectory: 
@@ -1054,10 +1052,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotStateDescription:
     gyroscope:
-      orientationNegation: 0
       forward: {x: 0, y: 0, z: 0}
       right: {x: 0, y: 0, z: 0}
       up: {x: 0, y: 0, z: 0}
+      isUpsideDown: 0
     lidar:
       distanceMatrix: []
       horizontalDensity: 0

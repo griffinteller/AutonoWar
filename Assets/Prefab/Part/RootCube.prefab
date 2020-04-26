@@ -59,7 +59,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   removable: 0
-  connectingFaceOutwardsDirection: {x: 0, y: 0, z: 0}
+  connectionBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
+  radius: 0.25
 --- !u!1 &8261723139981211264
 GameObject:
   m_ObjectHideFlags: 0

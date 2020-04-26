@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UI;
+using UnityEngine;
 using Utility;
 
 namespace Main.Building
@@ -8,6 +9,8 @@ namespace Main.Building
 
         public float moveSensitivity;
         public float lookSensitivity;
+
+        public BuildHandler buildHandler;
 
         private void Start()
         {

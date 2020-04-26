@@ -1,12 +1,15 @@
 /target:library
 /nowarn:0169
-/out:Temp/Unity.ProBuilder.AddOns.Editor.dll
+/out:Temp/com.unity.quicksearch.dll
 /debug:portable
 /optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:latest
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll
+/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
+/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
+/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -68,11 +71,6 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.dll"
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.dll
-/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
-/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
-/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
-/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll"
@@ -227,7 +225,6 @@
 /define:ENABLE_AUDIO
 /define:ENABLE_CACHING
 /define:ENABLE_CLOTH
-/define:ENABLE_EVENT_QUEUE
 /define:ENABLE_MICROPHONE
 /define:ENABLE_MULTIPLE_DISPLAYS
 /define:ENABLE_PHYSICS
@@ -245,6 +242,7 @@
 /define:ENABLE_CLOUD_SERVICES_ADS
 /define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
 /define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+/define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
 /define:ENABLE_CLOUD_SERVICES_PURCHASING
 /define:ENABLE_CLOUD_SERVICES_ANALYTICS
 /define:ENABLE_CLOUD_SERVICES_UNET
@@ -265,16 +263,17 @@
 /define:RENDER_SOFTWARE_CURSOR
 /define:ENABLE_VIDEO
 /define:PLATFORM_STANDALONE
-/define:PLATFORM_STANDALONE_WIN
-/define:UNITY_STANDALONE_WIN
+/define:PLATFORM_STANDALONE_OSX
+/define:UNITY_STANDALONE_OSX
 /define:UNITY_STANDALONE
+/define:ENABLE_GAMECENTER
 /define:ENABLE_RUNTIME_GI
 /define:ENABLE_MOVIES
 /define:ENABLE_NETWORK
 /define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
-/define:ENABLE_OUT_OF_PROCESS_CRASH_HANDLER
 /define:ENABLE_CLUSTER_SYNC
 /define:ENABLE_CLUSTERINPUT
+/define:ENABLE_SPATIALTRACKING
 /define:ENABLE_WEBSOCKET_HOST
 /define:ENABLE_MONO
 /define:NET_4_6
@@ -301,6 +300,79 @@
 /define:PUN_2_0_OR_NEWER
 /define:PUN_2_OR_NEWER
 /define:CROSS_PLATFORM_INPUT
+/define:PACKAGE_UGUI
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.probuilder@4.2.3\Addons\Fbx.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\AsyncSearchSession.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\BlinkCursorScope.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\DebugInfo.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\DebugTimer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\DetailView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Dispatcher.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\FilterWindow.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\FuzzySearch.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\GridView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\ISearchView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Icons.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\AssetIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\AssetPostprocessorIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\FileSearchIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\ObjectIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SceneIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchDatabase.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchDatabaseEditor.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchDatabaseImporter.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchIndexComparer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchIndexer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchIndexerQuery.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Indexing\SearchResultCollection.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\ListView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\AssetProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\AssetStoreProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\Calculator.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\Eval.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\HelpProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\LogProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\MenuProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\ObjectProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\PackageManagerProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\ResourceProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\SceneProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\SceneQueryEngine.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\SearchQueryProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\SettingsProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Providers\StaticMethodProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\DataWalkerQueryHandler.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\IInstruction.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryEngine.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryEngineAttributes.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryFilterOperations.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryFilterOperators.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryFilters.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryGraph.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryGraphViewer.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QueryEngine\QueryNodes.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\QuickSearch.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\ResourceDescriptors.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\ResultView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchAction.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchAnalytics.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchContent.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchContext.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchEngines.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchField.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchItem.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchList.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchProvider.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchQuery\SearchQuery.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchQuery\SearchQueryCreateWindow.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchSelection.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchService.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchSettings.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\SearchUtils.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\StackedEnumerator.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\StringView.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Styles.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\TryConvert.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\UnityVersion.cs
+C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.quicksearch@1.6.0-preview.6\Editor\Utils.cs

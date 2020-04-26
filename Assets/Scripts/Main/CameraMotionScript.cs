@@ -8,13 +8,13 @@ namespace Main
     public class CameraMotionScript : MonoBehaviour
     {
 
+        public bool interactable = true;
+
         public Transform centerObject;
         public PlayerConnection playerConnection;
 
         public Vector3 viewCenter;
         public Vector3 startingDisplacement;
-
-        public bool canRotate = true;
 
         public float zoomSensitivity;
         public float lookSensitivity;
@@ -54,6 +54,12 @@ namespace Main
         // Update is called once per frame
         void Update()
         {
+
+            if (!interactable) 
+                return;
+
+            if (Input.GetKey(KeyCode.LeftShift)) 
+                return;
 
             if (centerObject)
             {

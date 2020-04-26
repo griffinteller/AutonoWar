@@ -4,6 +4,7 @@ using System.IO;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
+using Utility;
 
 namespace Main
 {
@@ -14,8 +15,6 @@ namespace Main
 
         public int internalNegation = 1; // Wheels should keep spinning in same direction regardless of user coord flipping
         public int actorNumber;
-        
-        public float maxAngularVelocity;  // unity sets an unreasonably low limit of 7
 
         public string eventQueuePath = "";  // the file where commands from the user are stored
         public string robotStatePath = "";  // the json file where the game prints the robot state
@@ -65,10 +64,6 @@ namespace Main
                 GetComponent<RobotStateSender>().enabled = true;
 
             }
-            
-
-            SetMaximumAngularVelocities(maxAngularVelocity);
-            
 
         }
 
@@ -84,23 +79,9 @@ namespace Main
         // gets and/or creates directory for game files
         private void InitDataDirectory()
         {
-            
-            dataDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            if (Application.platform == RuntimePlatform.WindowsPlayer ||
-                Application.platform == RuntimePlatform.WindowsEditor)
-            {
 
-                dataDirectory += "\\ABR\\";
+            dataDirectory = SystemUtility.GetAndCreateDataDirectory();
 
-            }
-            else
-            {
-
-                dataDirectory += "/ABR/";
-
-            }
-            Directory.CreateDirectory(dataDirectory);
-            
         }
 
         public void ResetRobot()
@@ -108,6 +89,10 @@ namespace Main
             
             transform.position = _startingPosition;
             transform.rotation = _startingRotation;
+            
+            transform.GetChild(0).localPosition = Vector3.zero;
+            transform.GetChild(0).localRotation = Quaternion.identity;
+            
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             ResetInternalState();
@@ -150,18 +135,6 @@ namespace Main
             }
 
             return obj;
-
-        }
-        public void SetMaximumAngularVelocities(float maxAngularVelocity)
-        {
-
-            var tireRigidbodies = GetComponentsInChildren<Rigidbody>();
-            foreach (var rigidbody in tireRigidbodies)
-            {
-
-                rigidbody.maxAngularVelocity = maxAngularVelocity;
-
-            }
 
         }
 

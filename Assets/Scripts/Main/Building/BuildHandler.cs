@@ -1,14 +1,22 @@
-﻿using JetBrains.Annotations;
+﻿using System.IO;
+using JetBrains.Annotations;
+using UI;
 using UnityEngine;
+using Utility;
 
 namespace Main.Building
 {
     public class BuildHandler : MonoBehaviour
     {
 
+        public bool interactable = true;
+        public TireNameInputHandler tireNameInputHandler;
+        
         public GameObject currentItemPrefab;
 
         private BuildObjectComponent _currentItemBuildComponent;
+
+        private GameObject _objectLastClickedOn;
 
         public void Start()
         {
@@ -28,6 +36,15 @@ namespace Main.Building
         public void Update()
         {
 
+            if (!interactable) return;
+
+            if (!Input.GetKey(KeyCode.LeftShift)) return;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                RegisterMouseDown(); // we want to make sure we don't drag and then place.
+            }
+
             if (Input.GetMouseButtonUp(0))
             {
                 PlaceItemIfPossible();
@@ -39,22 +56,55 @@ namespace Main.Building
 
         }
 
+        private void RegisterMouseDown()
+        {
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            {
+
+                _objectLastClickedOn = hit.collider.gameObject;
+
+            }
+
+        }
+
         private void PlaceItemIfPossible()
         {
             
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var hitBuildComponent)) return;
+            if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var hitBuildComponent))
+                return;
+
+            if (_objectLastClickedOn && 
+                hitInfo.collider.gameObject.GetInstanceID() != _objectLastClickedOn.GetInstanceID())
+                return;
 
             var connection = hitBuildComponent.GetConnection(hitInfo.point);
-            if (!connection) return;  // in deadzone or on illegal face
+            
+            if (!connection)
+                return;  // in deadZone or on illegal face
 
             // we can now be sure we are placing a new item
             
-            var newObjectRotation = Quaternion.FromToRotation(_currentItemBuildComponent.GetConnectingFaceOutwardsDirection(),
+            var newObjectRotation = 
+                Quaternion.FromToRotation(_currentItemBuildComponent.GetConnectingFaceOutwardsDirection(),
                 -connection.outwardsDirection); // rotate the item so that the two connecting faces are facing each other
             
-            var tmp = Instantiate(currentItemPrefab, connection.newObjectCenter, newObjectRotation, transform);
+            var newObjectCenter = connection.connectionCenter;
+            newObjectCenter += _currentItemBuildComponent.GetRadius() * connection.outwardsDirection;
+            //displaces by radius of the object
+            
+            Instantiate(currentItemPrefab, newObjectCenter, newObjectRotation, transform);
+
+            var possibleTireComponent = _currentItemBuildComponent as BuildTireComponent;
+            if (possibleTireComponent)
+            {
+                
+                Debug.Log("Naming!");
+                tireNameInputHandler.ShowInputWindow(possibleTireComponent);
+                
+            }
 
         }
 
@@ -69,7 +119,7 @@ namespace Main.Building
             
         }
 
-        private static bool BuildObjectRaycast(Ray ray, out RaycastHit hitInfo, [CanBeNull] out BuildObjectComponent buildComponent)
+        private static bool BuildObjectRaycast(Ray ray, out RaycastHit hitInfo, out BuildObjectComponent buildComponent)
         {
 
             if (!Physics.Raycast(ray, out var hit))
@@ -94,6 +144,25 @@ namespace Main.Building
             return true;
             
         }
+        
+        private Vector3 GetLocalCenterOfMass()
+        {
+
+            var rigidbody = gameObject.AddComponent<Rigidbody>();
+            var com = rigidbody.centerOfMass;
+            Destroy(rigidbody);
+            return com;
+
+        }
+
+        /*private string GetOrCreateRobotsDirectory()
+        {
+
+            var dataDirectory = SystemUtility.GetAndCreateDataDirectory();
+            var robotsDirectory = dataDirectory + 
+
+        }*/
 
     }
+
 }

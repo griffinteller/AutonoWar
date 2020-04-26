@@ -1,12 +1,14 @@
 /target:library
 /nowarn:0169
-/out:Temp/Unity.ProBuilder.AddOns.Editor.dll
+/out:Temp/UnityEditor.UI.dll
 /debug:portable
 /optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:latest
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll
+/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
+/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -68,11 +70,6 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.dll"
-/reference:Library/ScriptAssemblies/Unity.ProBuilder.dll
-/reference:Library/ScriptAssemblies/UnityEditor.UI.dll
-/reference:Library/ScriptAssemblies/UnityEngine.UI.dll
-/reference:Library/ScriptAssemblies/UnityEditor.TestRunner.dll
-/reference:Library/ScriptAssemblies/UnityEngine.TestRunner.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll"
@@ -227,7 +224,6 @@
 /define:ENABLE_AUDIO
 /define:ENABLE_CACHING
 /define:ENABLE_CLOTH
-/define:ENABLE_EVENT_QUEUE
 /define:ENABLE_MICROPHONE
 /define:ENABLE_MULTIPLE_DISPLAYS
 /define:ENABLE_PHYSICS
@@ -245,6 +241,7 @@
 /define:ENABLE_CLOUD_SERVICES_ADS
 /define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
 /define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+/define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
 /define:ENABLE_CLOUD_SERVICES_PURCHASING
 /define:ENABLE_CLOUD_SERVICES_ANALYTICS
 /define:ENABLE_CLOUD_SERVICES_UNET
@@ -265,16 +262,17 @@
 /define:RENDER_SOFTWARE_CURSOR
 /define:ENABLE_VIDEO
 /define:PLATFORM_STANDALONE
-/define:PLATFORM_STANDALONE_WIN
-/define:UNITY_STANDALONE_WIN
+/define:PLATFORM_STANDALONE_OSX
+/define:UNITY_STANDALONE_OSX
 /define:UNITY_STANDALONE
+/define:ENABLE_GAMECENTER
 /define:ENABLE_RUNTIME_GI
 /define:ENABLE_MOVIES
 /define:ENABLE_NETWORK
 /define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
-/define:ENABLE_OUT_OF_PROCESS_CRASH_HANDLER
 /define:ENABLE_CLUSTER_SYNC
 /define:ENABLE_CLUSTERINPUT
+/define:ENABLE_SPATIALTRACKING
 /define:ENABLE_WEBSOCKET_HOST
 /define:ENABLE_MONO
 /define:NET_4_6
@@ -301,6 +299,45 @@
 /define:PUN_2_0_OR_NEWER
 /define:PUN_2_OR_NEWER
 /define:CROSS_PLATFORM_INPUT
+/define:PACKAGE_PHYSICS
+/define:PACKAGE_PHYSICS2D
+/define:PACKAGE_ANIMATION
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\griff\AutonoWar\Library\PackageCache\com.unity.probuilder@4.2.3\Addons\Fbx.cs
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\EventSystem\EventSystemEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\EventSystem\EventTriggerEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\EventSystem\Physics2DRaycasterEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\EventSystem\PhysicsRaycasterEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\Properties\AssemblyInfo.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\AspectRatioFitterEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ButtonEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\CanvasScalerEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ContentSizeFitterEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\DropdownEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\GraphicEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\GridLayoutGroupEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\HorizontalOrVerticalLayoutGroupEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ImageEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\InputFieldEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\InterceptedEventsPreview.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\LayoutElementEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\LayoutPropertiesPreview.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\MaskEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\MenuOptions.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PrefabLayoutRebuilder.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\AnimationTriggersDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\ColorBlockDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\DropdownOptionListDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\FontDataDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\NavigationDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\PropertyDrawers\SpriteStateDrawer.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\RawImageEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\RectMask2DEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ScrollRectEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ScrollbarEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\SelectableEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\SelfControllerEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\SliderEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\SpriteDrawUtility.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\TextEditor.cs"
+"C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.ugui\Editor\UI\ToggleEditor.cs"
