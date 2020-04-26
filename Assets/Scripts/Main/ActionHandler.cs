@@ -32,6 +32,9 @@ namespace Main
 
         private RobotNetworkBridge _robotNetworkBridge;
 
+        private ResetState _resetState = ResetState.Normal;
+        private Rigidbody _rigidbody;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -50,6 +53,8 @@ namespace Main
             robotStatePath = dataDirectory + "RobotState.json";
 
             _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+
+            _rigidbody = GetComponent<Rigidbody>();
             
             if (PhotonNetwork.InRoom)
             {
@@ -67,14 +72,47 @@ namespace Main
 
         }
 
-        // flips user coordinates around forward axis to facilitate steering and prevent turtleing, if the user wants
-        /*public void FlipUserCoordinates()
+        public void Update()
+        {
+
+            switch (_resetState)
+            {
+                
+                case ResetState.NeedToReset:
+                    
+                    InternalResetRobot();
+                    _resetState = ResetState.NeedToUndoReset;
+                    break;
+                
+                case ResetState.NeedToUndoReset:
+
+                    UndoReset();
+                    _resetState = ResetState.Normal;
+                    break;
+
+            }
+
+        }
+
+        private void UndoReset()
         {
             
-            userNegation *= -1;
-            _robotStateSender.robotStateDescription.gyroscope.orientationNegation *= -1; // flip user coordinates
+            RemoveBrakeForceOnWheelColliders();
+            _rigidbody.isKinematic = false;
 
-        }*/
+        }
+
+        private void RemoveBrakeForceOnWheelColliders()
+        {
+            
+            foreach (var wheelCollider in _wheelColliders)
+            {
+                
+                wheelCollider.brakeTorque = 0;
+
+            }
+            
+        }
 
         // gets and/or creates directory for game files
         private void InitDataDirectory()
@@ -86,36 +124,38 @@ namespace Main
 
         public void ResetRobot()
         {
+
+            _resetState = ResetState.NeedToReset;
+
+        }
+
+        private void InternalResetRobot()
+        {
             
             transform.position = _startingPosition;
             transform.rotation = _startingRotation;
             
-            transform.GetChild(0).localPosition = Vector3.zero;
-            transform.GetChild(0).localRotation = Quaternion.identity;
+            robotBody.transform.localPosition = Vector3.zero;
+            robotBody.transform.localRotation = Quaternion.identity;
             
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            ResetInternalState();
-
-        }
-
-        // set torques to zero and steering to 0
-        public void ResetInternalState()
-        {
+            robotBody.transform.localRotation = Quaternion.identity;
+            
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.isKinematic = true;
 
             foreach (var wheelCollider in _wheelColliders)
             {
 
                 wheelCollider.motorTorque = 0;
                 wheelCollider.steerAngle = 0;
+                wheelCollider.brakeTorque = Mathf.Infinity;
+                CachedFind(wheelCollider.name = "Vis").transform.localRotation = Quaternion.identity;
 
             }
-
-            //userNegation = 1;
-            robotBody.transform.localRotation = Quaternion.identity;
-
+            
         }
-        
+
         public GameObject CachedFind(string name)
         {
             

@@ -140,30 +140,10 @@ namespace Main
 
                     Set(argsList);
                     break;
-                
-                /*case "COORDINATES":
 
-                    Coordinates(argsList);
-                    break;*/
-                
             }
 
         }
-
-        /*private void Coordinates(List<string> remainingCommand)
-        {
-
-            switch (remainingCommand[0])
-            {
-                
-                case "flip":
-                    
-                    _actionHandler.FlipUserCoordinates();
-                    break;
-                
-            }
-
-        }*/
 
         private void Set(List<string> remainingCommand)
         {

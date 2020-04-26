@@ -59,7 +59,7 @@ namespace Main
                 
                 GetComponentInChildren<Text>().text = "Execute Script";
                 StopExecution();
-                _actionHandler.ResetInternalState();
+                //_actionHandler.ResetInternalState();
                 
             }
             
