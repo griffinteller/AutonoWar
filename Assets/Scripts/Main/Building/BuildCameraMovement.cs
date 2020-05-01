@@ -1,5 +1,4 @@
-﻿using UI;
-using UnityEngine;
+﻿using UnityEngine;
 using Utility;
 
 namespace Main.Building

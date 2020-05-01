@@ -1,51 +1,97 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
+using System.IO.Pipes;
 using UnityEngine;
 
 namespace Utility
 {
     public static class SystemUtility
     {
-        
-        public static string GetAndCreateDataDirectory()
+
+        public static SimplePlatform GetSimplePlatform()
+        {
+
+            switch (Application.platform)
+            {
+                
+                case RuntimePlatform.WindowsEditor:
+
+                    return SimplePlatform.Windows;
+                
+                case RuntimePlatform.WindowsPlayer:
+
+                    return SimplePlatform.Windows;
+                
+                case RuntimePlatform.OSXPlayer:
+
+                    return SimplePlatform.Posix;
+                
+                case RuntimePlatform.OSXEditor:
+
+                    return SimplePlatform.Posix;
+                
+                case RuntimePlatform.LinuxEditor:
+
+                    return SimplePlatform.Posix;
+                
+                case RuntimePlatform.LinuxPlayer:
+
+                    return SimplePlatform.Posix;
+                
+                default:
+                    
+                    throw new NotImplementedException("Operating systems other than Windows NT and " +
+                                                      "POSIX systems are not currently supported.");
+                
+                
+            }
+            
+        }
+
+        public static bool TryConnectPipeClientWindows(NamedPipeClientStream clientStream)
         {
             
-            var directory = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            directory += AddSlashes("ABR");
-            Directory.CreateDirectory(directory);
-            return directory;
+            try
+            {
+
+                clientStream.Connect();
+
+            }
+            catch (Win32Exception e)
+            {
+                return false;
+            }
+
+            return true;
+            
+        }
+
+        public static bool TryConnectPipeClientWindows(NamedPipeClientStream clientStream, out bool connected)
+        {
+
+            connected = TryConnectPipeClientWindows(clientStream);
+            return connected;
 
         }
 
-        /*public static string GetAndCreateRobotsDirectory()
+        public static bool IsDuplexPipeStillConnectedWindows(NamedPipeClientStream clientStream)
         {
 
-            var dataDirectory = GetAndCreateDataDirectory();
-            var robotsDirectory
-
-        }*/
-
-        private static string AddSlashes(string str)
-        {
-
-            string res;
-            if (Application.platform == RuntimePlatform.WindowsPlayer ||
-                Application.platform == RuntimePlatform.WindowsEditor)
+            try
             {
-
-                res = "\\" + str + "\\";
-
+                clientStream.WriteByte(1);
             }
-            else
+            catch (IOException)
             {
-
-                res = "/" + str + "/";
-
+                Debug.LogError("Pipe is closed");
+                return false;
             }
 
-            return res;
+            return true;
 
         }
         
     }
+    
 }

@@ -780,9 +780,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af22e557e110a1c4db41addc0699cb93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wheelColliderParent: {fileID: 3862314424849155858}
-  robot: {fileID: 3862314426688975686}
   lerpSpeed: 0.5
+  robot: {fileID: 3862314426688975686}
+  wheelColliderParent: {fileID: 3862314424849155858}
 --- !u!1 &3862314426020569368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,12 +1019,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75e8e907f8ac0aa48b0af9fd10831697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotBody: {fileID: 3862314425481221679}
-  internalNegation: 1
   actorNumber: 0
-  eventQueuePath: 
-  robotStatePath: 
-  dataDirectory: 
+  internalNegation: 1
+  robotBody: {fileID: 3862314425481221679}
 --- !u!114 &3862314426688975680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,7 +1034,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb32c9f34f230b4b821b016009f1541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxFileSize: 100
 --- !u!114 &3862314426688975683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1050,28 +1046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b872d487a8efa1448321c674f7f4379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotStateDescription:
-    gyroscope:
-      forward: {x: 0, y: 0, z: 0}
-      right: {x: 0, y: 0, z: 0}
-      up: {x: 0, y: 0, z: 0}
-      isUpsideDown: 0
-    lidar:
-      distanceMatrix: []
-      horizontalDensity: 0
-      verticalDensity: 0
-      verticalFOVBounds: []
-      range: 0
-    gps:
-      position: {x: 0, y: 0, z: 0}
-    altimeter:
-      altitude: 0
-    radar:
-      pings: []
-      itPing: {x: 0, y: 0, z: 0}
-    timestamp: 0
-    isIt: 0
-    gameMode: 
+  robotBody: {fileID: 3862314425481221679}
 --- !u!54 &3862314426688975682
 Rigidbody:
   m_ObjectHideFlags: 0

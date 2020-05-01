@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Main
 {
     public class ScriptExecutor : MonoBehaviour
     {
 
-        public string scriptName;
+        /*public string scriptName;
         private Process _process;
 
         private ActionHandler _actionHandler;
@@ -63,7 +61,7 @@ namespace Main
                 
             }
             
-        }
+        }*/
 
     }
     

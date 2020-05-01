@@ -1,13 +1,11 @@
-﻿using System.IO;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Main
 {
     public class ScriptEditorBehaviour : MonoBehaviour
     {
 
-        public string scriptName;
+        /*public string scriptName;
 
         private ActionHandler _actionHandler;
 
@@ -68,7 +66,7 @@ namespace Main
         
         
         
-        }
+        }*/
     
     }
 }
