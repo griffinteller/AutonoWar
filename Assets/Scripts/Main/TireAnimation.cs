@@ -5,12 +5,13 @@ namespace Main
     public class TireAnimation : MonoBehaviour
     {
         private ActionHandler _actionHandler;
+
         public float lerpSpeed;
         public Transform robot;
 
+
         public Transform wheelColliderParent;
         //private Dictionary<string, WheelCollider> _wheelCollidersDictionary;
-
 
         public void Start()
         {
@@ -29,9 +30,7 @@ namespace Main
                 tireMeshParent.Rotate(tireMeshParent.right,
                     wheelCollider.rpm * _actionHandler.internalNegation / 60 * 360 * Time.deltaTime, Space.World);
 
-                // TODO: have tire meshes sync up with collider rotation directly, to prevent them from becoming out of sync
-
-                var lerper = tireMeshParent.GetComponent<Lerper>();
+                /*var lerper = tireMeshParent.GetComponent<Lerper>();
 
                 if (lerper.lerping) return;
 
@@ -40,7 +39,7 @@ namespace Main
                 if (robot.up.y > 0)
                     tireMeshParent.position = pos;
                 else
-                    lerper.LerpLocal(transform.parent.InverseTransformPoint(pos), lerpSpeed);
+                    lerper.LerpLocal(transform.parent.InverseTransformPoint(pos), lerpSpeed);*/
             }
         }
     }

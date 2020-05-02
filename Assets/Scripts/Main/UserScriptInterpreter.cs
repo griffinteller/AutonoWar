@@ -113,9 +113,23 @@ namespace Main
 
             var usiCast = (UserScriptInterpreter) usi;
 
-            usiCast._clientStream = File.OpenRead("/tmp/" + PipeName);
-            usiCast._clientStream.ReadTimeout = PosixReadTimeout;
+            while (true)
+            {
+                try
+                {
+                    usiCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Read);
+                    break;
+                }
+                catch (IOException)
+                {
+                    continue;
+                }
+            }
+
+            usiCast._clientReader = new StreamReader(usiCast._clientStream);
+            
             usiCast._connected = true;
+            Debug.Log("USI Connected!");
 
 
         };
@@ -158,27 +172,26 @@ namespace Main
 
         private void InitStreams()
         {
-            
+
             switch (_platform)
             {
-                
+
                 case SimplePlatform.Windows:
-                    
+
                     _clientStream = new NamedPipeClientStream(PipeName);
+                    _clientReader = new StreamReader(_clientStream);
                     break;
-                
+
                 case SimplePlatform.Posix:
 
                     Task.Factory.StartNew(ConnectToPipePosix, this);
                     break;
-                
+
                 default:
-                    
+
                     throw new NotImplementedException();
 
             }
-            
-            _clientReader = new StreamReader(_clientStream);
 
         }
 

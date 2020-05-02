@@ -27,9 +27,22 @@ namespace Main
         {
 
             var rssCast = (RobotStateSender) rss;
+            
+            while (true)
+            {
+                try
+                {
+                    rssCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Write);
+                    break;
+                }
+                catch (IOException)
+                {
+                    continue;
+                }
+            }
 
-            rssCast._clientStream = File.OpenWrite("/tmp/" + PipeName);
             rssCast._connected = true;
+            Debug.Log("RSS Connected!");
             
         };
 

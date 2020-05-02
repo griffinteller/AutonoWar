@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
@@ -58,6 +59,16 @@ namespace Main
 
         public void Update()
         {
+
+            foreach (var wheelCollider in _wheelColliders)
+            {
+                
+                Debug.Log(wheelCollider.motorTorque);
+                Debug.Log(wheelCollider.brakeTorque);
+                Debug.Log(wheelCollider.rpm);
+
+            }
+            
             switch (_resetState)
             {
                 case ResetState.NeedToReset:
@@ -97,9 +108,7 @@ namespace Main
 
             robotBody.transform.localPosition = Vector3.zero;
             robotBody.transform.localRotation = Quaternion.identity;
-
-            robotBody.transform.localRotation = Quaternion.identity;
-
+            
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.isKinematic = true;
@@ -108,8 +117,8 @@ namespace Main
             {
                 wheelCollider.motorTorque = 0;
                 wheelCollider.steerAngle = 0;
-                wheelCollider.brakeTorque = Mathf.Infinity;
-                CachedFind(wheelCollider.name = "Vis").transform.localRotation = Quaternion.identity;
+                wheelCollider.brakeTorque = 10000;
+                CachedFind(wheelCollider.name + "Vis").transform.localRotation = Quaternion.identity;
             }
         }
 
@@ -144,12 +153,30 @@ namespace Main
             }
         }
 
-        public void SetTireSteering(string tireName, float bering)
+        public void SetTireSteering(string tireName, float bearing)
         {
             var tireObject = CachedFind(tireName);
-            tireObject.GetComponent<WheelCollider>().steerAngle = internalNegation * bering;
-            CachedFind(tireName + "Vis").transform.localRotation = Quaternion.Euler(
-                0, bering, 0);
+
+            var wheelCollider = tireObject.GetComponent<WheelCollider>();
+
+            wheelCollider.steerAngle = internalNegation * bearing;
+
+            var tireMeshParent = CachedFind(tireName + "Vis");
+            
+            var currentLocalRight = tireMeshParent.transform.localRotation
+             * Vector3.right;
+
+            var currentBearing = Mathf.Rad2Deg * Mathf.Acos(currentLocalRight.x);
+
+            if (currentLocalRight.z > 0)
+                currentBearing *= -1;
+
+            tireMeshParent.transform.Rotate(
+                robotBody.transform.up, 
+                bearing - currentBearing,
+                Space.World);
+
+
         }
 
         public void OnDestroy()
