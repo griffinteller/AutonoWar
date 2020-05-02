@@ -23,6 +23,7 @@ namespace Main
         {
             foreach (Transform tireMeshParent in transform)
             {
+                
                 var wheelCollider = _actionHandler.CachedFind(tireMeshParent.name.Substring(0,
                     tireMeshParent.name.Length - 3)).GetComponent<WheelCollider>();
 
@@ -34,12 +35,10 @@ namespace Main
 
                 if (lerper.lerping) return;
 
-                //Vector3.cr
+                //Vector3.cr*/
                 wheelCollider.GetWorldPose(out var pos, out _);
-                if (robot.up.y > 0)
-                    tireMeshParent.position = pos;
-                else
-                    lerper.LerpLocal(transform.parent.InverseTransformPoint(pos), lerpSpeed);*/
+                tireMeshParent.position = pos;
+                
             }
         }
     }
