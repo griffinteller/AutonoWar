@@ -19,7 +19,7 @@ namespace Main
         public GPS gps;
         public Altimeter altimeter;
         public Radar radar;
-        public long timestamp;
+        public float timestamp;
         public bool isIt;
         public string gameMode;
         
@@ -47,7 +47,7 @@ namespace Main
             gps.Update();
             altimeter.Update();
             radar.Update();
-            timestamp = TimeUtility.CurrentTimeMillis();
+            timestamp = Time.fixedTime * 1000f;
 
             if (gameMode.Equals("Classic Tag"))
             {

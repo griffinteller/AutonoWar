@@ -60,15 +60,6 @@ namespace Main
         public void Update()
         {
 
-            foreach (var wheelCollider in _wheelColliders)
-            {
-                
-                Debug.Log(wheelCollider.motorTorque);
-                Debug.Log(wheelCollider.brakeTorque);
-                Debug.Log(wheelCollider.rpm);
-
-            }
-            
             switch (_resetState)
             {
                 case ResetState.NeedToReset:

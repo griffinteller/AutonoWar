@@ -119,7 +119,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.2.5e2
+  bundleVersion: 0.2.5e3
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}

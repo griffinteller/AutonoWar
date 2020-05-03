@@ -19,15 +19,19 @@ namespace Main
         private Stream _clientStream;
         private bool _connected;
         private SimplePlatform _platform;
+        private Task _currentWriteTask;
         
         private const string PipeName = "RobotInfoPipe";
         private const string MessageSeparator = ";";
-        
-        private static readonly Action<object> InitConnectToPipePosix = rss =>
+        private const int SendInterval = 5;
+
+        private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
         {
 
             var rssCast = (RobotStateSender) rss;
             
+            var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
+
             while (true)
             {
                 try
@@ -40,10 +44,10 @@ namespace Main
                     continue;
                 }
             }
-
-            rssCast._connected = true;
-            Debug.Log("RSS Connected!");
             
+            rssCast._clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
+            rssCast._clientStream.Close();
+
         };
 
         public void Start()
@@ -71,7 +75,7 @@ namespace Main
                 
                 case SimplePlatform.Posix:
 
-                    Task.Factory.StartNew(InitConnectToPipePosix, this);
+                    _currentWriteTask = Task.Factory.StartNew(ConnectUpdateAndWritePosix, this);
                     break;
                 
                 default:
@@ -82,10 +86,8 @@ namespace Main
             
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
-            
-            _robotStateDescription.Update();
 
             switch (_platform)
             {
@@ -115,10 +117,12 @@ namespace Main
                 !SystemUtility.TryConnectPipeClientWindows((NamedPipeClientStream) _clientStream, out _connected))  
                 // we are not connected and we can't connect
                 return;  // therefore the API is not running
+            
+            _robotStateDescription.Update();
 
             try
             {
-
+                
                 var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription);
                 _clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
 
@@ -135,17 +139,16 @@ namespace Main
 
         private void PosixUpdate()
         {
+            
+            _robotStateDescription.Update();
 
-            if (!_connected)
+            if (!(_currentWriteTask.Status == TaskStatus.Canceled 
+                  || _currentWriteTask.Status == TaskStatus.Faulted
+                  || _currentWriteTask.IsCompleted))
                 return;
-
-            var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription); // json
-            _clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
-            _clientStream.Close();
-            _connected = false;
-            Task.Factory.StartNew(InitConnectToPipePosix, this);
-
-
+            
+            _currentWriteTask = Task.Factory.StartNew(ConnectUpdateAndWritePosix, this);
+            
         }
 
         private static byte[] GetRobotDescriptionBytes(Robot robotDescription)
@@ -154,6 +157,13 @@ namespace Main
             return Encoding.ASCII.GetBytes(
                 JsonUtility.ToJson(robotDescription) + MessageSeparator);
             
+        }
+
+        private static string GetRobotDescription(Robot robotDescription)
+        {
+
+            return JsonUtility.ToJson(robotDescription);
+
         }
 
         private void GetRoomVariables(
