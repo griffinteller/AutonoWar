@@ -27,26 +27,43 @@ namespace Main
 
         private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
         {
-
+            
             var rssCast = (RobotStateSender) rss;
-            
-            var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
 
-            while (true)
+            try
             {
-                try
+
+                var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
+
+                while (true)
                 {
-                    rssCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Write);
-                    break;
+                    try
+                    {
+                        rssCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Write);
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        continue;
+                    }
                 }
-                catch (IOException)
-                {
-                    continue;
-                }
+
+                rssCast._clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
+                rssCast._clientStream.Close();
+
             }
-            
-            rssCast._clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
-            rssCast._clientStream.Close();
+            catch (Exception e)
+            {
+
+                Debug.LogError(e);
+
+            }
+            finally
+            {
+                
+                rssCast._clientStream.Close();
+                
+            }
 
         };
 
