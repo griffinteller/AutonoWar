@@ -333,6 +333,12 @@ PrefabInstance:
       propertyPath: startingPosition.z
       value: -413
       objectReference: {fileID: 0}
+    - target: {fileID: 6367326465283834949, guid: 012663ac73c1ff443bd04f8c0d0f2b45,
+        type: 3}
+      propertyPath: playerObjectPrefab
+      value: 
+      objectReference: {fileID: 4421177872403235923, guid: d5b926445abbe244f94ecf6a59e62e03,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 012663ac73c1ff443bd04f8c0d0f2b45, type: 3}
 --- !u!114 &1160644685 stripped

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Utility
 {
@@ -34,6 +35,13 @@ namespace Utility
                 
             }
             
+        }
+
+        public void LoadScene(string sceneName)
+        {
+
+            SceneManager.LoadScene(sceneName);
+
         }
 
         public static void ToggleCanvasGroupStatic(CanvasGroup panel)

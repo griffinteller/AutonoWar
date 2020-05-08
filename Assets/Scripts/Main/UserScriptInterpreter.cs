@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -261,15 +262,23 @@ namespace Main
 
         private void ExecuteCommand(IEnumerable<string> args)
         {
-
+            
             var argsList = new List<string>(args);
             var keyword = argsList[0];
+
+            if (!char.IsLetter(keyword[0]))
+            {
+
+                keyword = keyword.Substring(1);
+
+            }
+            
             argsList.RemoveAt(0);
             switch (keyword)
             {
                 
                 case "SET":
-
+                    
                     Set(argsList);
                     break;
 
@@ -285,12 +294,12 @@ namespace Main
                 
                 case "tire":
                     
-                    _actionHandler.SetTireTorque(remainingCommand[1], (int) double.Parse(remainingCommand[2]));
+                    _actionHandler.SetTireTorque(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
                     break;
                 
                 case "steering":
                     
-                    _actionHandler.SetTireSteering(remainingCommand[1], (int) double.Parse(remainingCommand[2]));
+                    _actionHandler.SetTireSteering(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
                     break;
 
             }

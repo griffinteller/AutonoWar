@@ -70,11 +70,27 @@ namespace Main
 
                 lastItActorNumber = currentItActorNumber;
                 currentItActorNumber = actorNumber;
+
+                var oldItMeshRenderers =
+                    playerConnection.robots[lastItActorNumber].GetComponentsInChildren<MeshRenderer>();
+                var newItMeshRenderers =
+                    playerConnection.robots[currentItActorNumber].GetComponentsInChildren<MeshRenderer>();
+
+                foreach (var meshRenderer in oldItMeshRenderers)
+                {
+
+                    print(meshRenderer);
+                    meshRenderer.material.color = normalTint;
+
+                }
+
+                foreach (var meshRenderer in newItMeshRenderers)
+                {
+
+                    meshRenderer.material.color = itTint;
+
+                }
                 
-                playerConnection.robots[lastItActorNumber].transform.Find("Body").Find("Base").gameObject
-                    .GetComponent<MeshRenderer>().material.color = normalTint;
-                playerConnection.robots[currentItActorNumber].transform.Find("Body").Find("Base").gameObject
-                    .GetComponent<MeshRenderer>().material.color = itTint;
                 _lastTag = Time.time;
                 
             }

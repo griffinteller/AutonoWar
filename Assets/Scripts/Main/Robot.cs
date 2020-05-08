@@ -1,9 +1,9 @@
 ﻿using System;
-using Main.Sensor;
+using Sensor;
 using UnityEngine;
 using Utility;
 
-using Gyroscope = Main.Sensor.Gyroscope;
+using Gyroscope = Sensor.Gyroscope;
 
 namespace Main
 {

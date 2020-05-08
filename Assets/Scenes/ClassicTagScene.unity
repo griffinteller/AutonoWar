@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -395,6 +396,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -550,6 +552,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -683,6 +686,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -774,7 +778,7 @@ PrefabInstance:
     - target: {fileID: 1467070168979876491, guid: f85e687a1917adf4ab681b85bd75db5f,
         type: 3}
       propertyPath: maxDistance
-      value: 1000
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1467070168979876495, guid: f85e687a1917adf4ab681b85bd75db5f,
         type: 3}
@@ -913,6 +917,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1232,5 +1237,11 @@ PrefabInstance:
       propertyPath: startingPosition.z
       value: -413
       objectReference: {fileID: 0}
+    - target: {fileID: 6367326465283834949, guid: 012663ac73c1ff443bd04f8c0d0f2b45,
+        type: 3}
+      propertyPath: playerObjectPrefab
+      value: 
+      objectReference: {fileID: 4421177872403235923, guid: d5b926445abbe244f94ecf6a59e62e03,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 012663ac73c1ff443bd04f8c0d0f2b45, type: 3}
