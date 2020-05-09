@@ -11,15 +11,19 @@ namespace Main
         private const float LerpTimePerRotation = 1f;
         
         [SerializeField] private Transform innerMesh;
+        [SerializeField] private TireComponent _tireComponent;
         
         [HideInInspector] public Transform tireMeshRoot;
         [HideInInspector] public WheelCollider wheelCollider;
 
         private Vector3 _desiredLocalPosition;  // to facilitate lerping
         private Quaternion _desiredLocalRotation;
+        private ActionHandler _actionHandler;
 
         public void Start()
         {
+
+            _actionHandler = transform.root.GetComponent<ActionHandler>();
             
             RotateInnerTireFromRpm();
 
@@ -51,8 +55,20 @@ namespace Main
 
         private void SyncDesiredRotationWithSteerAngle()
         {
+
+            var correction = 0;
+
+            if (_actionHandler.internalNegation == -1)
+            {
+
+                correction = 180;
+
+            }
             
-            _desiredLocalRotation = Quaternion.Euler(0, wheelCollider.steerAngle, 0);
+            _desiredLocalRotation = Quaternion.Euler(
+                0, 
+                _tireComponent.originalSteerAngle + _actionHandler.internalNegation * _tireComponent.bearing, 
+                0);
 
         }
 

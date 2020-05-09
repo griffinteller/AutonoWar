@@ -50,7 +50,7 @@ namespace Utility
             var zHigh = terrain.SampleHeight(worldPosition + Vector3.forward * sampleRadius);
 
             var xDisplacement = new Vector3(sampleRadius * 2,xHigh - xLow, 0);
-            var zDisplacement = new Vector3(0,xHigh - xLow, sampleRadius * 2);
+            var zDisplacement = new Vector3(0,zHigh - zLow, sampleRadius * 2);
 
             return Vector3.Cross(zDisplacement, xDisplacement).normalized;
 

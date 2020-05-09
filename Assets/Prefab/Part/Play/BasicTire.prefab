@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   innerMesh: {fileID: 212465993580246236}
+  _tireComponent: {fileID: 4734048834668821019}
   tireMeshRoot: {fileID: 0}
   wheelCollider: {fileID: 0}
 --- !u!114 &4734048834668821019
@@ -250,5 +251,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1416999b371041a993ba1d4cc6fa7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wheelCollider: {fileID: 0}
+  bearing: 0
   baseSteerAngle: 0

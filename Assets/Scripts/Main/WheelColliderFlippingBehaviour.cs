@@ -6,7 +6,7 @@ namespace Main
     public class WheelColliderFlippingBehaviour : MonoBehaviour
     {
         private ActionHandler _actionHandler;
-        private bool _flipped;
+        private bool _flippedLastFrame;
 
         private Transform _robotBody;
 
@@ -31,25 +31,26 @@ namespace Main
                 upVectorCorrectionMagnitude, robotBodyRightVector);
             
             var innerRotation = robotBodyTransform.rotation;
+            var outerRotation = upVectorCorrection * innerRotation;
 
-            transform.rotation = upVectorCorrection * innerRotation;
+            if (Vector3.Angle(robotBodyTransform.forward, outerRotation * Vector3.forward) > 90)
+                outerRotation = Quaternion.AngleAxis(180, outerRotation * Vector3.up) * outerRotation;
+
+            transform.rotation = outerRotation;
             robotBodyTransform.rotation = innerRotation; // fixes inner rotation because it gets pulled along with its parent
+            var flippedCurrently = robotBodyTransform.up.y < 0;
 
-            if (robotBodyTransform.up.y < 0)
+            if (flippedCurrently != _flippedLastFrame)
             {
-                _actionHandler.internalNegation = -1;
-
-                if (!_flipped)
-                {
-                    _actionHandler.InvertTires();
-                    _flipped = true;
-                }
+                if (flippedCurrently)
+                    _actionHandler.internalNegation = -1;
+                else
+                    _actionHandler.internalNegation = 1;
+                
+                _actionHandler.AdjustTireOrientation();
+                _flippedLastFrame = flippedCurrently;
             }
-            else
-            {
-                _actionHandler.internalNegation = 1;
-                _flipped = false;
-            }
+            
         }
     }
 }

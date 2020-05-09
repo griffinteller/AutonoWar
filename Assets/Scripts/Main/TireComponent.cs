@@ -12,6 +12,23 @@ namespace Main
 
         public float baseSteerAngle;
 
+        public float originalSteerAngle;
+
+        public void Start()
+        {
+
+            originalSteerAngle = baseSteerAngle;
+
+        }
+
+        public void ResetTireSteering()
+        {
+
+            baseSteerAngle = originalSteerAngle;
+            bearing = 0;
+
+        }
+
         public void Update()
         {
 

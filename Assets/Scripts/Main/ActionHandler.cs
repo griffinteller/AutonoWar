@@ -30,6 +30,8 @@ namespace Main
 
         private readonly Dictionary<string, TireComponent> _tireComponents = new Dictionary<string, TireComponent>();
 
+        private bool _waiting;
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -74,6 +76,13 @@ namespace Main
 
                 case ResetState.NeedToUndoReset:
 
+                    if (!_waiting)
+                    {
+                        _waiting = true;
+                        break;
+                    }
+
+                    _waiting = false;
                     UndoReset();
                     _resetState = ResetState.Normal;
                     break;
@@ -110,11 +119,13 @@ namespace Main
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.isKinematic = true;
 
+            internalNegation = 1;
+
             foreach (var tire in _tireComponents.Values)
             {
                 tire.WheelCollider.motorTorque = 0;
-                tire.bearing = 0;
-                tire.WheelCollider.brakeTorque = 10000;
+                tire.WheelCollider.brakeTorque = 10000000000000000;
+                tire.ResetTireSteering();
             }
         }
 
@@ -122,16 +133,23 @@ namespace Main
         {
 
             var tireObject = _tireComponents[tireName + "Vis"];
-            tireObject.WheelCollider.motorTorque = torque * internalNegation; //* userNegation;
+            tireObject.WheelCollider.motorTorque = torque * internalNegation;
             
         }
 
-        public void InvertTires()
+        public void AdjustTireOrientation()
         {
             foreach (var tire in _tireComponents.Values)
             {
                 tire.WheelCollider.motorTorque *= -1;
                 tire.bearing *= -1;
+
+                var correction = 0;
+
+                if (internalNegation == -1)
+                    correction = 180;
+                
+                tire.baseSteerAngle = (tire.originalSteerAngle + correction) % 360;
             }
         }
 
