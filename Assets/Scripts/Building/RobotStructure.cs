@@ -61,6 +61,20 @@ namespace Building
             }
             
         }
+
+        public string ToJson()
+        {
+
+            return JsonUtility.ToJson(this);
+
+        }
+
+        public static RobotStructure FromJson(string json)
+        {
+
+            return JsonUtility.FromJson<RobotStructure>(json);
+
+        }
         
     }
     

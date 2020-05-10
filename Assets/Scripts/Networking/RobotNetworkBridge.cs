@@ -1,4 +1,5 @@
-﻿using Main;
+﻿using Building;
+using Main;
 using Photon.Pun;
 using UnityEngine;
 
@@ -28,6 +29,12 @@ namespace Networking
                 playerConnection.playerObject = gameObject;
                     
                 Camera.main.GetComponent<CameraMotionScript>().SetCenterObject(gameObject);
+
+                var robotStructure = BuildHandler.GetRobotStructure();
+                photonView.RPC(
+                    "BuildRobotRpc", 
+                    RpcTarget.AllBuffered, 
+                    robotStructure.ToJson());
                     
                 GetComponent<UserScriptInterpreter>().enabled = true;
                 GetComponent<RobotStateSender>().enabled = true;

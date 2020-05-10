@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using Building;
+using Photon.Pun;
 using UnityEngine;
 using Utility;
 
 namespace Main
 {
-    public class DesignLoaderPlay : MonoBehaviour
+    public class DesignLoaderPlay : MonoBehaviourPun
     {
 
         [SerializeField] private ActionHandler actionHandler;
@@ -16,23 +17,28 @@ namespace Main
         [SerializeField] private Transform wheelColliderRoot;
         [SerializeField] private Transform tireMeshRoot;
         [SerializeField] private GameObject wheelColliderPrefab;
-        
 
         private readonly Dictionary<string, GameObject> _gamePartsDict = new Dictionary<string, GameObject>();
 
         private Rigidbody _robotRigidbody;
 
-        public void Start()
+        [PunRPC]
+        public void BuildRobotRpc(object data)
         {
-            
             LoadPartListIntoDict();
-
             _robotRigidbody = GetComponent<Rigidbody>();
-            
-            CreateParts();
-            
+            var structure = RobotStructure.FromJson((string) data);
+            CreateParts(structure);
             actionHandler.LoadTiresIntoDict();
+        }
 
+        public void BuildRobotSinglePlayer()
+        {
+            LoadPartListIntoDict();
+            _robotRigidbody = GetComponent<Rigidbody>();
+            var structure = BuildHandler.GetRobotStructure();
+            CreateParts(structure);
+            actionHandler.LoadTiresIntoDict();
         }
 
         private void LoadPartListIntoDict()
@@ -50,10 +56,8 @@ namespace Main
 
         }
 
-        private void CreateParts()
+        private void CreateParts(RobotStructure structure)
         {
-
-            var structure = BuildHandler.GetRobotStructure();
 
             foreach (var part in structure.parts)
             {

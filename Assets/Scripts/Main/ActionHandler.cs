@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
+﻿using System.Collections.Generic;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
@@ -32,6 +30,8 @@ namespace Main
 
         private bool _waiting;
 
+        private const float MaxAngularVelocity = 500f;
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -41,6 +41,8 @@ namespace Main
             _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
             _rigidbody = GetComponent<Rigidbody>();
             
+            SetMaximumAngularVelocities();
+            
             if (PhotonNetwork.InRoom)
             {
                 _robotNetworkBridge.enabled = true;
@@ -49,8 +51,23 @@ namespace Main
             {
                 GetComponent<UserScriptInterpreter>().enabled = true;
                 GetComponent<RobotStateSender>().enabled = true;
+                GetComponent<DesignLoaderPlay>().BuildRobotSinglePlayer();
             }
             
+        }
+
+        private void SetMaximumAngularVelocities()
+        {
+
+            var rigidbodies = GetComponentsInChildren<Rigidbody>();
+
+            foreach (var rigidbody in rigidbodies)
+            {
+
+                rigidbody.maxAngularVelocity = MaxAngularVelocity;
+
+            }
+
         }
 
         public void LoadTiresIntoDict()

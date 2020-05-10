@@ -63,6 +63,11 @@ namespace Sensor
             if (_gamemode.Equals("Classic Tag") && _classicTagScript.currentItActorNumber != -1) // we've assigned an it
             {
 
+                var it = _playerConnection.robots[_classicTagScript.currentItActorNumber];
+
+                if (!it)
+                    _playerConnection.robots.Remove(_classicTagScript.currentItActorNumber);
+
                 itPing = _playerConnection.robots[_classicTagScript.currentItActorNumber]
                     .transform.position - _robotBody.transform.position;
 
