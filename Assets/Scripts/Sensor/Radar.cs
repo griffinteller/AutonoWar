@@ -12,20 +12,20 @@ namespace Sensor
     {
 
         private GameObject _robotBody;
-        private string _gamemode;
+        private GameModeEnum _gameMode;
         private ClassicTagScript _classicTagScript;
         private PlayerConnection _playerConnection;
 
         public Vector3[] pings;
         public Vector3 itPing;
 
-        public Radar(GameObject robot, string gamemode)
+        public Radar(GameObject robot, GameModeEnum gameMode)
         {
 
             _robotBody = robot;
-            _gamemode = gamemode;
+            _gameMode = gameMode;
 
-            if (_gamemode.Equals("Classic Tag"))
+            if (_gameMode == GameModeEnum.ClassicTag)
             {
 
                 var robotRoot = _robotBody.transform.root.gameObject;
@@ -43,7 +43,7 @@ namespace Sensor
             if (PhotonNetwork.IsConnected)
             {
 
-                foreach (var robot in GameObject.FindGameObjectsWithTag("Robot"))
+                foreach (var robot in GameObject.FindGameObjectsWithTag("RobotDescription"))
                 {
 
                     if (robot.GetInstanceID() != _robotBody.transform.parent.gameObject.GetInstanceID())
@@ -60,7 +60,7 @@ namespace Sensor
             
             pings = tmpPingList.ToArray();
 
-            if (_gamemode.Equals("Classic Tag") && _classicTagScript.currentItActorNumber != -1) // we've assigned an it
+            if (_gameMode == GameModeEnum.ClassicTag && _classicTagScript.currentItActorNumber != -1) // we've assigned an it
             {
 
                 var it = _playerConnection.robots[_classicTagScript.currentItActorNumber];

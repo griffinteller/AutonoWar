@@ -28,7 +28,7 @@ namespace UI
         public void CloseInputWindow()
         {
             
-            UIUtility.DisableCanvasGroup(tireNamingWindow);
+            UiUtility.DisableCanvasGroupStatic(tireNamingWindow);
             
             SetSceneInteractable(true);
             
@@ -40,7 +40,7 @@ namespace UI
             
             _buildTireComponent = tireComponentJustPlaced;
             
-            UIUtility.EnableCanvasGroup(tireNamingWindow);
+            UiUtility.EnableCanvasGroup(tireNamingWindow);
 
             SetSceneInteractable(false);
 

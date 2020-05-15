@@ -7,6 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/MainMenuScene.unity
+    guid: 0ffe852b5a5c3d54abfda1ee6bad2b2e
+  - enabled: 0
+    path: Assets/Scenes/OldMainMenuScene.unity
     guid: 15a8ef343b56d0445b4b531f97c3c6ee
   - enabled: 1
     path: Assets/Scenes/SinglePlayerHighlands.unity

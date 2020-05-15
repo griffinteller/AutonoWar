@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Utility;
 
 namespace Sensor
 {
@@ -21,7 +22,7 @@ namespace Sensor
         {
 
             var pos = _robot.transform.position;
-            altitude = pos.y - Terrain.activeTerrain.SampleHeight(pos);
+            altitude = pos.y - TerrainUtility.GetClosestCurrentTerrain(pos).SampleHeight(pos);
 
         }
 

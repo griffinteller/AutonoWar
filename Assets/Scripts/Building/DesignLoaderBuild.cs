@@ -9,8 +9,8 @@ namespace Building
     public class DesignLoaderBuild : MonoBehaviour
     {
 
-        [SerializeField] private List<BuildObjectComponent> partList;
-        [SerializeField] private GameObject rootCube;
+        [SerializeField] private List<BuildObjectComponent> partList;  // list of possible parts
+        [SerializeField] private GameObject rootCube;  // starting cube if new robot
 
         private readonly Dictionary<string, BuildObjectComponent> _partComponentDict = 
             new Dictionary<string, BuildObjectComponent>();

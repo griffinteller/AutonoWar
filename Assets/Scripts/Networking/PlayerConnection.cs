@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Utility;
 
@@ -8,7 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace Networking
 {
-    public class PlayerConnection : MonoBehaviour
+    public class PlayerConnection : MonoBehaviourPunCallbacks
     {
 
         public GameObject playerObjectPrefab;
@@ -25,8 +26,7 @@ namespace Networking
             startingPosition.x += Random.Range(-10, 10);
             startingPosition.z += Random.Range(-10, 10);
             startingPosition.y = TerrainUtility.GetClosestCurrentTerrain(startingPosition).SampleHeight(startingPosition) + 1;
-            Debug.Log(startingPosition);
-            
+
             var res = PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
             cameraMotionScript.SetCenterObject(res);
 
@@ -35,7 +35,7 @@ namespace Networking
         public void OnFullyLoaded()
         {
 
-            if (PhotonNetwork.CurrentRoom.CustomProperties["Gamemode"].Equals("Classic Tag"))
+            if ((GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"] == GameModeEnum.ClassicTag)
             {
 
                 robots[PhotonNetwork.LocalPlayer.ActorNumber].GetComponent<ClassicTagScript>().enabled = true;
@@ -44,5 +44,11 @@ namespace Networking
             
         }
 
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+
+            robots.Remove(otherPlayer.ActorNumber);
+
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace Building
     public class BuildHandler : MonoBehaviour
     {
 
-        public const string RobotFileName = "robot.json";
+        private const string RobotFileName = "robot.json";
         
-        public bool interactable;
+        public bool interactable; // can the player currently place blocks?
         public TireNameInputHandler tireNameInputHandler;
         public GameObject currentItemPrefab;
 
@@ -38,9 +38,11 @@ namespace Building
         public void Update()
         {
 
-            if (!interactable) return;
+            if (!interactable)
+                return;
 
-            if (!Input.GetKey(KeyCode.LeftShift)) return;
+            if (!Input.GetKey(KeyCode.LeftShift))
+                return;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -97,6 +99,8 @@ namespace Building
             newObjectCenter += _currentItemBuildComponent.GetRadius() * connection.outwardsDirection;
             //displaces by radius of the object
             
+            // is this a tire, and if it is, name it
+            
              var obj = Instantiate(currentItemPrefab, newObjectCenter, newObjectRotation, transform);
              var instantiatedBuildComponent = obj.GetComponent<BuildObjectComponent>();
 
@@ -128,9 +132,8 @@ namespace Building
             
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             
-            if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var bc) || !bc.removable) return;
-
-            var hitGameObject = hitInfo.transform.gameObject;
+            if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var bc) || !bc.removable) 
+                return;
 
             Destroy(hitInfo.transform.gameObject);
             

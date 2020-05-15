@@ -12,7 +12,7 @@ namespace Tests
         void Update()
         {
         
-            transform.RotateAround(Vector3.zero, Vector3.up, amount);
+            transform.RotateAround(viewObject.position, Vector3.up, amount);
             transform.LookAt(viewObject.position);
         
         }

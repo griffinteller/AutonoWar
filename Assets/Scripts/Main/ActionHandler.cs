@@ -1,73 +1,43 @@
 ﻿using System.Collections.Generic;
-using Networking;
-using Photon.Pun;
 using UnityEngine;
 
 namespace Main
 {
     public class ActionHandler : MonoBehaviour
     {
-        private readonly Dictionary<string, GameObject> _gameObjectsCache = new Dictionary<string, GameObject>(); 
-        // caching in a hashtable is faster than sequentially searching every time
+        
+        public int internalNegation = 1; // Wheels should keep spinning in same direction regardless of user coord flipping
+        
+        [SerializeField] private GameObject robotBody;
+        
+        private readonly Dictionary<string, TireComponent> _tireComponents = 
+            new Dictionary<string, TireComponent>();
 
         private ResetState _resetState = ResetState.Normal;
         private Rigidbody _rigidbody;
+        private bool _resetting;
 
-        private RobotNetworkBridge _robotNetworkBridge;
-
-        private Vector3
-            _startingPosition; // we store these in case we want to reset the robot and we didn't start from 0,0,0
-
+        // we store these in case we want to reset the robot and we didn't start from 0,0,0
+        private Vector3 _startingPosition;
         private Quaternion _startingRotation;
         
-        public int actorNumber;
-
-        public int internalNegation = 1; // Wheels should keep spinning in same direction regardless of user coord flipping
-
-        public GameObject robotBody;
-
-        private readonly Dictionary<string, TireComponent> _tireComponents = new Dictionary<string, TireComponent>();
-
-        private bool _waiting;
-
-        private const float MaxAngularVelocity = 500f;
-
-        // Start is called before the first frame update
         private void Start()
         {
-
-            _startingPosition = transform.position;
-            _startingRotation = transform.rotation;
-            _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+            
             _rigidbody = GetComponent<Rigidbody>();
-            
-            SetMaximumAngularVelocities();
-            
-            if (PhotonNetwork.InRoom)
-            {
-                _robotNetworkBridge.enabled = true;
-            }
-            else
-            {
-                GetComponent<UserScriptInterpreter>().enabled = true;
-                GetComponent<RobotStateSender>().enabled = true;
-                GetComponent<DesignLoaderPlay>().BuildRobotSinglePlayer();
-            }
-            
+
+            LoadStartingPosition();
+
         }
 
-        private void SetMaximumAngularVelocities()
+        private void LoadStartingPosition()
         {
 
-            var rigidbodies = GetComponentsInChildren<Rigidbody>();
-
-            foreach (var rigidbody in rigidbodies)
-            {
-
-                rigidbody.maxAngularVelocity = MaxAngularVelocity;
-
-            }
-
+            var t = transform;
+            
+            _startingPosition = t.position;
+            _startingRotation = t.rotation;
+            
         }
 
         public void LoadTiresIntoDict()
@@ -93,13 +63,13 @@ namespace Main
 
                 case ResetState.NeedToUndoReset:
 
-                    if (!_waiting)
+                    if (!_resetting)
                     {
-                        _waiting = true;
+                        _resetting = true;
                         break;
                     }
 
-                    _waiting = false;
+                    _resetting = false;
                     UndoReset();
                     _resetState = ResetState.Normal;
                     break;
@@ -177,14 +147,6 @@ namespace Main
 
             tireComponent.bearing = internalNegation * bearing;
         }
-
-        public void OnDestroy()
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                var playerConnection = GameObject.FindWithTag("ConnectionObject").GetComponent<PlayerConnection>();
-                playerConnection.robots.Remove(actorNumber);
-            }
-        }
+        
     }
 }

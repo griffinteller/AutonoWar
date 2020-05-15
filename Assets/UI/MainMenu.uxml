@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="screen" style="flex-grow: 1; align-items: stretch; justify-content: flex-start; flex-direction: column;">
+        <Style src="MainMenu.uss" />
+        <ui:VisualElement name="top-bar" style="height: 10%; color: rgba(255, 255, 255, 255); background-color: rgba(0, 0, 0, 255);" />
+        <ui:VisualElement name="MainArea" style="flex-grow: 1; flex-direction: row-reverse;">
+            <ui:VisualElement name="MainButtons" style="flex-basis: auto; align-items: stretch; justify-content: space-between;">
+                <ui:VisualElement name="top" class="button-container" />
+                <ui:VisualElement name="middle" class="button-container" />
+                <ui:VisualElement name="bottom" class="button-container" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

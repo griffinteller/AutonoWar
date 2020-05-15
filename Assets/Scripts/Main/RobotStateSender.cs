@@ -15,7 +15,7 @@ namespace Main
 
         public GameObject robotBody;
 
-        private Robot _robotStateDescription;
+        private RobotDescription _robotDescriptionStateDescription;
         private Stream _clientStream;
         private bool _connected;
         private SimplePlatform _platform;
@@ -33,7 +33,7 @@ namespace Main
             try
             {
 
-                var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
+                var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotDescriptionStateDescription); // json
 
                 while (true)
                 {
@@ -72,8 +72,8 @@ namespace Main
 
             _platform = SystemUtility.GetSimplePlatform();
             
-            GetRoomVariables(out var gamemode, out var actorNumber, out var classicTagScript);
-            _robotStateDescription = new Robot(robotBody, gamemode, actorNumber, classicTagScript);
+            GetRoomVariables(out var gameMode, out var actorNumber, out var classicTagScript);
+            _robotDescriptionStateDescription = new RobotDescription(robotBody, gameMode, actorNumber, classicTagScript);
 
             InitStream();
             
@@ -135,12 +135,12 @@ namespace Main
                 // we are not connected and we can't connect
                 return;  // therefore the API is not running
             
-            _robotStateDescription.Update();
+            _robotDescriptionStateDescription.Update();
 
             try
             {
                 
-                var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription);
+                var robotDescriptionBytes = GetRobotDescriptionBytes(_robotDescriptionStateDescription);
                 _clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
 
             }
@@ -157,7 +157,7 @@ namespace Main
         private void PosixUpdate()
         {
             
-            _robotStateDescription.Update();
+            _robotDescriptionStateDescription.Update();
 
             if (!(_currentWriteTask.Status == TaskStatus.Canceled 
                   || _currentWriteTask.Status == TaskStatus.Faulted
@@ -168,36 +168,36 @@ namespace Main
             
         }
 
-        private static byte[] GetRobotDescriptionBytes(Robot robotDescription)
+        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescriptionDescription)
         {
             
             return Encoding.ASCII.GetBytes(
-                JsonUtility.ToJson(robotDescription) + MessageSeparator);
+                JsonUtility.ToJson(robotDescriptionDescription) + MessageSeparator);
             
         }
 
-        private static string GetRobotDescription(Robot robotDescription)
+        private static string GetRobotDescription(RobotDescription robotDescriptionDescription)
         {
 
-            return JsonUtility.ToJson(robotDescription);
+            return JsonUtility.ToJson(robotDescriptionDescription);
 
         }
 
         private void GetRoomVariables(
-            out string gamemode,
+            out GameModeEnum gameMode,
             out int actorNumber,
             out ClassicTagScript classicTagScript)
         {
 
-            gamemode = "Singleplayer";
+            gameMode = GameModeEnum.SinglePlayer;
             actorNumber = -1;
             classicTagScript = null;
             
             if (PhotonNetwork.InRoom)
             {
 
-                gamemode = (string) PhotonNetwork.CurrentRoom.CustomProperties["Gamemode"];
-                if (gamemode.Equals("Classic Tag"))
+                gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
+                if (gameMode == GameModeEnum.ClassicTag)
                 {
 
                     classicTagScript = GetComponent<ClassicTagScript>();

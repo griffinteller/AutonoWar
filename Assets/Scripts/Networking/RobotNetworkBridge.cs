@@ -16,7 +16,7 @@ namespace Networking
         public void Start()
         {
 
-            Debug.Log("Starting Robot Network Bridge");
+            Debug.Log("Starting RobotDescription Network Bridge");
             
             playerConnectionObject = GameObject.FindWithTag("ConnectionObject");
             playerConnection = playerConnectionObject.GetComponent<PlayerConnection>();
