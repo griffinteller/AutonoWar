@@ -43,7 +43,7 @@ namespace Sensor
             if (PhotonNetwork.IsConnected)
             {
 
-                foreach (var robot in GameObject.FindGameObjectsWithTag("RobotDescription"))
+                foreach (var robot in GameObject.FindGameObjectsWithTag("Robot"))
                 {
 
                     if (robot.GetInstanceID() != _robotBody.transform.parent.gameObject.GetInstanceID())
