@@ -197,14 +197,13 @@ namespace Main
             {
 
                 gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
+                print(gameMode);
+                
+                var robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+                actorNumber = robotNetworkBridge.actorNumber;
                 if (gameMode == GameModeEnum.ClassicTag)
                 {
-
                     classicTagScript = GetComponent<ClassicTagScript>();
-
-                    var robotNetworkBridge = GetComponent<RobotNetworkBridge>();
-                    actorNumber = robotNetworkBridge.actorNumber;
-
                 }
 
             }

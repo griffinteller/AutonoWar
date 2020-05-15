@@ -30,7 +30,10 @@ namespace Main
             gps = new GPS(gameObject);
             altimeter = new Altimeter(gameObject);
             radar = new Radar(gameObject, gameMode);
-            this.gameMode = gameMode.ToString();
+            this.gameMode = new GameModeEnumWrapper
+            {
+                Index = (int) gameMode
+            }.ToString();
 
             _classicTagScript = classicTagScript;
             _id = actorNumber;

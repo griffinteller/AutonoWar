@@ -39,10 +39,8 @@ namespace Networking
         {
 
             if (photonEvent.Code != (byte) PhotonEventCode.NewIt)
-            {
                 return;
-            }
-            
+
             SetNewIt(((int[]) photonEvent.CustomData)[0]);
             
         }
@@ -77,8 +75,7 @@ namespace Networking
 
                 foreach (var meshRenderer in oldItMeshRenderers)
                 {
-
-                    print(meshRenderer);
+                    
                     meshRenderer.material.color = normalTint;
 
                 }
