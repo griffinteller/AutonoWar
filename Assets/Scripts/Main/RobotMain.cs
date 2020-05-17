@@ -12,6 +12,7 @@ namespace Main
         public int actorNumber;
         
         private const float MaxAngularVelocity = 500f;
+        private const float TagBuffer = 0.3f;
 
         public void Start()
         {
@@ -19,6 +20,22 @@ namespace Main
             SetMaximumAngularVelocities();
 
             InitializeScripts();
+
+        }
+
+        public void AddSphereTrigger()
+        {
+
+            var bounds = new Bounds();
+            var colliders = GetComponentsInChildren<Collider>();
+            
+            foreach (var collider in colliders)
+                bounds.Encapsulate(collider.bounds.extents + collider.transform.localPosition);
+
+            var sphereCollider = gameObject.AddComponent<SphereCollider>();
+
+            sphereCollider.radius = bounds.extents.magnitude + TagBuffer;
+            sphereCollider.isTrigger = true;
 
         }
 

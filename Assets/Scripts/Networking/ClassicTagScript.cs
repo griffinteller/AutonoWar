@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon;
+﻿using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -105,11 +106,11 @@ namespace Networking
 
         }
 
-        private void OnCollisionEnter(Collision other)
+        public void OnTriggerEnter(Collider other)
         {
-
+            
             var collisionObjectRoot = other.transform.root;
-            if (collisionObjectRoot.tag.Equals("RobotDescription") && 
+            if (collisionObjectRoot.tag.Equals("Robot") && 
                 PhotonNetwork.LocalPlayer.ActorNumber == currentItActorNumber)
             {
 
@@ -117,7 +118,7 @@ namespace Networking
                 RaiseNewItEvent(collisionObjectRoot.GetComponent<RobotNetworkBridge>().actorNumber);
 
             }    
-
+            
         }
 
     }

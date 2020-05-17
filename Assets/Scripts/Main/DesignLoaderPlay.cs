@@ -10,6 +10,7 @@ namespace Main
     public class DesignLoaderPlay : MonoBehaviourPun
     {
 
+        [SerializeField] private RobotMain robotMain;
         [SerializeField] private ActionHandler actionHandler;
         [SerializeField] private List<GameObject> gamePartList;
         [SerializeField] private Transform structureRoot;
@@ -28,7 +29,9 @@ namespace Main
             _robotRigidbody = GetComponent<Rigidbody>();
             var structure = RobotStructure.FromJson((string) data);
             CreateParts(structure);
+            
             actionHandler.LoadTiresIntoDict();
+            robotMain.AddSphereTrigger();
         }
 
         public void BuildRobotSinglePlayer()
@@ -38,6 +41,7 @@ namespace Main
             var structure = BuildHandler.GetRobotStructure();
             CreateParts(structure);
             actionHandler.LoadTiresIntoDict();
+            robotMain.AddSphereTrigger();
         }
 
         private void LoadPartListIntoDict()

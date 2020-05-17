@@ -120,7 +120,7 @@ namespace Main
         {
 
             var tireObject = _tireComponents[tireName + "Vis"];
-            tireObject.WheelCollider.motorTorque = torque * internalNegation;
+            tireObject.WheelCollider.motorTorque = torque;
             
         }
 
@@ -128,7 +128,7 @@ namespace Main
         {
             foreach (var tire in _tireComponents.Values)
             {
-                tire.WheelCollider.motorTorque *= -1;
+                //tire.WheelCollider.motorTorque *= -1;
                 tire.bearing *= -1;
 
                 var correction = 0;

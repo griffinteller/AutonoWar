@@ -78,11 +78,11 @@ GameObject:
   - component: {fileID: 8922581642721579762}
   - component: {fileID: 6574105224318105294}
   - component: {fileID: 7812004616116019815}
+  - component: {fileID: 2849167643997509586}
   - component: {fileID: -691069952085206052}
   - component: {fileID: 6169384561132137689}
   - component: {fileID: 686880663218978992}
   - component: {fileID: 6681657717093209485}
-  - component: {fileID: 2849167643997509586}
   m_Layer: 9
   m_Name: RobotParent
   m_TagString: Robot
@@ -201,6 +201,29 @@ MonoBehaviour:
   playerConnectionObject: {fileID: 0}
   playerConnection: {fileID: 0}
   actorNumber: 0
+--- !u!114 &2849167643997509586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421177872403235923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c876e5bd458b46b793da92e38990a64f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  robotMain: {fileID: 3365832499811330419}
+  actionHandler: {fileID: 4416227297937577906}
+  gamePartList:
+  - {fileID: 567264566145193179, guid: 52e8c1fd7f6b2404fb227d15c8ecc7e8, type: 3}
+  - {fileID: 5299458965186968501, guid: 0f865f8719734ee4abcf72f52d288e92, type: 3}
+  - {fileID: 2342486262294323141, guid: 0796e104400d28744b1992392d73c9f3, type: 3}
+  structureRoot: {fileID: 171596509867255858}
+  wheelColliderRoot: {fileID: 428431369170529367}
+  tireMeshRoot: {fileID: 7147369648861061552}
+  wheelColliderPrefab: {fileID: 157531082362127546, guid: 1fdd45156f5b319418587cd000aeee03,
+    type: 3}
 --- !u!54 &-691069952085206052
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -289,28 +312,6 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &2849167643997509586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4421177872403235923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c876e5bd458b46b793da92e38990a64f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionHandler: {fileID: 4416227297937577906}
-  gamePartList:
-  - {fileID: 567264566145193179, guid: 52e8c1fd7f6b2404fb227d15c8ecc7e8, type: 3}
-  - {fileID: 5299458965186968501, guid: 0f865f8719734ee4abcf72f52d288e92, type: 3}
-  - {fileID: 2342486262294323141, guid: 0796e104400d28744b1992392d73c9f3, type: 3}
-  structureRoot: {fileID: 171596509867255858}
-  wheelColliderRoot: {fileID: 428431369170529367}
-  tireMeshRoot: {fileID: 7147369648861061552}
-  wheelColliderPrefab: {fileID: 157531082362127546, guid: 1fdd45156f5b319418587cd000aeee03,
-    type: 3}
 --- !u!1 &6034424552130210897
 GameObject:
   m_ObjectHideFlags: 0

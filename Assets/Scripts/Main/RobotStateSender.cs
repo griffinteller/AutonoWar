@@ -15,7 +15,7 @@ namespace Main
 
         public GameObject robotBody;
 
-        private RobotDescription _robotDescriptionStateDescription;
+        private RobotDescription _robotStateDescription;
         private Stream _clientStream;
         private bool _connected;
         private SimplePlatform _platform;
@@ -23,7 +23,6 @@ namespace Main
         
         private const string PipeName = "RobotInfoPipe";
         private const string MessageSeparator = ";";
-        private const int SendInterval = 5;
 
         private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
         {
@@ -33,7 +32,7 @@ namespace Main
             try
             {
 
-                var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotDescriptionStateDescription); // json
+                var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
 
                 while (true)
                 {
@@ -42,9 +41,9 @@ namespace Main
                         rssCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Write);
                         break;
                     }
-                    catch (IOException)
+                    catch (IOException e)
                     {
-                        continue;
+                        Debug.Log("Couldn't connect rss: " + e);
                     }
                 }
 
@@ -73,7 +72,7 @@ namespace Main
             _platform = SystemUtility.GetSimplePlatform();
             
             GetRoomVariables(out var gameMode, out var actorNumber, out var classicTagScript);
-            _robotDescriptionStateDescription = new RobotDescription(robotBody, gameMode, actorNumber, classicTagScript);
+            _robotStateDescription = new RobotDescription(robotBody, gameMode, actorNumber, classicTagScript);
 
             InitStream();
             
@@ -135,12 +134,12 @@ namespace Main
                 // we are not connected and we can't connect
                 return;  // therefore the API is not running
             
-            _robotDescriptionStateDescription.Update();
+            _robotStateDescription.Update();
 
             try
             {
                 
-                var robotDescriptionBytes = GetRobotDescriptionBytes(_robotDescriptionStateDescription);
+                var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription);
                 _clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
 
             }
@@ -157,7 +156,7 @@ namespace Main
         private void PosixUpdate()
         {
             
-            _robotDescriptionStateDescription.Update();
+            _robotStateDescription.Update();
 
             if (!(_currentWriteTask.Status == TaskStatus.Canceled 
                   || _currentWriteTask.Status == TaskStatus.Faulted

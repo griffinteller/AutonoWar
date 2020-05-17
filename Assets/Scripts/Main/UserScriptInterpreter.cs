@@ -121,8 +121,9 @@ namespace Main
                     usiCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Read);
                     break;
                 }
-                catch (IOException)
+                catch (IOException e)
                 {
+                    Debug.Log("Couldn't connect usi: " + e);
                     continue;
                 }
             }

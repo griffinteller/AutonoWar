@@ -43,7 +43,7 @@ namespace Sensor
         {
             
             distanceMatrix = new FloatArrayContainer
-                [(int) ((-verticalFOVBounds[0] + verticalFOVBounds[1]) / verticalDensity + 0.5f)];
+                [(int) ((-verticalFOVBounds[0] + verticalFOVBounds[1]) / verticalDensity + 0.5f) + 1];
 
             var horizontalSamples = (int) (360.0 / horizontalDensity + 0.5f);
             for (var i = 0; i < distanceMatrix.Length; i++)
@@ -68,17 +68,9 @@ namespace Sensor
                     var rayDirectionWorld = _robotBody.transform.TransformDirection(rayDirectionLocal);
 
                     if (Physics.Raycast(_robotBody.transform.position, rayDirectionWorld, out var hit, range, _lidarMask))
-                    {
-
                         distanceMatrix[i].array[j] = hit.distance;
-
-                    }
                     else
-                    {
-
                         distanceMatrix[i].array[j] = range;
-
-                    }
 
                 }
 
