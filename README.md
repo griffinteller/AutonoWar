@@ -2,7 +2,7 @@
 
 A game focused on realtime competition between user-programmed robots.
 
-**Note to alpha-testers**: This is an alpha! Please don't distribut these builds! It's buggy, and it's unstable. Things may break, things may disappear. Expect breaking changes in the future.
+**Note to alpha-testers**: This is an alpha! Please don't distribute these builds! It's buggy, and it's unstable. Things may break, things may disappear. Expect breaking changes in the future.
 
 Installation
 ------------
