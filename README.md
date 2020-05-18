@@ -1,11 +1,11 @@
 # AutonoWar
 
-Battle royale with autonomous, user-programmed players.
+A game focused on realtime competition between user-programmed robots.
 
 Installation
 ------------
 
-Currently, AutonoWar is separated into two separate pieces of software: The game itself, which can be found on the [release page](1) as a zip file, and the python package allowing you to write code to control your robot. In the documentation, the game is referred to as "AutonoWar" and the python package as "awconnection."
+Currently, AutonoWar is separated into two separate pieces of software: The game itself, which can be found on the [release page][1] as a zip file, and the python package allowing you to write code to control your robot. In the documentation, the game is referred to as "AutonoWar" and the python package as "awconnection."
 
 To install AutonoWar (the game), head to the release page and download the latest zip. Right now, nothing is that stable, so don't worry about choosing a too-recent release. Double click on the zip file, and run the .exe/.app inside. Windows users should have no problem installing; mac users might. If mac is giving you problems, head to the **mac security issues** section below.
 
@@ -57,4 +57,4 @@ Contribution
 
 Got an idea? Go create a card on our [trello page](https://trello.com/invite/b/nCJ2ejBj/5024f944fcaaff7247377fa953e70b05/autonowar-features-and-bugs). If you want to jump in and get your hands dirty, feel free to fork this repo and submit a pull request (just make sure you're using unity==2019.3).
 
-[1](https://github.com/griffinteller/AutonoWar/releases)
+[1]: https://github.com/griffinteller/AutonoWar/releases
