@@ -775,11 +775,6 @@ PrefabInstance:
       propertyPath: playerConnection
       value: 
       objectReference: {fileID: 925112124}
-    - target: {fileID: 1467070168979876491, guid: f85e687a1917adf4ab681b85bd75db5f,
-        type: 3}
-      propertyPath: maxDistance
-      value: 500
-      objectReference: {fileID: 0}
     - target: {fileID: 1467070168979876495, guid: f85e687a1917adf4ab681b85bd75db5f,
         type: 3}
       propertyPath: m_Name

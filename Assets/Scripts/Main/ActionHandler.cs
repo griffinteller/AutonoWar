@@ -20,10 +20,12 @@ namespace Main
         // we store these in case we want to reset the robot and we didn't start from 0,0,0
         private Vector3 _startingPosition;
         private Quaternion _startingRotation;
+        private RobotMain _robotMain;
         
         private void Start()
         {
-            
+
+            _robotMain = GetComponent<RobotMain>();
             _rigidbody = GetComponent<Rigidbody>();
 
             LoadStartingPosition();
@@ -74,6 +76,7 @@ namespace Main
                     _resetState = ResetState.Normal;
                     break;
             }
+            
         }
 
         private void UndoReset()

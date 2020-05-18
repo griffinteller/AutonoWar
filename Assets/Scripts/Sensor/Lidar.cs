@@ -24,7 +24,7 @@ namespace Sensor
         public Lidar(GameObject robotBody)
         {
 
-            _lidarMask = LayerMask.GetMask("LidarVisible");
+            _lidarMask = LayerMask.GetMask("LidarVisible", "Robots");
             _robotBody = robotBody;
             _actionHandler = _robotBody.transform.root.GetComponent<ActionHandler>();
             horizontalDensity = 5;

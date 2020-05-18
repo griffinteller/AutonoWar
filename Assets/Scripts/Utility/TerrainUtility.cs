@@ -9,7 +9,7 @@ namespace Utility
         public static Terrain GetClosestCurrentTerrain(Vector3 playerPos)
         {
             //Get all terrain
-            Terrain[] terrains = Terrain.activeTerrains;
+            var terrains = Terrain.activeTerrains;
 
             //Make sure that terrains length is ok
             if (terrains.Length == 0)

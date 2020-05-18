@@ -38,10 +38,10 @@ namespace Main
         {
             LoadPartListIntoDict();
             _robotRigidbody = GetComponent<Rigidbody>();
+            
             var structure = BuildHandler.GetRobotStructure();
             CreateParts(structure);
-            actionHandler.LoadTiresIntoDict();
-            robotMain.AddSphereTrigger();
+            robotMain.OnPartsLoaded();
         }
 
         private void LoadPartListIntoDict()

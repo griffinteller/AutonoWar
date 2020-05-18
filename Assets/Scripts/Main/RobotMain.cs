@@ -13,6 +13,14 @@ namespace Main
         
         private const float MaxAngularVelocity = 500f;
         private const float TagBuffer = 0.3f;
+        private const string BeaconName = "Beacon";
+        private RobotNetworkBridge _robotNetworkBridge;
+
+        public void OnPartsLoaded()
+        {
+            GetComponent<ActionHandler>().LoadTiresIntoDict();
+            AddSphereTrigger();
+        }
 
         public void Start()
         {
@@ -44,7 +52,8 @@ namespace Main
 
             if (PhotonNetwork.InRoom)
             {
-                GetComponent<RobotNetworkBridge>().enabled = true;
+                _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+                _robotNetworkBridge.enabled = true;
             }
             else
             {
@@ -53,7 +62,23 @@ namespace Main
             
         }
 
-        private void InitializeSinglePlayerScripts()
+        public void Update()
+        {
+            KeyCheck();
+        }
+
+        public void SetBeaconActive(bool show)
+        {
+            transform.Find(BeaconName).gameObject.SetActive(show);
+        }
+
+        public void ToggleBeaconActive()
+        {
+            var beacon = transform.Find(BeaconName).gameObject;
+            beacon.SetActive(!beacon.activeSelf);
+        }
+
+            private void InitializeSinglePlayerScripts()
         {
             GetComponent<UserScriptInterpreter>().enabled = true;
             GetComponent<RobotStateSender>().enabled = true;
@@ -74,6 +99,15 @@ namespace Main
 
             }
 
+        }
+        
+        private void KeyCheck()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (_robotNetworkBridge && !_robotNetworkBridge.isLocal)
+                    ToggleBeaconActive();
+            }
         }
     }
 }

@@ -2759,10 +2759,12 @@ MonoBehaviour:
   startingDisplacement: {x: 0, y: 1, z: -4}
   zoomSensitivity: 50
   lookSensitivity: 50
+  smoothTime: 0.05
   minDistance: 0.5
   maxDistance: 20
   groundBuffer: 0.5
   maxCameraAngle: 80
+  cameraMode: 0
 --- !u!1001 &5563761088419352138
 PrefabInstance:
   m_ObjectHideFlags: 0

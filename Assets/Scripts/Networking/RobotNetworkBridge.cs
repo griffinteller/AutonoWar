@@ -1,4 +1,5 @@
 ﻿using Building;
+using Cam;
 using Main;
 using Photon.Pun;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Networking
         public GameObject playerConnectionObject;
         public PlayerConnection playerConnection;
         public int actorNumber;
+        public bool isLocal;
 
         public void Start()
         {
@@ -25,7 +27,8 @@ namespace Networking
 
             if (photonView.IsMine)
             {
-                    
+
+                isLocal = true;
                 playerConnection.playerObject = gameObject;
                     
                 Camera.main.GetComponent<CameraMotionScript>().SetCenterObject(gameObject);
