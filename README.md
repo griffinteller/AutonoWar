@@ -54,7 +54,7 @@ Documentation for the python API can be found on this repo's [wiki page](https:/
 
 Contribution
 ------------
-**Found a bug?** Go ahead and open an [issue][2]. **Got an idea?** Go create a card on our [trello page](https://trello.com/invite/b/nCJ2ejBj/5024f944fcaaff7247377fa953e70b05/autonowar-features-and-bugs). If you want to jump in and get your hands dirty, feel free to fork this repo and submit a pull request (just make sure you're using unity==2019.3).
+**Found a bug?** Go ahead and open an [issue][2]. **Got an idea?** Go create a card on our [trello page](https://trello.com/invite/b/nCJ2ejBj/5024f944fcaaff7247377fa953e70b05/autonowar-asterisk-autochampions-features-and-bugs). If you want to jump in and get your hands dirty, feel free to fork this repo and submit a pull request (just make sure you're using unity==2019.3).
 
 [1]: https://github.com/griffinteller/AutonoWar/releases
 [2]: https://github.com/griffinteller/AutonoWar/issues
