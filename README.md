@@ -5,10 +5,47 @@ Battle royale with autonomous, user-programmed players.
 Installation
 ------------
 
-To install, download the latest appropriate build from the [release page](https://github.com/griffinteller/AutonoWar/releases). Then make sure to install the python API with:
-  
-    pip install awconnection
+Currently, AutonoWar is separated into two separate pieces of software: The game itself, which can be found on the release page as a zip file, and the python package allowing you to write code to control your robot. In the documentation, the game is referred to as "AutonoWar" and the python package as "awconnection."
 
+To install AutonoWar (the game), head to the release page and download the latest zip. Right now, nothing is that stable, so don't worry about choosing a too-recent release. Double click on the zip file, and run the .exe/.app inside. Windows users should have no problem installing; mac users might. If mac is giving you problems, head to the **mac security issues** section below.
+
+To install the python package, 
++ Make sure you have python >3.6 installed.
++ Make sure you can run python from your shell or in an ide.
+
+Then run the following command in your shell:
+
+    pip install awconnection
+    
+Or if that doesn't work:
+
+    pip3 install awconnection
+    
+If you want to upgrade, run:
+
+    pip install --upgrade awconnection
+    
+Mac Installation/Security Issues
+--------------------------------
+
+MacOS (and more specifically macOS Catalina) doesn't always play well with apps from unknown developers. There's a very good chance you will run into a screen saying:
+
+    "AutonoWar-x.y.z" cannot be opened because it is from an unidentified developer.
+    
+If this happens, go System Preferences-->Security and click "Open Anyway." 
+
+You may also see an error saying:
+
+    The application "AutonoWar-x.y.z" cannot be opened.
+    
+On recent macOS versions, apps not built on windows don't always get flagged as executable. If this happens,
++ Open terminal
++ `cd` **into** the app itself (e.g. `cd "/Users/John Doe/Desktop/AutonoWar-x.y.z.app"`)
++ Make the app executable: `chmod +x Contents/MacOS/*`
+
+Santa's Naughty List
+--------------------
+For any googlers out there, if you try to install this on a gmac, google's antivirus "Santa" will automatically mark new builds as malware. Trust me, I'm not doing anything nefarious. To get it to run, upvote it, and then send an email to another googler with alpha access to upvote it. You can also just send an email to astroteller@gmail.com.
 
 Documentation
 -------------
