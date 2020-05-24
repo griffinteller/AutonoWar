@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameDirection;
 using Main;
 using Networking;
 using Photon.Pun;
@@ -13,7 +14,7 @@ namespace Sensor
 
         private GameObject _robotBody;
         private GameModeEnum _gameMode;
-        private ClassicTagScript _classicTagScript;
+        private ClassicTagDirector _classicTagScript;
         private PlayerConnection _playerConnection;
 
         public Vector3[] pings;
@@ -29,7 +30,7 @@ namespace Sensor
             {
 
                 var robotRoot = _robotBody.transform.root.gameObject;
-                _classicTagScript = robotRoot.gameObject.GetComponent<ClassicTagScript>();
+                _classicTagScript = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<ClassicTagDirector>();
                 _playerConnection = robotRoot.GetComponent<RobotNetworkBridge>().playerConnection;
 
             }

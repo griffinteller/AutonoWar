@@ -16,7 +16,6 @@ namespace UI
         [SerializeField] private ServerSettingsHandler serverSettingsHandler;
         [SerializeField] private CanvasGroup roomWaitingPanel;
         [SerializeField] private UiUtility uiUtility;
-        [SerializeField] private ModalWindow modalWindow;
         [SerializeField] private Text waitingText;
         [SerializeField] private Button startButton;
         [SerializeField] private Button leaveButton;
@@ -25,8 +24,7 @@ namespace UI
         [SerializeField] private GameObject topBar;
 
         private Hashtable _serverDescription;
-        private string _gameVersion;
-        
+
         private readonly Dictionary<Player, GameObject> _playerListItems = 
             new Dictionary<Player, GameObject>();
 
@@ -38,19 +36,13 @@ namespace UI
 
         private bool _creatingServer;
 
-        public void Start()
-        {
-
-            _gameVersion = Application.version;
-
-        }
-
         public void StartServer()
         {
             _creatingServer = true;
 
             if (!PhotonNetwork.IsConnected)
             {
+                PhotonNetwork.GameVersion = Application.version;
                 PhotonNetwork.ConnectUsingSettings();
                 return;
             }
@@ -115,14 +107,12 @@ namespace UI
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
             _creatingServer = false;
-            modalWindow.SetMessage("Could not create server with error:\n" + message);
-            modalWindow.Open();
+            uiUtility.RaiseError("Could not create server:\n" + message);
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
-            modalWindow.SetMessage("Could not join server with error:\n" + message);
-            modalWindow.Open();
+            uiUtility.RaiseError("Could not join server:\n" + message);
         }
 
         private void AddAllCurrentPlayersToList()
@@ -172,7 +162,7 @@ namespace UI
                     break;
                 
                 case GameModeEnum.ClassicTag:
-
+                    
                     PhotonNetwork.LoadLevel(ClassicTagSceneName);
                     break;
                 
@@ -207,12 +197,12 @@ namespace UI
         public void LeaveRoom()
         {
             PhotonNetwork.Disconnect();
+            startButton.onClick.RemoveListener(StartGame);
 
             foreach (var obj in _playerListItems.Values)
                 Destroy(obj);
             
             _playerListItems.Clear();
-            
         }
 
         public override void OnDisconnected(DisconnectCause cause)

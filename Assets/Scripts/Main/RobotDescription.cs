@@ -1,4 +1,5 @@
 ﻿using System;
+using GameDirection;
 using Networking;
 using Sensor;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Main
     public class RobotDescription
     {
 
-        private ClassicTagScript _classicTagScript;
+        private ClassicTagDirector _classicTagScript;
         private int _id;
 
         public Gyroscope gyroscope;
@@ -22,7 +23,7 @@ namespace Main
         public bool isIt;
         public string gameMode;
 
-        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, int actorNumber = 0, ClassicTagScript classicTagScript = null)
+        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, int actorNumber = 0, ClassicTagDirector classicTagScript = null)
         {
 
             lidar = new Lidar(gameObject);
@@ -53,9 +54,7 @@ namespace Main
 
             if (gameMode.Equals("Classic Tag"))
             {
-
                 isIt = _classicTagScript.currentItActorNumber == _id;
-
             }
 
         }

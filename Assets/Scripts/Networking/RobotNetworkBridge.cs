@@ -41,7 +41,6 @@ namespace Networking
                     
                 GetComponent<UserScriptInterpreter>().enabled = true;
                 GetComponent<RobotStateSender>().enabled = true;
-
             }
 
         }

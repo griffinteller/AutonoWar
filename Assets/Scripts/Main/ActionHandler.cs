@@ -1,60 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Main
 {
     public class ActionHandler : MonoBehaviour
     {
-        
-        public int internalNegation = 1; // Wheels should keep spinning in same direction regardless of user coord flipping
-        
-        [SerializeField] private GameObject robotBody;
-        
-        private readonly Dictionary<string, TireComponent> _tireComponents = 
+        private readonly Dictionary<string, TireComponent> _tireComponents =
             new Dictionary<string, TireComponent>();
 
         private ResetState _resetState = ResetState.Normal;
-        private Rigidbody _rigidbody;
         private bool _resetting;
+        private Rigidbody _rigidbody;
 
         // we store these in case we want to reset the robot and we didn't start from 0,0,0
         private Vector3 _startingPosition;
         private Quaternion _startingRotation;
-        private RobotMain _robotMain;
-        
+        [SerializeField] private GameObject robotBody;
+
         private void Start()
         {
-
-            _robotMain = GetComponent<RobotMain>();
             _rigidbody = GetComponent<Rigidbody>();
-
             LoadStartingPosition();
-
         }
 
         private void LoadStartingPosition()
         {
-
             var t = transform;
-            
+
             _startingPosition = t.position;
             _startingRotation = t.rotation;
-            
         }
 
         public void LoadTiresIntoDict()
         {
-            
             foreach (var tireComponent in transform.GetComponentsInChildren<TireComponent>())
-            {
                 _tireComponents.Add(tireComponent.name, tireComponent);
-            }
-            
         }
 
         public void Update()
         {
-
             switch (_resetState)
             {
                 case ResetState.NeedToReset:
@@ -76,7 +61,6 @@ namespace Main
                     _resetState = ResetState.Normal;
                     break;
             }
-            
         }
 
         private void UndoReset()
@@ -87,7 +71,7 @@ namespace Main
 
         private void RemoveBrakeForceOnTires()
         {
-            foreach (var tire in _tireComponents) 
+            foreach (var tire in _tireComponents)
                 tire.Value.WheelCollider.brakeTorque = 0;
         }
 
@@ -98,18 +82,15 @@ namespace Main
 
         private void InternalResetRobot()
         {
-            
             transform.position = _startingPosition;
             transform.rotation = _startingRotation;
 
             robotBody.transform.localPosition = Vector3.zero;
             robotBody.transform.localRotation = Quaternion.identity;
-            
+
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.isKinematic = true;
-
-            internalNegation = 1;
 
             foreach (var tire in _tireComponents.Values)
             {
@@ -121,35 +102,15 @@ namespace Main
 
         public void SetTireTorque(string tireName, float torque)
         {
-
             var tireObject = _tireComponents[tireName + "Vis"];
             tireObject.WheelCollider.motorTorque = torque;
-            
-        }
-
-        public void AdjustTireOrientation()
-        {
-            foreach (var tire in _tireComponents.Values)
-            {
-                //tire.WheelCollider.motorTorque *= -1;
-                tire.bearing *= -1;
-
-                var correction = 0;
-
-                if (internalNegation == -1)
-                    correction = 180;
-                
-                tire.baseSteerAngle = (tire.originalSteerAngle + correction) % 360;
-            }
         }
 
         public void SetTireSteering(string tireName, float bearing)
         {
-
             var tireComponent = _tireComponents[tireName + "Vis"];
 
-            tireComponent.bearing = internalNegation * bearing;
+            tireComponent.bearing = bearing;
         }
-        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using GameDirection;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
@@ -8,30 +9,70 @@ namespace Main
 
     public class RobotMain : MonoBehaviour
     {
+        private static bool _showingBeacons;
         
-        public int actorNumber;
-        
-        private const float MaxAngularVelocity = 500f;
+        public int robotIndex;
+
+        private const float MaxAngularVelocity = 120f;
         private const float TagBuffer = 0.3f;
         private const string BeaconName = "Beacon";
         private RobotNetworkBridge _robotNetworkBridge;
+        private SinglePlayerDirector _singlePlayerDirector;
+        private GameObject _beaconObject;
+        private GameDirector _gameDirector;
+        private bool _partsAreLoaded;
+        private bool _shouldColor;
+        private Color _newColor;
+        
+        private const float TintCombineAmount = 0.9f;
 
         public void OnPartsLoaded()
         {
+            _partsAreLoaded = true;
             GetComponent<ActionHandler>().LoadTiresIntoDict();
+            GetComponent<EasySuspension>().enabled = true;
             AddSphereTrigger();
+
+            if (_shouldColor)
+                CombineTint(_newColor);
+        }
+
+        public void CombineTint(Color tint, bool undo = false)
+        {
+            if (!_partsAreLoaded)
+            {
+                _shouldColor = true;
+                _newColor = tint;
+            }
+
+            float t;
+            if (undo)
+            {
+                t = 1f - 1f / (1f - TintCombineAmount);
+            }
+            // undoes combine;
+            else
+            {
+                t = TintCombineAmount;
+            }
+
+            foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                var originalColor = meshRenderer.material.color;
+                meshRenderer.material.color = Color.LerpUnclamped(originalColor, tint, t);
+            }
         }
 
         public void Start()
         {
-
             SetMaximumAngularVelocities();
-
             InitializeScripts();
 
+            _beaconObject = transform.Find(BeaconName).gameObject;
+            _gameDirector = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<GameDirector>();
         }
 
-        public void AddSphereTrigger()
+        private void AddSphereTrigger()
         {
 
             var bounds = new Bounds();
@@ -49,7 +90,6 @@ namespace Main
 
         private void InitializeScripts()
         {
-
             if (PhotonNetwork.InRoom)
             {
                 _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
@@ -59,17 +99,29 @@ namespace Main
             {
                 InitializeSinglePlayerScripts();
             }
-            
         }
 
         public void Update()
         {
             KeyCheck();
+            TryShowBeacons();
         }
 
-        public void SetBeaconActive(bool show)
+        private void TryShowBeacons()
         {
-            transform.Find(BeaconName).gameObject.SetActive(show);
+            if ((_robotNetworkBridge && !_robotNetworkBridge.isLocal) 
+                || (_singlePlayerDirector 
+                    && !(_singlePlayerDirector.SelectedRobot == robotIndex)))
+                
+                SetBeaconActive(_showingBeacons);
+
+            else
+                SetBeaconActive(false);
+        }
+
+        private void SetBeaconActive(bool show)
+        {
+            _beaconObject.SetActive(show);
         }
 
         public void ToggleBeaconActive()
@@ -78,35 +130,42 @@ namespace Main
             beacon.SetActive(!beacon.activeSelf);
         }
 
-            private void InitializeSinglePlayerScripts()
+        private void InitializeSinglePlayerScripts()
         {
+            _singlePlayerDirector = FindObjectOfType<SinglePlayerDirector>();
+            
             GetComponent<UserScriptInterpreter>().enabled = true;
             GetComponent<RobotStateSender>().enabled = true;
             GetComponent<DesignLoaderPlay>().enabled = true;
             
-            GetComponent<DesignLoaderPlay>().BuildRobotSinglePlayer();
+            GetComponent<DesignLoaderPlay>().BuildRobot();
         }
 
         private void SetMaximumAngularVelocities()
         {
-
             var rigidbodies = GetComponentsInChildren<Rigidbody>();
 
             foreach (var rigidbody in rigidbodies)
             {
-
                 rigidbody.maxAngularVelocity = MaxAngularVelocity;
-
             }
-
         }
         
         private void KeyCheck()
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && robotIndex == 0)
+                _showingBeacons = !_showingBeacons;
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            var collisionRoot = other.transform.root.gameObject;
+            if (_gameDirector.GameMode == GameModeEnum.ClassicTag && collisionRoot.CompareTag("Robot"))
             {
-                if (_robotNetworkBridge && !_robotNetworkBridge.isLocal)
-                    ToggleBeaconActive();
+                var tagDirector = (ClassicTagDirector) _gameDirector;
+                Debug.Log("Collided with a robot!");
+                if (_robotNetworkBridge.actorNumber == tagDirector.currentItActorNumber)
+                    tagDirector.TryRaiseNewItEvent(collisionRoot.GetComponent<RobotNetworkBridge>().actorNumber);
             }
         }
     }

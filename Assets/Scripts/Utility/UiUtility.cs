@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace Utility
         [SerializeField] private RectTransform panelParent;
         [SerializeField] private CanvasGroup startPanel;
         [SerializeField] private GameObject topBar;
+        [SerializeField] private ModalWindow errorWindow;
 
         public void Start()
         {
@@ -94,6 +96,12 @@ namespace Utility
         public void ShowModalWindow(CanvasGroup window)
         {
             EnableCanvasGroup(window);
+        }
+
+        public void RaiseError(string error)
+        {
+            errorWindow.SetMessage(error);
+            errorWindow.Open();
         }
 
         public void HideModalWindow(CanvasGroup window)

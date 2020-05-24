@@ -10,18 +10,22 @@ namespace UI
         [SerializeField] private OptionsSlider gameModeOptionsSlider;
         [SerializeField] private OptionsSlider mapOptionsSlider;
         [SerializeField] private OptionsSliderNumeric maxPlayersOptionsSlider;
+        [SerializeField] private OptionsSliderNumeric gameLengthOptionsSlider;
 
         [SerializeField] private InputField nameInputField;
 
         public Hashtable GetServerDescription()
         {
-            return new Hashtable
+            var result = new Hashtable
             {
                 {"name", nameInputField.text},
                 {"gameMode", (GameModeEnum) gameModeOptionsSlider.enumWrapper.Index},
                 {"map", (MapEnum) mapOptionsSlider.enumWrapper.Index},
-                {"maxPlayers", (byte) maxPlayersOptionsSlider.slider.value}
+                {"maxPlayers", (byte) maxPlayersOptionsSlider.slider.value},
+                {"gameLength", (int) gameLengthOptionsSlider.slider.value}
             };
+
+            return result;
         }
     }
 }

@@ -49,6 +49,11 @@ MonoBehaviour:
   playerObject: {fileID: 0}
   startingPosition: {x: 0, y: 3, z: 0}
   cameraMotionScript: {fileID: 0}
+  classicTagDirector: {fileID: 2612124392210836542, guid: be021f1431278624ba94e7d6f12e088a,
+    type: 3}
+  freeplayDirector: {fileID: 4140264822069007822, guid: cf1c247b6d0590b4588a589e80c9ff66,
+    type: 3}
+  gameMode: 0
 --- !u!114 &9022163172499462134
 MonoBehaviour:
   m_ObjectHideFlags: 0

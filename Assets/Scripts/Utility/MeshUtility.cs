@@ -19,8 +19,7 @@ namespace Utility
                 
                 var positionRelativeToParent =
                     parent.InverseTransformPoint(objectTransform.position);
-                var rotationRelativeToParent = objectTransform.rotation
-                                               * Quaternion.Inverse(parent.rotation);
+                var rotationRelativeToParent = Quaternion.Inverse(parent.rotation) * objectTransform.rotation;
                 var scaleRelativeToParent = objectTransform.localScale;
 
                 var matrix = Matrix4x4.TRS(

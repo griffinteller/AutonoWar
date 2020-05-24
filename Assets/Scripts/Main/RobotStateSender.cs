@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading.Tasks;
+using GameDirection;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
@@ -12,7 +13,6 @@ namespace Main
 {
     public class RobotStateSender : MonoBehaviour
     {
-
         public GameObject robotBody;
 
         private RobotDescription _robotStateDescription;
@@ -20,8 +20,9 @@ namespace Main
         private bool _connected;
         private SimplePlatform _platform;
         private Task _currentWriteTask;
+        private RobotMain _robotMain;
         
-        private const string PipeName = "RobotInfoPipe";
+        private string PipeName = "RobotInfoPipe";
         private const string MessageSeparator = ";";
 
         private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
@@ -38,7 +39,7 @@ namespace Main
                 {
                     try
                     {
-                        rssCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Write);
+                        rssCast._clientStream = new FileStream("/tmp/" + rssCast.PipeName, FileMode.Open, FileAccess.Write);
                         break;
                     }
                     catch (IOException e)
@@ -59,9 +60,7 @@ namespace Main
             }
             finally
             {
-                
                 rssCast._clientStream.Close();
-                
             }
 
         };
@@ -74,6 +73,9 @@ namespace Main
             GetRoomVariables(out var gameMode, out var actorNumber, out var classicTagScript);
             _robotStateDescription = new RobotDescription(robotBody, gameMode, actorNumber, classicTagScript);
 
+            _robotMain = GetComponent<RobotMain>();
+            PipeName += _robotMain.robotIndex;
+            
             InitStream();
             
         }
@@ -185,7 +187,7 @@ namespace Main
         private void GetRoomVariables(
             out GameModeEnum gameMode,
             out int actorNumber,
-            out ClassicTagScript classicTagScript)
+            out ClassicTagDirector classicTagScript)
         {
 
             gameMode = GameModeEnum.SinglePlayer;
@@ -196,13 +198,12 @@ namespace Main
             {
 
                 gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
-                print(gameMode);
-                
+
                 var robotNetworkBridge = GetComponent<RobotNetworkBridge>();
                 actorNumber = robotNetworkBridge.actorNumber;
                 if (gameMode == GameModeEnum.ClassicTag)
                 {
-                    classicTagScript = GetComponent<ClassicTagScript>();
+                    classicTagScript = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<ClassicTagDirector>();
                 }
 
             }

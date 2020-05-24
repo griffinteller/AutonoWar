@@ -12,6 +12,9 @@ namespace Sensor
         private GameObject _robotBody;
         private ActionHandler _actionHandler;
         private LayerMask _lidarMask;
+        private float _lastUpdate;
+        
+        private const float UpdateInterval = 0.2f;
 
         public FloatArrayContainer[] distanceMatrix;
 
@@ -30,6 +33,7 @@ namespace Sensor
             horizontalDensity = 5;
             verticalDensity = 5;
             verticalFOVBounds = new float[] {-30, 30};
+            _lastUpdate = -UpdateInterval;
 
             range = 300;
 
@@ -53,6 +57,10 @@ namespace Sensor
 
         public void Update()
         {
+            if (Time.time - _lastUpdate < UpdateInterval)
+                return;
+
+            _lastUpdate = Time.time;
 
             for (var i = 0; i < distanceMatrix.Length; i++)
             {

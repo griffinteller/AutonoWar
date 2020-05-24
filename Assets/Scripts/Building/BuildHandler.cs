@@ -178,26 +178,27 @@ namespace Building
 
         public void SaveDesign()
         {
-
-
             var robotCenterOfMass = GetWorldCenterOfMass();
             LoadParts();
             
             var structure = new RobotStructure(_parts, robotCenterOfMass);
             var structureJson = JsonUtility.ToJson(structure);
             
-            var file = new StreamWriter(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName);
+            var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName, FileMode.Create,
+                FileAccess.Write);
+            var writer = new StreamWriter(file);
             
-            file.Write(structureJson);
-            file.Close();
-
+            writer.Write(structureJson);
+            writer.Close();
         }
         
         public static RobotStructure GetRobotStructure()
         {
+            var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName, 
+                FileMode.Open,
+                FileAccess.Read);
             
-            var fileReader = new StreamReader(
-                SystemUtility.GetAndCreateRobotsDirectory() + BuildHandler.RobotFileName);
+            var fileReader = new StreamReader(file);
 
             var json = fileReader.ReadToEnd();
             var structure = JsonUtility.FromJson<RobotStructure>(json);
@@ -205,7 +206,6 @@ namespace Building
             fileReader.Close();
 
             return structure;
-
         }
 
     }

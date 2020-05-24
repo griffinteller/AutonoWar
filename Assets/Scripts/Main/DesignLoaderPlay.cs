@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Main
 {
-    public class DesignLoaderPlay : MonoBehaviourPun
+    public class DesignLoaderPlay : MonoBehaviour
     {
 
         [SerializeField] private RobotMain robotMain;
@@ -22,25 +22,45 @@ namespace Main
 
         private Rigidbody _robotRigidbody;
 
+        private const float ColliderBuffer = 0.3f;
+
         [PunRPC]
         public void BuildRobotRpc(object data)
         {
-            LoadPartListIntoDict();
-            _robotRigidbody = GetComponent<Rigidbody>();
-            var structure = RobotStructure.FromJson((string) data);
-            CreateParts(structure);
-            
-            actionHandler.LoadTiresIntoDict();
-            robotMain.AddSphereTrigger();
+            BuildRobot();
         }
 
-        public void BuildRobotSinglePlayer()
+        private void ReplaceColliders()
+        {
+            var newColliderRelativeBounds = new Bounds(Vector3.zero, Vector3.zero);
+            var buffer = new Vector3(1, 0, 1) * 2 * ColliderBuffer;
+            
+            foreach (var boxCollider in structureRoot.GetComponentsInChildren<BoxCollider>())
+            {
+                var colliderBounds = new Bounds(
+                    boxCollider.transform.localPosition, 
+                    boxCollider.size + buffer);
+                
+                newColliderRelativeBounds.Encapsulate(colliderBounds);
+                
+                Destroy(boxCollider);
+            }
+
+            var newBoxCollider = structureRoot.gameObject.AddComponent<BoxCollider>();
+            newBoxCollider.center = Vector3.zero;
+            newBoxCollider.size = newColliderRelativeBounds.size;
+            _robotRigidbody.centerOfMass = Vector3.zero;
+        }
+
+        public void BuildRobot()
         {
             LoadPartListIntoDict();
             _robotRigidbody = GetComponent<Rigidbody>();
             
             var structure = BuildHandler.GetRobotStructure();
             CreateParts(structure);
+            ReplaceColliders();
+            
             robotMain.OnPartsLoaded();
         }
 

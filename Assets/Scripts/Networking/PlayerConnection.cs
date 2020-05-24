@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cam;
+using GameDirection;
 using Main;
 using Photon.Pun;
 using Photon.Realtime;
@@ -14,14 +16,18 @@ namespace Networking
     {
 
         public GameObject playerObjectPrefab;
-        public GameObject playerObject;
+        [HideInInspector] public GameObject playerObject;
         public Vector3 startingPosition;
         public CameraMotionScript cameraMotionScript;
         public Dictionary<int, GameObject> robots;
+        public ClassicTagDirector classicTagDirector;
+        public FreeplayDirector freeplayDirector;
+        [HideInInspector] public GameModeEnum gameMode;
+
+        private GameDirector _gameDirector;
 
         public void Start()
         {
-            
             robots = new Dictionary<int, GameObject>();
             
             startingPosition.x += Random.Range(-10, 10);
@@ -30,26 +36,39 @@ namespace Networking
 
             var res = PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
             cameraMotionScript.SetCenterObject(res);
+            gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
+            
+            InstantiateGameDirector();
+        }
 
+        private void InstantiateGameDirector()
+        {
+            switch (gameMode)
+            {
+                case GameModeEnum.ClassicTag:
+                    
+                    _gameDirector = Instantiate(classicTagDirector.gameObject).GetComponent<ClassicTagDirector>();
+                    break;
+                
+                case GameModeEnum.FreePlay:
+
+                    _gameDirector = Instantiate(freeplayDirector.gameObject).GetComponent<FreeplayDirector>();
+                    break;
+                
+                default:
+                    
+                    throw new NotImplementedException();
+            }
         }
 
         public void OnFullyLoaded()
         {
-
-            if ((GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"] == GameModeEnum.ClassicTag)
-            {
-
-                robots[PhotonNetwork.LocalPlayer.ActorNumber].GetComponent<ClassicTagScript>().enabled = true;
-
-            }
-            
+            _gameDirector.FullyLoaded = true;
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-
             robots.Remove(otherPlayer.ActorNumber);
-
         }
     }
 }

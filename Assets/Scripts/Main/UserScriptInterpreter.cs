@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -25,14 +24,15 @@ namespace Main
         private Task _currentVerifyConnectionTask;
         private Stream _clientStream;
         private StreamReader _clientReader;
+        private RobotMain _robotMain;
 
         private bool _connected;
         private bool _justStarted = true;
 
-        private const string PipeName = "EventQueuePipe";
-        private const char Separator = ';';
-        private const int PosixReadTimeout = 5;
+        private string PipeName = "EventQueuePipe";
         
+        private const char Separator = ';';
+
         private static readonly Action<object> GetEventsActionWindows = usi =>
         {
 
@@ -118,7 +118,8 @@ namespace Main
             {
                 try
                 {
-                    usiCast._clientStream = new FileStream("/tmp/" + PipeName, FileMode.Open, FileAccess.Read);
+                    usiCast._clientStream = new FileStream(
+                        "/tmp/" + usiCast.PipeName, FileMode.Open, FileAccess.Read);
                     break;
                 }
                 catch (IOException e)
@@ -141,6 +142,8 @@ namespace Main
 
             _platform = SystemUtility.GetSimplePlatform();
             _actionHandler = GetComponent<ActionHandler>();
+            _robotMain = GetComponent<RobotMain>();
+            PipeName += _robotMain.robotIndex;
             
             InitStreams();
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Robot
   - ConnectionObject
+  - GameDirector
   layers:
   - Default
   - TransparentFX

@@ -55,19 +55,9 @@ namespace Main
 
         private void SyncDesiredRotationWithSteerAngle()
         {
-
-            var correction = 0;
-
-            if (_actionHandler.internalNegation == -1)
-            {
-
-                correction = 180;
-
-            }
-            
             _desiredLocalRotation = Quaternion.Euler(
                 0, 
-                _tireComponent.originalSteerAngle + _actionHandler.internalNegation * _tireComponent.bearing, 
+                _tireComponent.baseSteerAngle + _tireComponent.bearing, 
                 0);
 
         }

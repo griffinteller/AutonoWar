@@ -11,6 +11,6 @@ namespace Networking
         public GameModeEnum gameMode;
         public byte maxPlayers;
         public MapEnum map;
-
+        public int gameLength;
     }
 }
