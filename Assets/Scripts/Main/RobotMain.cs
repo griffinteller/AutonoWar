@@ -7,6 +7,8 @@ using UnityEngine;
 namespace Main
 {
 
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(ScheduledFlip))]
     public class RobotMain : MonoBehaviour
     {
         private static bool _showingBeacons;
@@ -23,8 +25,12 @@ namespace Main
         private bool _partsAreLoaded;
         private bool _shouldColor;
         private Color _newColor;
-        
+        private Transform _robotBody;
+        private Rigidbody _rigidbody;
+        private ScheduledFlip _scheduledFlipComponent;
+
         private const float TintCombineAmount = 0.9f;
+        private const float MinStuckAngularVelocity = 1f;
 
         public void OnPartsLoaded()
         {
@@ -70,6 +76,9 @@ namespace Main
 
             _beaconObject = transform.Find(BeaconName).gameObject;
             _gameDirector = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<GameDirector>();
+            _robotBody = transform.GetChild(0);
+            _rigidbody = GetComponent<Rigidbody>();
+            _scheduledFlipComponent = GetComponent<ScheduledFlip>();
         }
 
         private void AddSphereTrigger()
@@ -105,6 +114,19 @@ namespace Main
         {
             KeyCheck();
             TryShowBeacons();
+
+            var turtled = CheckUpsideDownAndStuck();
+            
+            if (_scheduledFlipComponent.enabled && !turtled)
+                _scheduledFlipComponent.TryCancelFlip();
+            
+            else if (!_scheduledFlipComponent.enabled && turtled)
+                _scheduledFlipComponent.enabled = true;
+        }
+        
+        private bool CheckUpsideDownAndStuck()
+        {
+            return _robotBody.up.y < 0 && _rigidbody.angularVelocity.magnitude < MinStuckAngularVelocity;
         }
 
         private void TryShowBeacons()
@@ -168,5 +190,6 @@ namespace Main
                     tagDirector.TryRaiseNewItEvent(collisionRoot.GetComponent<RobotNetworkBridge>().actorNumber);
             }
         }
+
     }
 }

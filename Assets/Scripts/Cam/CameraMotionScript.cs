@@ -42,9 +42,7 @@ namespace Cam
 
             try
             {
-
                 viewCenter = playerConnection.startingPosition;
-
             }
             catch (NullReferenceException)
             {

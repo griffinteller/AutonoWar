@@ -28,17 +28,17 @@ namespace Networking
 
         public void Start()
         {
-            robots = new Dictionary<int, GameObject>();
-            
-            startingPosition.x += Random.Range(-10, 10);
-            startingPosition.z += Random.Range(-10, 10);
-            startingPosition.y = TerrainUtility.GetClosestCurrentTerrain(startingPosition).SampleHeight(startingPosition) + 1;
-
-            var res = PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
-            cameraMotionScript.SetCenterObject(res);
             gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
-            
             InstantiateGameDirector();
+            
+            robots = new Dictionary<int, GameObject>();
+
+            startingPosition =
+                _gameDirector.GetStartingPositions(startingPosition)[PhotonNetwork.LocalPlayer.ActorNumber];
+
+            var playerObj = 
+                PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
+            cameraMotionScript.SetCenterObject(playerObj);
         }
 
         private void InstantiateGameDirector()

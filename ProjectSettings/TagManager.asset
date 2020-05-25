@@ -7,6 +7,7 @@ TagManager:
   - Robot
   - ConnectionObject
   - GameDirector
+  - MessageText
   layers:
   - Default
   - TransparentFX

@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 6169384561132137689}
   - component: {fileID: 686880663218978992}
   - component: {fileID: 6681657717093209485}
+  - component: {fileID: 8835309884463888117}
   m_Layer: 9
   m_Name: RobotParent
   m_TagString: Robot
@@ -299,6 +300,18 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &8835309884463888117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421177872403235923}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bde77981a6b4214aed9573e1bbf1560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6034424552130210897
 GameObject:
   m_ObjectHideFlags: 0

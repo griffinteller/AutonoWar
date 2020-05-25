@@ -83,7 +83,7 @@ namespace GameDirection
 
             robot.GetComponent<RobotMain>().CombineTint(tint, undo);
         }
-        
+
         /*public int currentItActorNumber = -1;
         public int lastItActorNumber = -1;
 
