@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameDirection;
-using Main;
 using Networking;
-using Photon.Pun;
 using UnityEngine;
 
 namespace Sensor
@@ -11,59 +9,43 @@ namespace Sensor
     [Serializable]
     public class Radar : ISensor
     {
-
-        private GameObject _robotBody;
-        private GameModeEnum _gameMode;
         private ClassicTagDirector _classicTagScript;
+        private GameModeEnum _gameMode;
         private PlayerConnection _playerConnection;
 
-        public Vector3[] pings;
+        private GameObject _robotBody;
         public Vector3 itPing;
+
+        public Vector3[] pings;
 
         public Radar(GameObject robot, GameModeEnum gameMode)
         {
-
             _robotBody = robot;
             _gameMode = gameMode;
 
             if (_gameMode == GameModeEnum.ClassicTag)
             {
-
                 var robotRoot = _robotBody.transform.root.gameObject;
                 _classicTagScript = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<ClassicTagDirector>();
                 _playerConnection = robotRoot.GetComponent<RobotNetworkBridge>().playerConnection;
-
             }
-
         }
 
         public void Update()
         {
-
             var tmpPingList = new List<Vector3>();
-            if (PhotonNetwork.IsConnected)
-            {
-
-                foreach (var robot in GameObject.FindGameObjectsWithTag("Robot"))
+            foreach (var robot in GameObject.FindGameObjectsWithTag("Robot"))
+                if (robot.GetInstanceID() != _robotBody.transform.parent.gameObject.GetInstanceID())
                 {
-
-                    if (robot.GetInstanceID() != _robotBody.transform.parent.gameObject.GetInstanceID())
-                    {
-
-                        var delta = robot.transform.position - _robotBody.transform.position;
-                        tmpPingList.Add(delta);
-
-                    }
-
+                    var delta = robot.transform.position - _robotBody.transform.position;
+                    tmpPingList.Add(delta);
                 }
-                
-            }
-            
+
             pings = tmpPingList.ToArray();
 
-            if (_gameMode == GameModeEnum.ClassicTag && _classicTagScript.currentItActorNumber != -1) // we've assigned an it
+            if (_gameMode == GameModeEnum.ClassicTag && _classicTagScript.currentItActorNumber != -1) 
+                // we've assigned an it
             {
-
                 var it = _playerConnection.robots[_classicTagScript.currentItActorNumber];
 
                 if (!it)
@@ -71,9 +53,7 @@ namespace Sensor
 
                 itPing = _playerConnection.robots[_classicTagScript.currentItActorNumber]
                     .transform.position - _robotBody.transform.position;
-
             }
-
         }
     }
 }
