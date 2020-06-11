@@ -1,16 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using Utility;
 
 namespace UI
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class ModalWindow : MonoBehaviour
     {
 
-        public CanvasGroup canvasGroup;
+        private CanvasGroup _canvasGroup;
 
         [SerializeField] private Text messageText;
         [SerializeField] private UiUtility uiUtility;
+
+        public void Awake()
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+        }
 
         public void SetMessage(string message)
         {
@@ -19,12 +26,12 @@ namespace UI
 
         public void Open()
         {
-            uiUtility.ShowModalWindow(canvasGroup);
+            uiUtility.ShowModalWindow(_canvasGroup);
         }
 
         public void Close()
         {
-            uiUtility.HideModalWindow(canvasGroup);
+            uiUtility.HideModalWindow(_canvasGroup);
         }
 
     }

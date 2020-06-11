@@ -4,6 +4,7 @@ using Main;
 using Networking;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Utility;
 using Random = UnityEngine.Random;
@@ -96,13 +97,31 @@ namespace GameDirection
         private void InternalSelectRobot(int index)
         {
             _cameraMotionScript.SetCenterObject(_robotMains[index].gameObject);
-            _inGameUiScript.singlePlayerRobot = _robotMains[index].gameObject;
         }
 
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 SelectNextRobot();
+        }
+
+        public override List<EscapeMenuButtonInfo> GetEscapeMenuButtonInfo()
+        {
+            var result = base.GetEscapeMenuButtonInfo();
+            result.Add(
+                new EscapeMenuButtonInfo("Reset Robot", MetaUtility.UnityEventFromFunc(ResetLocalRobot)));
+            
+            return result;
+        }
+
+        public RobotMain GetSelectedRobot()
+        {
+            return _robotMains[SelectedRobot];
+        }
+
+        public RobotMain GetRobot(int index)
+        {
+            return _robotMains[index];
         }
     }
 }

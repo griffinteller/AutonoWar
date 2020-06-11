@@ -2,8 +2,8 @@
 {
     public enum PhotonEventCode : byte
     {
-
-        NewIt = 1
-
+        NewIt = 0,
+        StartingGame,
+        EndingGame
     }
 }

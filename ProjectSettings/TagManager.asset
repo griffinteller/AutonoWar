@@ -8,6 +8,9 @@ TagManager:
   - ConnectionObject
   - GameDirector
   - MessageText
+  - Scoreboard
+  - Canvas
+  - Clock
   layers:
   - Default
   - TransparentFX

@@ -14,9 +14,10 @@ namespace Networking
             var currentRobots = GameObject.FindGameObjectsWithTag("Robot");
             foreach (var robot in currentRobots)
             {
+                var actorNumber = robot.GetComponent<PhotonView>().Owner.ActorNumber;
 
-                playerConnection.robots[robot.GetComponent<PhotonView>().Owner.ActorNumber] = robot;
-
+                playerConnection.robots[actorNumber] = robot;
+                playerConnection.robotRigidbodies[actorNumber] = robot.GetComponent<Rigidbody>();
             }
 
             if (playerConnection.robots.Count == PhotonNetwork.CurrentRoom.PlayerCount)

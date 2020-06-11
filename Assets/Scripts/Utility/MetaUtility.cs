@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Utility
 {
@@ -21,6 +24,21 @@ namespace Utility
             return result.ToArray();
 
         }
+
+        public static UnityEvent UnityEventFromFunc(Action func)
+        {
+            var result = new UnityEvent();
+            result.AddListener(new UnityAction(func));
+            return result;
+        }
+
+        public static Button.ButtonClickedEvent UnityEventToButtonClickedEvent(UnityEvent unityEvent)
+        {
+            var result = new Button.ButtonClickedEvent();
+            result.AddListener(unityEvent.Invoke);
+            return result;
+        }
+        
         
     }
 }

@@ -19,7 +19,10 @@ namespace Networking
         [HideInInspector] public GameObject playerObject;
         public Vector3 startingPosition;
         public CameraMotionScript cameraMotionScript;
-        public Dictionary<int, GameObject> robots;
+        
+        public Dictionary<int, GameObject> robots = new Dictionary<int, GameObject>();
+        public Dictionary<int, Rigidbody> robotRigidbodies = new Dictionary<int, Rigidbody>();
+        
         public ClassicTagDirector classicTagDirector;
         public FreeplayDirector freeplayDirector;
         [HideInInspector] public GameModeEnum gameMode;
@@ -30,11 +33,11 @@ namespace Networking
         {
             gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
             InstantiateGameDirector();
-            
-            robots = new Dictionary<int, GameObject>();
 
             startingPosition =
                 _gameDirector.GetStartingPositions(startingPosition)[PhotonNetwork.LocalPlayer.ActorNumber];
+            print(startingPosition);
+            print(PhotonNetwork.LocalPlayer.ActorNumber);
 
             var playerObj = 
                 PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);

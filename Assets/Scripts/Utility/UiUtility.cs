@@ -8,7 +8,7 @@ namespace Utility
 {
     public class UiUtility : MonoBehaviour
     {
-        public const string NickNameKey = "NickName";
+        private const string NickNameKey = "NickName";
         private readonly List<CanvasGroup> _modalWindows = new List<CanvasGroup>();
 
         private readonly List<CanvasGroup> _panels = new List<CanvasGroup>();
@@ -18,6 +18,7 @@ namespace Utility
         [SerializeField] private CanvasGroup startPanel;
         [SerializeField] private GameObject topBar;
         [SerializeField] private ModalWindow errorWindow;
+        [SerializeField] private ModalWindow escapeWindow;
 
         public void Start()
         {
@@ -113,7 +114,9 @@ namespace Utility
         {
             SwitchToPanel(startPanel);
             DisableAllPanels(_modalWindows);
-            topBar.SetActive(true);
+            
+            if (topBar)
+                topBar.SetActive(true);
         }
 
         public void Exit()

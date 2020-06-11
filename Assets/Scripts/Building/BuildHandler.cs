@@ -15,8 +15,6 @@ namespace Building
         public TireNameInputHandler tireNameInputHandler;
         public GameObject currentItemPrefab;
 
-        private readonly List<BuildObjectComponent> _parts = new List<BuildObjectComponent>();
-        
         private BuildObjectComponent _currentItemBuildComponent;
         private GameObject _objectLastClickedOn;
         
@@ -74,7 +72,6 @@ namespace Building
 
         private void PlaceItemIfPossible()
         {
-            
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var hitBuildComponent))
@@ -107,36 +104,31 @@ namespace Building
              var possibleTireComponent = instantiatedBuildComponent as BuildTireComponent;
             if (possibleTireComponent)
             {
-                
                 Debug.Log("Naming!");
                 tireNameInputHandler.ShowInputWindow(possibleTireComponent);
-                
             }
-
         }
 
-        private void LoadParts()
+        private List<BuildObjectComponent> LoadParts()
         {
+            var parts = new List<BuildObjectComponent>();
 
             foreach (Transform child in transform)
             {
-                
-                _parts.Add(child.GetComponent<BuildObjectComponent>());
-                
+                parts.Add(child.GetComponent<BuildObjectComponent>());
             }
-            
+
+            return parts;
         }
 
         private void RemoveItemIfPossible()
         {
-            
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             
             if (!BuildObjectRaycast(mouseRay, out var hitInfo, out var bc) || !bc.removable) 
                 return;
 
             Destroy(hitInfo.transform.gameObject);
-            
         }
 
         private static bool BuildObjectRaycast(Ray ray, out RaycastHit hitInfo, out BuildObjectComponent buildComponent)
@@ -179,9 +171,9 @@ namespace Building
         public void SaveDesign()
         {
             var robotCenterOfMass = GetWorldCenterOfMass();
-            LoadParts();
+            var parts = LoadParts();
             
-            var structure = new RobotStructure(_parts, robotCenterOfMass);
+            var structure = new RobotStructure(parts, robotCenterOfMass);
             var structureJson = JsonUtility.ToJson(structure);
             
             var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName, FileMode.Create,

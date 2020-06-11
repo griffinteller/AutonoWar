@@ -22,15 +22,11 @@ namespace Building
 
             try
             {
-
                 CreateParts();
-
             }
             catch (IOException)
             {
-
                 Instantiate(rootCube, transform);
-
             }
         }
         
@@ -51,21 +47,16 @@ namespace Building
 
         private void CreateParts()
         {
-
             var structure = BuildHandler.GetRobotStructure();
 
             foreach (var part in structure.parts)
             {
-
                 var obj = Instantiate(_partComponentDict[part.part].gameObject, transform);
                 obj.transform.localPosition = part.position;
                 obj.transform.localRotation = part.rotation;
 
                 obj.GetComponent<BuildObjectComponent>().LoadInfoFromPartDescription(part);
-
             }
-
         }
-        
     }
 }

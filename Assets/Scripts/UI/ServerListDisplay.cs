@@ -54,7 +54,6 @@ namespace UI
                     continue;
                 
                 AddServerListing(roomInfo);
-
             }
         }
 

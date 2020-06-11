@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using GameDirection;
 using Networking;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Main
 {
@@ -13,12 +15,16 @@ namespace Main
     {
         private static bool _showingBeacons;
         
+        public static Action<Collider, RobotMain> OnTriggerEnterCallbacks = (collider, robotMain) => {};
+        
         public int robotIndex;
+        
+        [FormerlySerializedAs("_robotNetworkBridge")] public RobotNetworkBridge robotNetworkBridge;
 
         private const float MaxAngularVelocity = 120f;
         private const float TagBuffer = 0.3f;
         private const string BeaconName = "Beacon";
-        private RobotNetworkBridge _robotNetworkBridge;
+        
         private SinglePlayerDirector _singlePlayerDirector;
         private GameObject _beaconObject;
         private GameDirector _gameDirector;
@@ -45,6 +51,8 @@ namespace Main
 
         public void CombineTint(Color tint, bool undo = false)
         {
+            print("Combining color. Undo = " + undo);
+            
             if (!_partsAreLoaded)
             {
                 _shouldColor = true;
@@ -101,8 +109,8 @@ namespace Main
         {
             if (PhotonNetwork.InRoom)
             {
-                _robotNetworkBridge = GetComponent<RobotNetworkBridge>();
-                _robotNetworkBridge.enabled = true;
+                robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+                robotNetworkBridge.enabled = true;
             }
             else
             {
@@ -131,7 +139,7 @@ namespace Main
 
         private void TryShowBeacons()
         {
-            if ((_robotNetworkBridge && !_robotNetworkBridge.isLocal) 
+            if ((robotNetworkBridge && !robotNetworkBridge.isLocal) 
                 || (_singlePlayerDirector 
                     && !(_singlePlayerDirector.SelectedRobot == robotIndex)))
                 
@@ -175,20 +183,15 @@ namespace Main
         
         private void KeyCheck()
         {
-            if (Input.GetKeyDown(KeyCode.Q) && robotIndex == 0)
+            if (Input.GetKeyDown(KeyCode.Q) 
+                && robotIndex == 0 
+                && (robotNetworkBridge && robotNetworkBridge.isLocal  || !robotNetworkBridge))
                 _showingBeacons = !_showingBeacons;
         }
 
         public void OnTriggerEnter(Collider other)
         {
-            var collisionRoot = other.transform.root.gameObject;
-            if (_gameDirector.GameMode == GameModeEnum.ClassicTag && collisionRoot.CompareTag("Robot"))
-            {
-                var tagDirector = (ClassicTagDirector) _gameDirector;
-                Debug.Log("Collided with a robot!");
-                if (_robotNetworkBridge.actorNumber == tagDirector.currentItActorNumber)
-                    tagDirector.TryRaiseNewItEvent(collisionRoot.GetComponent<RobotNetworkBridge>().actorNumber);
-            }
+            OnTriggerEnterCallbacks(other, this);
         }
 
     }

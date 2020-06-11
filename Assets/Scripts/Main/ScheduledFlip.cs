@@ -1,10 +1,11 @@
 ﻿using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Main
 {
-    public class ScheduledFlip : MonoBehaviour
+    public class ScheduledFlip : MonoBehaviourPun
     {
         private enum FlippingState
         {
@@ -52,7 +53,8 @@ namespace Main
                 Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             _goalRotation = Quaternion.LookRotation(forwardProjOntoXZ, Vector3.up);
 
-            _messageText = GameObject.FindWithTag("MessageText").GetComponent<Text>();
+            if (!PhotonNetwork.InRoom || photonView.IsMine)
+                _messageText = GameObject.FindWithTag("MessageText").GetComponent<Text>();
         }
 
         private void FixedUpdate()
@@ -64,13 +66,16 @@ namespace Main
 
                     var remainingTime = WaitTime - (Time.time - _startTime);
 
-                    if (remainingTime < WaitTime - StartDelay)
+                    if (_messageText && remainingTime < WaitTime - StartDelay)
                         _messageText.text = "Flipping in: " + ((int) remainingTime + 1) + "...";
                     
                     if (remainingTime < 0)
                     {
                         GetComponent<Rigidbody>().isKinematic = true;
-                        _messageText.text = "";
+                        
+                        if (_messageText)
+                            _messageText.text = "";
+                        
                         _startTime = Time.time;
                         _state += 1;
                     }
