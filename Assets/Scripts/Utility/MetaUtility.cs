@@ -38,7 +38,15 @@ namespace Utility
             result.AddListener(unityEvent.Invoke);
             return result;
         }
-        
-        
+
+        public static void SyncRectTransforms(RectTransform source, RectTransform toBeChanged)
+        {
+            toBeChanged.anchorMax = source.anchorMax;
+            toBeChanged.anchorMin = source.anchorMin;
+            toBeChanged.pivot = source.pivot;
+            toBeChanged.anchoredPosition = source.anchoredPosition;
+            toBeChanged.localScale = source.localScale;
+            toBeChanged.sizeDelta = source.sizeDelta;
+        }
     }
 }

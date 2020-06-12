@@ -25,7 +25,6 @@ namespace GameDirection
         public Vector3 scoreboardOffset = new Vector3(0, 0, 0);
 
         public float tagCooldownTime = 10;
-        public float gameLength = 10;
 
         public Scoreboard scoreboardPrefab;
 
@@ -207,9 +206,10 @@ namespace GameDirection
         private void EndGameSetup()
         {
             SetRobotsKinematic(true);
-            var winningPlayerName = _scoreboard.GetNameOfRank(1);
-            _messageText.text = winningPlayerName + " wins!";
-            //_scoreboard.Expand();
+            //var winningPlayerName = _scoreboard.GetNameOfRank(1);
+            _scoreboard.SetExpand(true);
+            _scoreboard.positionLocked = true;
+            GameObject.FindWithTag("Hud").SetActive(false);
         }
 
         private void EndGameUpdate()
