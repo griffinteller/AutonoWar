@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Photon.Pun;
 using UnityEngine;
+using Utility;
 
 namespace UI
 {
@@ -51,8 +53,13 @@ namespace UI
 
         private readonly List<int> _actorNumberOrder = new List<int>();
         private bool _changedSinceLastUpdate;
+        private bool _expanded;
+
+        public bool positionLocked;
 
         [SerializeField] private ScoreboardEntry scoreboardEntryPrefab;
+        [SerializeField] private RectTransform defaultTransform;
+        [SerializeField] private RectTransform expandedTransform;
 
         private Dictionary<int, int> GetScoreDict()
         {
@@ -75,6 +82,12 @@ namespace UI
             
             binaryFormatter.Serialize(memoryStream, GetScoreDict());
             return memoryStream.ToArray();
+        }
+
+        public void Update()
+        {
+            if (!positionLocked)
+                SetExpand(Input.GetKey(KeyCode.Tab));
         }
 
         private Dictionary<int, int> DeserializeScoreDict(byte[] buffer)
@@ -127,6 +140,7 @@ namespace UI
         {
             var t = GetComponent<RectTransform>();
             t.SetParent(GameObject.FindWithTag("Canvas").transform);
+            t.SetSiblingIndex(t.parent.childCount - 2); // put behind windows
             t.anchoredPosition = offset;
             t.localScale = Vector3.one;
             
@@ -192,6 +206,21 @@ namespace UI
         public void ResetEntryColor(int actorNumber)
         {
             _entriesByActorNumber[actorNumber].ResetColor();
+        }
+
+        public void SetExpand(bool expand)
+        {
+            var rectTransform = GetComponent<RectTransform>();
+
+            if (expand && !_expanded)
+                MetaUtility.SyncRectTransforms(expandedTransform, rectTransform);
+            else if (!expand && _expanded)
+            {
+                MetaUtility.SyncRectTransforms(defaultTransform, rectTransform);
+                rectTransform.anchoredPosition += offset;
+            }
+
+            _expanded = expand;
         }
     }
 }

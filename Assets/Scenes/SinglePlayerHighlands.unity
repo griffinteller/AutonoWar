@@ -188,20 +188,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1475793619 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3181492964892290581, guid: 6a29fc1a463aea942bd1b0e7a9ac0142,
-    type: 3}
-  m_PrefabInstance: {fileID: 8838551436100300518}
-  m_PrefabAsset: {fileID: 0}
---- !u!33 &1475793621
-MeshFilter:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475793619}
-  m_Mesh: {fileID: 0}
 --- !u!1 &1890717198
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,6 +814,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841968610747293710, guid: 6a29fc1a463aea942bd1b0e7a9ac0142,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000011444092
       objectReference: {fileID: 0}
     - target: {fileID: 5148908803009528771, guid: 6a29fc1a463aea942bd1b0e7a9ac0142,
         type: 3}

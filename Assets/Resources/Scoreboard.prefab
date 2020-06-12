@@ -117,6 +117,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreboardEntryPrefab: {fileID: 5453462229271332177, guid: ac83e2c36d12b4244a26e64c6ecc6cee,
     type: 3}
+  defaultTransform: {fileID: 3045912235035093247, guid: 87655cef3cda0b74096011c454a4cd48,
+    type: 3}
+  expandedTransform: {fileID: 6442654498870046640, guid: 185b4f869b87bdd4c94e1f875f032388,
+    type: 3}
   offset: {x: -10, y: -10}
 --- !u!114 &1691873261826611064
 MonoBehaviour:
