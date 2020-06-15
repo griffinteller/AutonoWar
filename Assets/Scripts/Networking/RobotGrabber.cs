@@ -5,12 +5,10 @@ namespace Networking
 {
     public class RobotGrabber : MonoBehaviour
     {
-
         public PlayerConnection playerConnection;
 
         public void Update()
         {
-
             var currentRobots = GameObject.FindGameObjectsWithTag("Robot");
             foreach (var robot in currentRobots)
             {
@@ -25,9 +23,7 @@ namespace Networking
                 Debug.Log("Fully Loaded!");
                 playerConnection.OnFullyLoaded();
                 enabled = false;
-
             }
-
         }
     }
 }

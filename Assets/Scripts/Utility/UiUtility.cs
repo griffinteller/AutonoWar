@@ -12,13 +12,13 @@ namespace Utility
         private readonly List<CanvasGroup> _modalWindows = new List<CanvasGroup>();
 
         private readonly List<CanvasGroup> _panels = new List<CanvasGroup>();
+        [SerializeField] private ModalWindow errorWindow;
+        [SerializeField] private ModalWindow escapeWindow;
         [SerializeField] private RectTransform modalWindowParent;
 
         [SerializeField] private RectTransform panelParent;
         [SerializeField] private CanvasGroup startPanel;
         [SerializeField] private GameObject topBar;
-        [SerializeField] private ModalWindow errorWindow;
-        [SerializeField] private ModalWindow escapeWindow;
 
         public void Start()
         {
@@ -114,7 +114,7 @@ namespace Utility
         {
             SwitchToPanel(startPanel);
             DisableAllPanels(_modalWindows);
-            
+
             if (topBar)
                 topBar.SetActive(true);
         }

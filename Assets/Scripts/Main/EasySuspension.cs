@@ -1,44 +1,42 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 //[ExecuteInEditMode()]
-public class EasySuspension : MonoBehaviour {
-	[Range(0, 20)]
-	public float naturalFrequency = 10;
+public class EasySuspension : MonoBehaviour
+{
+    private float _mass;
 
-	[Range(0, 3)]
-	public float dampingRatio = 0.8f;
+    [Range(0, 3)] public float dampingRatio = 0.8f;
 
-	[Range(-1, 1)]
-	public float forceShift = 0.03f;
+    [Range(-1, 1)] public float forceShift = 0.03f;
 
-	public bool setSuspensionDistance = true;
+    [Range(0, 20)] public float naturalFrequency = 10;
 
-	private float _mass;
+    public bool setSuspensionDistance = true;
 
-	void Start () {
+    private void Start()
+    {
+        print("Setting Suspension");
+        // work out the stiffness and damper parameters based on the better spring model
+        foreach (var wc in GetComponentsInChildren<WheelCollider>())
+        {
+            var spring = wc.suspensionSpring;
 
-		print("Setting Suspension");
-		// work out the stiffness and damper parameters based on the better spring model
-		foreach (WheelCollider wc in GetComponentsInChildren<WheelCollider>()) {
-			JointSpring spring = wc.suspensionSpring;
+            spring.spring = Mathf.Pow(Mathf.Sqrt(wc.sprungMass) * naturalFrequency, 2);
+            spring.damper = 2 * dampingRatio * Mathf.Sqrt(spring.spring * wc.sprungMass);
 
-			spring.spring = Mathf.Pow(Mathf.Sqrt(wc.sprungMass) * naturalFrequency, 2);
-			spring.damper = 2 * dampingRatio * Mathf.Sqrt(spring.spring * wc.sprungMass);
+            wc.suspensionSpring = spring;
 
-			wc.suspensionSpring = spring;
+            var wheelRelativeBody = transform.InverseTransformPoint(wc.transform.position);
+            var distance = GetComponent<Rigidbody>().centerOfMass.y - wheelRelativeBody.y + wc.radius;
 
-			Vector3 wheelRelativeBody = transform.InverseTransformPoint(wc.transform.position);
-			float distance = GetComponent<Rigidbody>().centerOfMass.y - wheelRelativeBody.y + wc.radius;
+            wc.forceAppPointDistance = distance - forceShift;
 
-			wc.forceAppPointDistance = distance - forceShift;
-
-			// the following line makes sure the spring force at maximum droop is exactly zero
-			if (spring.targetPosition > 0 && setSuspensionDistance)
-				wc.suspensionDistance = wc.sprungMass * Physics.gravity.magnitude / (spring.targetPosition * spring.spring);
-		}
-	}
+            // the following line makes sure the spring force at maximum droop is exactly zero
+            if (spring.targetPosition > 0 && setSuspensionDistance)
+                wc.suspensionDistance =
+                    wc.sprungMass * Physics.gravity.magnitude / (spring.targetPosition * spring.spring);
+        }
+    }
 
 // uncomment OnGUI to observe how parameters change
 
@@ -56,5 +54,4 @@ public class EasySuspension : MonoBehaviour {
 		GUILayout.Label ("Center: " + rb.centerOfMass);
 	}
 */
-
 }

@@ -1,0 +1,7 @@
+<WorldCreator Version="2.0">
+  <Textures Preview="preview.png" Tags="desert;sand;dry" Description="" Publisher="GameTextures" Website="https://www.gametextures.com/" Guid="1560af86-8a2e-4d6c-8a5e-0566f4e9ab0a">
+    <Diffuse File="Ground_ChaoticSand_col.png" Time="131899138400000000" />
+    <Normal File="Ground_ChaoticSand_norm.png" Time="131899141200000000" />
+    <Displacement File="" Time="132364858121306728" />
+  </Textures>
+</WorldCreator>

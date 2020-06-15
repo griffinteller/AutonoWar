@@ -4,11 +4,11 @@ namespace Unused
 {
     public class BetterWheelCollider : MonoBehaviour
     {
-        public int raycastDensity;
-        public float radius;
-        public float torque;
         public float contactDistance = 0.05f;
         public LayerMask mask;
+        public float radius;
+        public int raycastDensity;
+        public float torque;
 
         public void FixedUpdate()
         {
@@ -36,7 +36,6 @@ namespace Unused
             for (var i = 0; i < raycastDensity; i++)
             {
                 var hit = hitArray[i];
-                
             }
         }
     }

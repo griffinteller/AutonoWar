@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Utility;
 
@@ -8,7 +7,6 @@ namespace UI
     [RequireComponent(typeof(CanvasGroup))]
     public class ModalWindow : MonoBehaviour
     {
-
         private CanvasGroup _canvasGroup;
 
         [SerializeField] private Text messageText;
@@ -33,6 +31,5 @@ namespace UI
         {
             uiUtility.HideModalWindow(_canvasGroup);
         }
-
     }
 }

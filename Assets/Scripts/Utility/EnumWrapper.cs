@@ -4,7 +4,17 @@ namespace Utility
 {
     public abstract class EnumWrapper
     {
+        protected abstract string[] Strings { get; }
         public int Index { get; set; }
-        public abstract override string ToString();
+
+        public override string ToString()
+        {
+            return Strings[Index];
+        }
+
+        protected int IndexFromStringInternal(string str)
+        {
+            return Array.IndexOf(Strings, str);
+        }
     }
 }

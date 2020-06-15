@@ -18,11 +18,22 @@ namespace GameDirection
         Ended,
         WaitingForTransition
     }
+
     public abstract class GameDirector : MonoBehaviourPunCallbacks
     {
-        public abstract GameModeEnum GameMode { get; }
+        public static readonly Dictionary<MapEnum, Vector3> BaseStartingPositions = new Dictionary<MapEnum, Vector3>
+        {
+            {MapEnum.Highlands, new Vector3(-280, 0, -410)},
+            {MapEnum.Desert, new Vector3(-385, 0, -1326)}
+        };
+
+        private bool _fullyLoaded;
 
         public GameState gameState;
+
+        public abstract GameModeEnum GameMode { get; }
+        public MapEnum Map { get; set; }
+
 
         public bool FullyLoaded
         {
@@ -35,30 +46,28 @@ namespace GameDirection
             }
         }
 
-        private bool _fullyLoaded;
+        protected virtual void OnFullyLoaded()
+        {
+        }
 
-        protected virtual void OnFullyLoaded() {}
-
-        public virtual Dictionary<int, Vector3> GetStartingPositions(Vector3 center)
+        public virtual Dictionary<int, Vector3> GetStartingPositions()
         {
             const float radius = 10f;
             const float distanceOffGround = 1f;
+            var center = BaseStartingPositions[Map];
             var players = PhotonNetwork.CurrentRoom.Players;
-            
+
             var playersSorted = new List<Player>();
-            foreach (var pair in players)
-            {
-                playersSorted.Add(pair.Value);
-            }
+            foreach (var pair in players) playersSorted.Add(pair.Value);
             playersSorted.Sort(
                 Comparer<Player>.Create((x, y) => x.ActorNumber.CompareTo(y.ActorNumber))
-                );
+            );
 
             var result = new Dictionary<int, Vector3>();
             for (var i = 0; i < playersSorted.Count; i++)
             {
                 var player = playersSorted[i];
-                
+
                 var pos = center;
                 pos.x += radius * Mathf.Cos(2 * Mathf.PI / players.Count * i);
                 pos.z += radius * Mathf.Sin(2 * Mathf.PI / players.Count * i);
@@ -76,7 +85,7 @@ namespace GameDirection
             {
                 new EscapeMenuButtonInfo("Main Menu", MetaUtility.UnityEventFromFunc(HudUi.ReturnToMainMenu))
             };
-        } 
+        }
 
         protected void RaiseStartGameEvent()
         {
@@ -93,15 +102,15 @@ namespace GameDirection
         public static void RaiseEventDefaultSettings(PhotonEventCode eventCode, object data = null)
         {
             var content = data;
-            var raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            var sendOptions = new SendOptions { Reliability = true };
+            var raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
+            var sendOptions = new SendOptions {Reliability = true};
             PhotonNetwork.RaiseEvent((byte) eventCode, content, raiseEventOptions, sendOptions);
         }
 
         public static void ResetLocalRobot()
         {
             var playerConnectionObj = GameObject.FindWithTag("ConnectionObject");
-            
+
             if (playerConnectionObj)
             {
                 var playerConnection = playerConnectionObj.GetComponent<PlayerConnection>();
@@ -114,4 +123,4 @@ namespace GameDirection
             }
         }
     }
-} 
+}

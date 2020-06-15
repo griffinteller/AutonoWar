@@ -44,16 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf89071f7da6dc4493d9d18c52d8703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerObjectPrefab: {fileID: 3862314426688975741, guid: c045c22c6fe6cfc4fb973113e71789bb,
-    type: 3}
-  playerObject: {fileID: 0}
-  startingPosition: {x: 0, y: 3, z: 0}
   cameraMotionScript: {fileID: 0}
   classicTagDirector: {fileID: 2612124392210836542, guid: be021f1431278624ba94e7d6f12e088a,
     type: 3}
   freeplayDirector: {fileID: 4140264822069007822, guid: cf1c247b6d0590b4588a589e80c9ff66,
     type: 3}
   gameMode: 0
+  playerObject: {fileID: 0}
+  playerObjectPrefab: {fileID: 4421177872403235923, guid: d5b926445abbe244f94ecf6a59e62e03,
+    type: 3}
+  startingPosition: {x: 0, y: 3, z: 0}
 --- !u!114 &9022163172499462134
 MonoBehaviour:
   m_ObjectHideFlags: 0

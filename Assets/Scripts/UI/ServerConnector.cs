@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Networking;
 using Photon.Pun;
@@ -12,32 +11,28 @@ namespace UI
 {
     public class ServerConnector : MonoBehaviourPunCallbacks
     {
-
-        [SerializeField] private ServerSettingsHandler serverSettingsHandler;
-        [SerializeField] private CanvasGroup roomWaitingPanel;
-        [SerializeField] private UiUtility uiUtility;
-        [SerializeField] private Text waitingText;
-        [SerializeField] private Button startButton;
-        [SerializeField] private Button leaveButton;
-        [SerializeField] private GameObject playerListItemPrefab;
-        [SerializeField] private RectTransform playerListParent;
-        [SerializeField] private GameObject topBar;
-
-        private Hashtable _serverDescription;
-
-        private readonly Dictionary<Player, GameObject> _playerListItems = 
-            new Dictionary<Player, GameObject>();
-
+        public const string NickNameKey = "NickName";
         private static readonly string[] RoomPropertiesForLobby = {"gameMode", "map"};
 
-        private const string ClassicTagSceneName = "ClassicTagScene";
-        private const string FreeplaySceneName = "FreeplayScene";
-        public const string NickNameKey = "NickName";
+        private readonly Dictionary<Player, GameObject> _playerListItems = new Dictionary<Player, GameObject>();
 
         private bool _creatingServer;
 
+        private Hashtable _serverDescription;
+        [SerializeField] private Button leaveButton;
+        [SerializeField] private GameObject playerListItemPrefab;
+        [SerializeField] private RectTransform playerListParent;
+        [SerializeField] private CanvasGroup roomWaitingPanel;
+
+        [SerializeField] private ServerSettingsHandler serverSettingsHandler;
+        [SerializeField] private Button startButton;
+        [SerializeField] private GameObject topBar;
+        [SerializeField] private UiUtility uiUtility;
+        [SerializeField] private Text waitingText;
+
         public void StartServer()
         {
+            print("starting server");
             _creatingServer = true;
 
             if (!PhotonNetwork.IsConnected)
@@ -52,7 +47,7 @@ namespace UI
                 PhotonNetwork.JoinLobby();
                 return;
             }
-            
+
             _serverDescription = serverSettingsHandler.GetServerDescription();
             PhotonNetwork.NickName = PlayerPrefs.GetString(NickNameKey);
             CreateRoomUsingDescription();
@@ -62,7 +57,7 @@ namespace UI
         {
             if (!newMasterClient.Equals(PhotonNetwork.LocalPlayer))
                 return;
-            
+
             waitingText.text = "Waiting for players...";
             startButton.gameObject.SetActive(true);
             startButton.onClick.AddListener(StartGame);
@@ -77,7 +72,7 @@ namespace UI
         {
             if (!_creatingServer)
                 return;
-            
+
             StartServer();
         }
 
@@ -89,17 +84,17 @@ namespace UI
                 CustomRoomProperties = _serverDescription,
                 CustomRoomPropertiesForLobby = RoomPropertiesForLobby,
                 IsOpen = true,
-                IsVisible = true,
+                IsVisible = true
             });
         }
 
         public void JoinServer(string serverName)
         {
             _creatingServer = false;
-            
+
             if (!PhotonNetwork.IsConnected || !PhotonNetwork.InLobby)
                 return;
-            
+
             PhotonNetwork.NickName = PlayerPrefs.GetString(NickNameKey);
             PhotonNetwork.JoinRoom(serverName);
         }
@@ -117,22 +112,20 @@ namespace UI
 
         private void AddAllCurrentPlayersToList()
         {
-
-            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values) 
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
                 AddPlayerToList(player);
-
         }
 
-        public override void OnJoinedRoom()  // this is called when creating room too
+        public override void OnJoinedRoom() // this is called when creating room too
         {
             _creatingServer = false;
             Debug.Log(PhotonNetwork.CurrentRoom.Name);
-            
+
             uiUtility.SwitchToPanel(roomWaitingPanel);
             topBar.SetActive(false);
 
             AddAllCurrentPlayersToList();
-            
+
             PhotonNetwork.AutomaticallySyncScene = true;
 
             if (PhotonNetwork.IsMasterClient)
@@ -150,27 +143,8 @@ namespace UI
 
         public void StartGame()
         {
-            
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            
-            switch ((GameModeEnum) _serverDescription["gameMode"])
-            {
-                
-                case GameModeEnum.FreePlay:
-
-                    PhotonNetwork.LoadLevel(FreeplaySceneName);
-                    break;
-                
-                case GameModeEnum.ClassicTag:
-                    
-                    PhotonNetwork.LoadLevel(ClassicTagSceneName);
-                    break;
-                
-                default:
-                    
-                    throw new ArgumentException("Illegal multi-player game mode!");
-
-            }
+            PhotonNetwork.LoadLevel(MapEnumWrapper.MapSceneNames[(MapEnum) _serverDescription["map"]]);
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -189,7 +163,7 @@ namespace UI
         {
             if (otherPlayer.Equals(PhotonNetwork.LocalPlayer))
                 return;
-            
+
             Destroy(_playerListItems[otherPlayer]);
             _playerListItems.Remove(otherPlayer);
         }
@@ -201,7 +175,7 @@ namespace UI
 
             foreach (var obj in _playerListItems.Values)
                 Destroy(obj);
-            
+
             _playerListItems.Clear();
         }
 

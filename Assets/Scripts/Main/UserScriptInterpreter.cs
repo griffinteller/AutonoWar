@@ -9,33 +9,12 @@ using Utility;
 
 namespace Main
 {
-
     public class UserScriptInterpreter : MonoBehaviour
     {
-
-        private readonly object _eventListLock = new object();
-        private readonly object _clientStreamLock = new object();
-        private readonly List<string> _eventList = new List<string>();
-        
-        private ActionHandler _actionHandler;
-        private SimplePlatform _platform;
-        private Task _currentGetEventsTask;
-        private CancellationTokenSource _getEventsCancellationTokenSource;
-        private Task _currentVerifyConnectionTask;
-        private Stream _clientStream;
-        private StreamReader _clientReader;
-        private RobotMain _robotMain;
-
-        private bool _connected;
-        private bool _justStarted = true;
-
-        private string PipeName = "EventQueuePipe";
-        
         private const char Separator = ';';
 
         private static readonly Action<object> GetEventsActionWindows = usi =>
         {
-
             var usiCast = (UserScriptInterpreter) usi;
 
             var eventList = usiCast._eventList;
@@ -43,34 +22,28 @@ namespace Main
 
             lock (usiCast._clientStreamLock)
             {
-                
                 var reader = usiCast._clientReader;
-            
+
                 var message = reader.ReadLine();
                 while (!string.IsNullOrEmpty(message))
                 {
-                    
                     var commands = message.Split(Separator);
 
                     lock (eventListLock)
                     {
-                
                         eventList.AddRange(commands);
-                
                     }
+
                     message = reader.ReadLine();
-
                 }
-
             }
-
         };
 
         private static readonly Action<object> VerifyConnectionActionWindows = usi =>
         {
-
             var usiCast = (UserScriptInterpreter) usi;
-            var stillConnected = SystemUtility.IsDuplexPipeStillConnectedWindows((NamedPipeClientStream) usiCast._clientStream);
+            var stillConnected =
+                SystemUtility.IsDuplexPipeStillConnectedWindows((NamedPipeClientStream) usiCast._clientStream);
 
             if (stillConnected)
                 return;
@@ -78,24 +51,19 @@ namespace Main
             Debug.Log("Disconnected!");
             lock (usiCast._clientStreamLock)
             {
-                
                 usiCast._connected = false;
                 usiCast._clientReader.Close();
                 usiCast.InitStreams();
-
             }
-
         };
 
         private static readonly Action<object> GetEventsActionPosix = usi =>
         {
-
             var usiCast = (UserScriptInterpreter) usi;
 
             var batch = usiCast._clientReader.ReadLine();
             while (!string.IsNullOrEmpty(batch))
             {
-
                 var events = batch.Split(Separator);
 
                 lock (usiCast._eventListLock)
@@ -104,18 +72,14 @@ namespace Main
                 }
 
                 batch = usiCast._clientReader.ReadLine();
-
             }
-
         };
 
         private static readonly Action<object> ConnectToPipePosix = usi =>
         {
-
             var usiCast = (UserScriptInterpreter) usi;
 
             while (true)
-            {
                 try
                 {
                     usiCast._clientStream = new FileStream(
@@ -125,62 +89,69 @@ namespace Main
                 catch (IOException e)
                 {
                     Debug.Log("Couldn't connect usi: " + e);
-                    continue;
                 }
-            }
 
             usiCast._clientReader = new StreamReader(usiCast._clientStream);
-            
+
             usiCast._connected = true;
             Debug.Log("USI Connected!");
-
-
         };
+
+        private readonly object _clientStreamLock = new object();
+        private readonly List<string> _eventList = new List<string>();
+
+        private readonly object _eventListLock = new object();
+
+        private ActionHandler _actionHandler;
+        private StreamReader _clientReader;
+        private Stream _clientStream;
+
+        private bool _connected;
+        private Task _currentGetEventsTask;
+        private Task _currentVerifyConnectionTask;
+        private CancellationTokenSource _getEventsCancellationTokenSource;
+        private bool _justStarted = true;
+        private SimplePlatform _platform;
+        private RobotMain _robotMain;
+
+        private string PipeName = "EventQueuePipe";
 
         public void Start()
         {
-
             _platform = SystemUtility.GetSimplePlatform();
             _actionHandler = GetComponent<ActionHandler>();
             _robotMain = GetComponent<RobotMain>();
             PipeName += _robotMain.robotIndex;
-            
-            InitStreams();
 
+            InitStreams();
         }
 
         public void Update()
         {
-
             switch (_platform)
             {
-                
                 case SimplePlatform.Windows:
-                    
+
                     WindowsUpdate();
                     break;
-                
+
                 case SimplePlatform.Posix:
 
                     PosixUpdate();
                     break;
-                
+
                 default:
-                    
+
                     throw new NotImplementedException();
-
             }
-            
-            ExecuteEvents();
 
+            ExecuteEvents();
         }
 
         private void InitStreams()
         {
-
             switch (_platform)
             {
-
                 case SimplePlatform.Windows:
 
                     _clientStream = new NamedPipeClientStream(PipeName);
@@ -195,47 +166,33 @@ namespace Main
                 default:
 
                     throw new NotImplementedException();
-
             }
-
         }
 
         private void WindowsUpdate()
         {
-            
-            if (!_connected && !SystemUtility.TryConnectPipeClientWindows((NamedPipeClientStream) _clientStream, out _connected))
-            {
-                
-                return;  // we aren't connected and we can't connect
-                
-            }
-            
+            if (!_connected &&
+                !SystemUtility.TryConnectPipeClientWindows((NamedPipeClientStream) _clientStream, out _connected))
+                return; // we aren't connected and we can't connect
+
             if (_justStarted || _currentGetEventsTask.IsCompleted || _currentGetEventsTask.IsCanceled)
             {
-                
                 _getEventsCancellationTokenSource = new CancellationTokenSource();
                 _currentGetEventsTask = Task.Factory.StartNew(
                     GetEventsActionWindows,
                     this, _getEventsCancellationTokenSource.Token);
-
             }
 
             if (_justStarted || _currentVerifyConnectionTask.IsCompleted)
-            {
-
                 _currentVerifyConnectionTask = Task.Factory.StartNew(
                     VerifyConnectionActionWindows,
                     this);
 
-            }
-
             _justStarted = false;
-            
         }
 
         private void PosixUpdate()
         {
-
             if (!_connected)
                 return;
 
@@ -243,73 +200,52 @@ namespace Main
                 _currentGetEventsTask = Task.Factory.StartNew(GetEventsActionPosix, this);
 
             _justStarted = false;
-
         }
 
         private void ExecuteEvents()
         {
             lock (_eventListLock)
             {
-                
                 while (_eventList.Count > 0)
                 {
-
                     var command = _eventList[0].Split(' ');
                     _eventList.RemoveAt(0);
                     ExecuteCommand(command);
-
                 }
-                
             }
-
         }
 
         private void ExecuteCommand(IEnumerable<string> args)
         {
-            
             var argsList = new List<string>(args);
             var keyword = argsList[0];
 
-            if (!char.IsLetter(keyword[0]))
-            {
+            if (!char.IsLetter(keyword[0])) keyword = keyword.Substring(1);
 
-                keyword = keyword.Substring(1);
-
-            }
-            
             argsList.RemoveAt(0);
             switch (keyword)
             {
-                
                 case "SET":
-                    
+
                     Set(argsList);
                     break;
-
             }
-
         }
 
         private void Set(List<string> remainingCommand)
         {
-            
             switch (remainingCommand[0])
             {
-                
                 case "tire":
-                    
+
                     _actionHandler.SetTireTorque(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
                     break;
-                
+
                 case "steering":
-                    
+
                     _actionHandler.SetTireSteering(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
                     break;
-
             }
-            
         }
-
     }
-
 }
