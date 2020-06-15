@@ -14,6 +14,7 @@ namespace Main
         private int _id;
         public Altimeter altimeter;
         public string gameMode;
+        public string map;
         public GPS gps;
 
         public Gyroscope gyroscope;
@@ -22,7 +23,7 @@ namespace Main
         public Radar radar;
         public float timestamp;
 
-        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, int actorNumber = 0,
+        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0,
             ClassicTagDirector classicTagScript = null)
         {
             lidar = new Lidar(gameObject);
@@ -33,6 +34,10 @@ namespace Main
             this.gameMode = new GameModeEnumWrapper
             {
                 Index = (int) gameMode
+            }.ToString();
+            this.map = new MapEnumWrapper
+            {
+                Index = (int) map
             }.ToString();
 
             _classicTagScript = classicTagScript;
