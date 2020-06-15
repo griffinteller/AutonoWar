@@ -42,8 +42,8 @@ namespace Sensor
                 }
 
             pings = tmpPingList.ToArray();
-            
-            if (_gameMode == GameModeEnum.ClassicTag && _classicTagScript.currentItActorNumber != -1) 
+
+            if (_gameMode == GameModeEnum.ClassicTag && _classicTagScript.currentItActorNumber != -1)
                 // we've assigned an it
             {
                 var it = _playerConnection.robots[_classicTagScript.currentItActorNumber];

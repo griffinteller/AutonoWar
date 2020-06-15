@@ -1,0 +1,7 @@
+<WorldCreator Version="2.0">
+  <Textures Preview="preview.png" Tags="rocky" Description="" Publisher="GameTextures" Website="https://www.gametextures.com/" Guid="97aece38-c646-4d58-991f-4c3cce2dc282">
+    <Diffuse File="Ground_KalahariRockFaces_col.png" Time="131899138560000000" />
+    <Normal File="Ground_KalahariRockFaces_norm.png" Time="131899141260000000" />
+    <Displacement File="" Time="132364858121426561" />
+  </Textures>
+</WorldCreator>

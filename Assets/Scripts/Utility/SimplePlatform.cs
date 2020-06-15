@@ -2,9 +2,7 @@
 {
     public enum SimplePlatform
     {
-        
         Windows,
         Posix
-        
     }
 }

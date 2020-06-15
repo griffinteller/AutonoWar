@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Win32;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -9,12 +7,11 @@ namespace UI
 {
     public class HudUi : MonoBehaviour
     {
+        private readonly Dictionary<string, GameObject> _windows = new Dictionary<string, GameObject>();
+        public List<UnityEvent> events;
+        public List<KeyCode> hotKeys;
 
         public Transform windowParent;
-        public List<KeyCode> hotKeys;
-        public List<UnityEvent> events;
-
-        private readonly Dictionary<string, GameObject> _windows = new Dictionary<string, GameObject>();
 
         public void Start()
         {
@@ -52,10 +49,7 @@ namespace UI
             for (var i = 0; i < hotKeys.Count; i++)
             {
                 var keycode = hotKeys[i];
-                if (Input.GetKeyDown(keycode))
-                {
-                    events[i].Invoke();
-                }
+                if (Input.GetKeyDown(keycode)) events[i].Invoke();
             }
         }
 

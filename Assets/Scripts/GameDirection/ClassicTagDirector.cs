@@ -14,36 +14,10 @@ namespace GameDirection
 {
     public class ClassicTagDirector : GameDirector, IOnEventCallback
     {
-        public override GameModeEnum GameMode => GameModeEnum.ClassicTag;
-
-        public int currentItActorNumber = -1;
-        public int lastItActorNumber = -1;
-
-        public Color itTint = Color.red;
-        public Color scoreboardEntryItColor;
-
-        public Vector3 scoreboardOffset = new Vector3(0, 0, 0);
-
-        public float tagCooldownTime = 10;
-
-        public Scoreboard scoreboardPrefab;
-
-        private float _lastTagTime;
-        private PlayerConnection _playerConnection;
-
-        private float _timeIntroStarted;
-        private Text _messageText;
-
-        private float _timeGameStarted;
-
-        private float _gameLength;
-
-        private UiClock _clock;
-
         private const float WaitingTime = 10f;
-        
+
         private const float DistanceFromItPointHalvingDistance = 30f;
-        
+
         // per second
         private const float MinNotItPoints = 0f;
         private const float MaxNotItPoints = 10f;
@@ -51,7 +25,57 @@ namespace GameDirection
 
         private const float TagPoints = 300f;
 
+        private UiClock _clock;
+
+        private float _gameLength;
+
+        private float _lastTagTime;
+        private Text _messageText;
+        private PlayerConnection _playerConnection;
+
         private Scoreboard _scoreboard;
+
+        private float _timeGameStarted;
+
+        private float _timeIntroStarted;
+
+        public int currentItActorNumber = -1;
+
+        public Color itTint = Color.red;
+        public int lastItActorNumber = -1;
+        public Color scoreboardEntryItColor;
+
+        public Vector3 scoreboardOffset = new Vector3(0, 0, 0);
+
+        public Scoreboard scoreboardPrefab;
+
+        public float tagCooldownTime = 10;
+        public override GameModeEnum GameMode => GameModeEnum.ClassicTag;
+
+        public void OnEvent(EventData photonEvent)
+        {
+            switch (photonEvent.Code)
+            {
+                case (byte) PhotonEventCode.NewIt:
+
+                    SetNewIt(((int[]) photonEvent.CustomData)[0]);
+                    if (PhotonNetwork.IsMasterClient)
+                        _scoreboard.AddToScore(lastItActorNumber, TagPoints);
+                    break;
+
+                case (byte) PhotonEventCode.StartingGame:
+
+                    gameState = GameState.Initializing;
+                    GameStartSetup();
+                    break;
+
+                case (byte) PhotonEventCode.EndingGame:
+
+                    gameState = GameState.Ended;
+                    EndGameSetup();
+                    break;
+            }
+        }
 
         public override void OnEnable()
         {
@@ -70,7 +94,7 @@ namespace GameDirection
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.InstantiateSceneObject(
                     scoreboardPrefab.name, scoreboardOffset, Quaternion.identity);
-            
+
             PhotonNetwork.AddCallbackTarget(this);
         }
 
@@ -79,33 +103,6 @@ namespace GameDirection
             base.OnDisable();
 
             PhotonNetwork.RemoveCallbackTarget(this);
-        }
-
-        public void OnEvent(EventData photonEvent)
-        {
-            switch (photonEvent.Code)
-            {
-
-                case (byte) PhotonEventCode.NewIt:
-                    
-                    SetNewIt(((int[]) photonEvent.CustomData)[0]);
-                    if (PhotonNetwork.IsMasterClient)
-                        _scoreboard.AddToScore(lastItActorNumber, TagPoints);
-                    break;
-                
-                case (byte) PhotonEventCode.StartingGame:
-
-                    gameState = GameState.Initializing;
-                    GameStartSetup();
-                    break;
-                
-                case (byte) PhotonEventCode.EndingGame:
-
-                    gameState = GameState.Ended;
-                    EndGameSetup();
-                    break;
-
-            }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -120,7 +117,7 @@ namespace GameDirection
         {
             var actorNumbers = PhotonNetwork.CurrentRoom.Players.Keys;
             var i = (int) (Random.value * (actorNumbers.Count - 1));
-            
+
             var j = 0;
             var newItActorNumber = 0;
             foreach (var key in actorNumbers)
@@ -130,7 +127,7 @@ namespace GameDirection
 
                 j++;
             }
-            
+
             TryRaiseNewItEvent(newItActorNumber, true);
         }
 
@@ -147,12 +144,12 @@ namespace GameDirection
 
         private void TryRaiseNewItEvent(int actorNumber, bool ignoreCooldown = false)
         {
-            if ((Time.time - _lastTagTime < tagCooldownTime && !ignoreCooldown) || !FullyLoaded)
+            if (Time.time - _lastTagTime < tagCooldownTime && !ignoreCooldown || !FullyLoaded)
                 return;
 
             _lastTagTime = Time.time;
             print("Raising It Event!");
-            RaiseEventDefaultSettings(PhotonEventCode.NewIt, new [] {actorNumber});
+            RaiseEventDefaultSettings(PhotonEventCode.NewIt, new[] {actorNumber});
         }
 
         protected override void OnFullyLoaded()
@@ -164,12 +161,12 @@ namespace GameDirection
         private void SetInitialIt()
         {
             print("setting initial it");
-            
+
             currentItActorNumber = PhotonNetwork.MasterClient.ActorNumber;
             lastItActorNumber = currentItActorNumber;
 
             CombineTintWithRobot(currentItActorNumber, itTint);
-            
+
             try
             {
                 _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
@@ -178,7 +175,7 @@ namespace GameDirection
             {
                 return; // scoreboard has not been instantiated yet
             }
-            
+
             _scoreboard.SetEntryColor(currentItActorNumber, scoreboardEntryItColor);
         }
 
@@ -187,15 +184,15 @@ namespace GameDirection
             switch (gameState)
             {
                 case GameState.Initializing:
-                    
+
                     PreGameUpdate();
                     break;
-                
+
                 case GameState.Started:
-                    
+
                     InGameUpdate();
                     break;
-                
+
                 case GameState.Ended:
 
                     EndGameUpdate();
@@ -221,14 +218,11 @@ namespace GameDirection
             var timeRemaining = _clock.Seconds;
             var gameOver = timeRemaining < 0;
 
-            if (gameOver)
-            {
-                _clock.Stop();
-            }
-            
+            if (gameOver) _clock.Stop();
+
             if (!PhotonNetwork.IsMasterClient)
                 return;
-            
+
             if (gameOver)
             {
                 _clock.Stop();
@@ -237,7 +231,6 @@ namespace GameDirection
             }
 
             if (!_scoreboard)
-            {
                 try
                 {
                     _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
@@ -246,7 +239,6 @@ namespace GameDirection
                 {
                     return; // scoreboard has not been instantiated yet
                 }
-            }
 
             ScorePlayers();
         }
@@ -254,7 +246,7 @@ namespace GameDirection
         private void ScorePlayers()
         {
             var itLocation = _playerConnection.robots[currentItActorNumber].transform.position;
-            
+
             foreach (var pair in _playerConnection.robots)
             {
                 var actorNumber = pair.Key;
@@ -270,7 +262,6 @@ namespace GameDirection
                     var pointsPerSecond = NotItPointsPerSecond(distanceToIt);
                     _scoreboard.AddToScore(actorNumber, pointsPerSecond * Time.deltaTime);
                 }
-
             }
         }
 
@@ -287,13 +278,14 @@ namespace GameDirection
 
             if (starting)
             {
-                _messageText.text = "Starting in: " + ((int) (WaitingTime - (Time.time - _timeIntroStarted)) + 1) + "...";
+                _messageText.text = "Starting in: " + ((int) (WaitingTime - (Time.time - _timeIntroStarted)) + 1) +
+                                    "...";
                 return;
             }
 
             if (!PhotonNetwork.IsMasterClient)
                 return;
-            
+
             RaiseStartGameEvent();
         }
 
@@ -306,7 +298,7 @@ namespace GameDirection
         private void SetNewIt(int actorNumber)
         {
             _lastTagTime = Time.time;
-            
+
             lastItActorNumber = currentItActorNumber;
             currentItActorNumber = actorNumber;
 
@@ -333,13 +325,13 @@ namespace GameDirection
         private static void OnTriggerEnterTagCallback(Collider other, RobotMain robotMain)
         {
             var collisionRoot = other.transform.root.gameObject;
-            
+
             if (!collisionRoot.CompareTag("Robot"))
                 return;
-            
+
             var tagDirector = GameObject.FindWithTag("GameDirector").GetComponent<ClassicTagDirector>();
             if (robotMain.robotNetworkBridge.actorNumber == tagDirector.currentItActorNumber)
-                    tagDirector.TryRaiseNewItEvent(collisionRoot.GetComponent<RobotNetworkBridge>().actorNumber);
+                tagDirector.TryRaiseNewItEvent(collisionRoot.GetComponent<RobotNetworkBridge>().actorNumber);
         }
     }
 }

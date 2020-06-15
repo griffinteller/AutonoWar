@@ -5,11 +5,10 @@ namespace UI
 {
     public class ServerListItem : MonoBehaviour
     {
-        
-        public Text serverNameText;
-        public Text playersText;
-        public Text mapText;
         public Text gameModeText;
+        public Text mapText;
+        public Text playersText;
 
+        public Text serverNameText;
     }
 }

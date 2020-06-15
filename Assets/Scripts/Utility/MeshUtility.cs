@@ -1,14 +1,11 @@
-﻿using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Utility
 {
     public static class MeshUtility
     {
-
         public static Mesh GetCombinedMeshes(MeshFilter[] meshFilters, Transform parent)
         {
-            
             var combineInstances = new CombineInstance[meshFilters.Length];
             for (var i = 0; i < meshFilters.Length; i++)
             {
@@ -16,7 +13,7 @@ namespace Utility
                 combineInstances[i].mesh = meshFilters[i].sharedMesh;
 
                 var objectTransform = meshFilters[i].transform;
-                
+
                 var positionRelativeToParent =
                     parent.InverseTransformPoint(objectTransform.position);
                 var rotationRelativeToParent = Quaternion.Inverse(parent.rotation) * objectTransform.rotation;
@@ -29,11 +26,10 @@ namespace Utility
 
                 combineInstances[i].transform = matrix;
             }
-            
+
             var result = new Mesh();
             result.CombineMeshes(combineInstances);
             return result;
         }
-
     }
 }

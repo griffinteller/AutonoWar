@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using Utility;
 
 namespace Building
 {
     public class DesignLoaderBuild : MonoBehaviour
     {
-
-        [SerializeField] private List<BuildObjectComponent> partList;  // list of possible parts
-        [SerializeField] private GameObject rootCube;  // starting cube if new robot
-
-        private readonly Dictionary<string, BuildObjectComponent> _partComponentDict = 
+        private readonly Dictionary<string, BuildObjectComponent> _partComponentDict =
             new Dictionary<string, BuildObjectComponent>();
+
+        [SerializeField] private List<BuildObjectComponent> partList; // list of possible parts
+        [SerializeField] private GameObject rootCube; // starting cube if new robot
 
         public void Start()
         {
-            
             LoadComponentListIntoDict();
 
             try
@@ -29,20 +25,16 @@ namespace Building
                 Instantiate(rootCube, transform);
             }
         }
-        
+
         private void LoadComponentListIntoDict()
         {
-            
             while (partList.Count > 0)
             {
-
                 var component = partList[0];
                 partList.RemoveAt(0);
-                
+
                 _partComponentDict.Add(component.name, component);
-
             }
-
         }
 
         private void CreateParts()

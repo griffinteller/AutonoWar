@@ -1,78 +1,65 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Main
 {
-    
     public class TireMeshAnimator : MonoBehaviour
     {
-        
         private const float LerpTimePerMeter = 0.5f;
         private const float LerpTimePerRotation = 1f;
-        
-        [SerializeField] private Transform innerMesh;
+        private ActionHandler _actionHandler;
+
+        private Vector3 _desiredLocalPosition; // to facilitate lerping
+        private Quaternion _desiredLocalRotation;
         [SerializeField] private TireComponent _tireComponent;
-        
+
+        [SerializeField] private Transform innerMesh;
+
         [HideInInspector] public Transform tireMeshRoot;
         [HideInInspector] public WheelCollider wheelCollider;
 
-        private Vector3 _desiredLocalPosition;  // to facilitate lerping
-        private Quaternion _desiredLocalRotation;
-        private ActionHandler _actionHandler;
-
         public void Start()
         {
-
             _actionHandler = transform.root.GetComponent<ActionHandler>();
-            
+
             RotateInnerTireFromRpm();
 
             SyncDesiredRotationWithSteerAngle();
             SyncDesiredPositionWithColliderCenter();
-            
         }
 
         public void Update()
         {
-            
             LerpState();
 
             RotateInnerTireFromRpm();
 
             SyncDesiredRotationWithSteerAngle();
             SyncDesiredPositionWithColliderCenter();
-
         }
 
         private void RotateInnerTireFromRpm()
         {
-
             var rpm = wheelCollider.rpm;
 
             innerMesh.Rotate(rpm * 360 / 60 * Time.deltaTime, 0, 0);
-
         }
 
         private void SyncDesiredRotationWithSteerAngle()
         {
             _desiredLocalRotation = Quaternion.Euler(
-                0, 
-                _tireComponent.baseSteerAngle + _tireComponent.bearing, 
+                0,
+                _tireComponent.baseSteerAngle + _tireComponent.bearing,
                 0);
-
         }
 
         private void SyncDesiredPositionWithColliderCenter()
         {
-            
             wheelCollider.GetWorldPose(out var pos, out _);
             _desiredLocalPosition = tireMeshRoot.InverseTransformPoint(pos);
-
         }
 
         private void LerpState()
         {
-
             var t = transform;
 
             var deltaDistance = (_desiredLocalPosition - t.localPosition).magnitude;
@@ -82,12 +69,10 @@ namespace Main
                 Time.deltaTime / (deltaDistance * LerpTimePerMeter));
 
             var deltaDegress = Quaternion.Angle(t.localRotation, _desiredLocalRotation);
-            
+
             t.localRotation = Quaternion.Slerp(
                 t.localRotation, _desiredLocalRotation,
                 Time.deltaTime / (deltaDegress / 360 * LerpTimePerRotation));
-
         }
-        
     }
 }

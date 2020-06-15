@@ -8,15 +8,14 @@ namespace Networking
         FreePlay,
         ClassicTag
     }
+
     public class GameModeEnumWrapper : EnumWrapper
     {
-        private static readonly string[] Strings =
+        protected override string[] Strings => new[]
         {
             "Singleplayer",
             "Freeplay",
             "Classic Tag"
         };
-
-        public override string ToString() => Strings[Index];
     }
 }

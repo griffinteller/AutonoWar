@@ -6,7 +6,6 @@ namespace Sensor
     [Serializable]
     public class GPS : ISensor
     {
-
         private GameObject _robot;
         private Rigidbody _robotRigidbody;
 
@@ -15,23 +14,18 @@ namespace Sensor
 
         public GPS(GameObject robot)
         {
-
             _robot = robot;
 
             var robotRoot = robot.transform.root;
             _robotRigidbody = robotRoot.GetComponent<Rigidbody>();
-            
-            Update();
 
+            Update();
         }
 
         public void Update()
         {
-
             position = _robot.transform.position;
             velocity = _robotRigidbody.velocity;
-
         }
-
     }
 }

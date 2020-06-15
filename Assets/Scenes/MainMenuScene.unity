@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e99856657774daca2ee2207aaa310ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numControllableBotsSlider: {fileID: 1398574810}
   mapSlider: {fileID: 860819220}
+  numControllableBotsSlider: {fileID: 1398574810}
   singlePlayerDirectorPrefab: {fileID: 2541324036647193942, guid: 5e1363b0a1e755f47ab4fecffdeba229,
     type: 3}
 --- !u!225 &24373098
@@ -322,6 +322,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stringEnumRaw
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685272486346929760, guid: 70bc9ab7ed758264fbb137866ba0c402,
+        type: 3}
+      propertyPath: maxIndex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3685272486346929766, guid: 70bc9ab7ed758264fbb137866ba0c402,
         type: 3}
@@ -2400,16 +2405,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40637f0da6e4cdba89cb4ddef7c1631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverSettingsHandler: {fileID: 633709699}
-  roomWaitingPanel: {fileID: 499065857}
-  uiUtility: {fileID: 626406189}
-  waitingText: {fileID: 610658207}
-  startButton: {fileID: 870731347}
   leaveButton: {fileID: 0}
   playerListItemPrefab: {fileID: 5951132717144334821, guid: 4c3476345995dfd469ff0f2a83d3c552,
     type: 3}
   playerListParent: {fileID: 1322438953}
+  roomWaitingPanel: {fileID: 499065857}
+  serverSettingsHandler: {fileID: 633709699}
+  startButton: {fileID: 870731347}
   topBar: {fileID: 1225958588}
+  uiUtility: {fileID: 626406189}
+  waitingText: {fileID: 610658207}
 --- !u!1 &505471177
 GameObject:
   m_ObjectHideFlags: 0
@@ -3370,11 +3375,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f991f4697bcd4abaa681cde6c9198eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  errorWindow: {fileID: 0}
+  escapeWindow: {fileID: 0}
   modalWindowParent: {fileID: 2029305299}
   panelParent: {fileID: 1995372624}
   startPanel: {fileID: 1268258388}
   topBar: {fileID: 1225958588}
-  errorWindow: {fileID: 0}
 --- !u!222 &626406190
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3509,10 +3515,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a96f974f1054b558b8b0d5ca6637cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameLengthOptionsSlider: {fileID: 588305406}
   gameModeOptionsSlider: {fileID: 1741906446}
   mapOptionsSlider: {fileID: 1360563102}
   maxPlayersOptionsSlider: {fileID: 1421432663}
-  gameLengthOptionsSlider: {fileID: 588305406}
   nameInputField: {fileID: 1998343545}
 --- !u!1 &662263520
 GameObject:
@@ -4804,8 +4810,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 880639691}
   - {fileID: 1772497057}
+  - {fileID: 880639691}
   m_Father: {fileID: 338535882}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4880,6 +4886,16 @@ PrefabInstance:
         type: 3}
       propertyPath: stringEnumRaw
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685272486346929760, guid: 70bc9ab7ed758264fbb137866ba0c402,
+        type: 3}
+      propertyPath: minIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685272486346929760, guid: 70bc9ab7ed758264fbb137866ba0c402,
+        type: 3}
+      propertyPath: maxIndex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3685272486346929766, guid: 70bc9ab7ed758264fbb137866ba0c402,
         type: 3}
@@ -5247,7 +5263,7 @@ RectTransform:
   - {fileID: 1812238296}
   - {fileID: 1398574809}
   m_Father: {fileID: 842497960}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6003,10 +6019,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a96f974f1054b558b8b0d5ca6637cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameLengthOptionsSlider: {fileID: 0}
   gameModeOptionsSlider: {fileID: 0}
   mapOptionsSlider: {fileID: 0}
   maxPlayersOptionsSlider: {fileID: 0}
-  gameLengthOptionsSlider: {fileID: 0}
   nameInputField: {fileID: 1994487257}
 --- !u!225 &1113930115
 CanvasGroup:
@@ -6768,11 +6784,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb6555183f9648cf8b7f046d4c8d745c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  evenColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
   listParent: {fileID: 332101438}
+  serverConnector: {fileID: 499065858}
   serverListItem: {fileID: 5658029443229244777, guid: 37c8c533fc13f2547b2e8c9daf80bf29,
     type: 3}
-  serverConnector: {fileID: 499065858}
-  evenColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
 --- !u!1 &1354881127
 GameObject:
   m_ObjectHideFlags: 0
@@ -8721,7 +8737,7 @@ RectTransform:
   - {fileID: 1165434048}
   - {fileID: 860819219}
   m_Father: {fileID: 842497960}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9435,7 +9451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b995b3f1c15f4496ad29d3a5ce14694e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 1937904442}
   messageText: {fileID: 893496206}
   uiUtility: {fileID: 626406189}
 --- !u!225 &1937904442

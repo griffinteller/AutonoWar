@@ -7,10 +7,10 @@ namespace UI
 {
     public class ServerSettingsHandler : MonoBehaviour
     {
+        [SerializeField] private OptionsSliderNumeric gameLengthOptionsSlider;
         [SerializeField] private OptionsSlider gameModeOptionsSlider;
         [SerializeField] private OptionsSlider mapOptionsSlider;
         [SerializeField] private OptionsSliderNumeric maxPlayersOptionsSlider;
-        [SerializeField] private OptionsSliderNumeric gameLengthOptionsSlider;
 
         [SerializeField] private InputField nameInputField;
 

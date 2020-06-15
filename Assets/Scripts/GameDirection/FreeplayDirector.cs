@@ -14,7 +14,7 @@ namespace GameDirection
             var result = base.GetEscapeMenuButtonInfo();
             result.Add(
                 new EscapeMenuButtonInfo("Reset Robot", MetaUtility.UnityEventFromFunc(ResetLocalRobot)));
-            
+
             return result;
         }
     }

@@ -1,22 +1,22 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
     public class UiClock : MonoBehaviour
     {
+        private bool _active;
+
+        private float _seconds;
+        private Text _text;
+
+        public bool stopwatch;
+
         public float Seconds
         {
             get => _seconds;
             set => SetSeconds(value);
         }
-
-        public bool stopwatch;
-
-        private float _seconds;
-        private Text _text;
-        private bool _active;
 
         public void Stop()
         {
@@ -45,7 +45,7 @@ namespace UI
         {
             if (!_active)
                 return;
-            
+
             if (stopwatch)
                 Seconds += Time.deltaTime;
             else

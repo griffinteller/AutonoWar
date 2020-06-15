@@ -12,10 +12,10 @@ namespace Editor
             DrawDefaultInspector();
 
             var baseComponent = (CylinderColliderGenerator) target;
-            
+
             if (GUILayout.Button("Build Colliders With Spheres"))
                 baseComponent.BuildCylinderSpheres();
-            
+
             if (GUILayout.Button("Build Colliders With Boxes"))
                 baseComponent.BuildCylinderBoxes();
         }

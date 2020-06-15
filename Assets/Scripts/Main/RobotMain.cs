@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using GameDirection;
 using Networking;
 using Photon.Pun;
@@ -8,35 +7,34 @@ using UnityEngine.Serialization;
 
 namespace Main
 {
-
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(ScheduledFlip))]
     public class RobotMain : MonoBehaviour
     {
-        private static bool _showingBeacons;
-        
-        public static Action<Collider, RobotMain> OnTriggerEnterCallbacks = (collider, robotMain) => {};
-        
-        public int robotIndex;
-        
-        [FormerlySerializedAs("_robotNetworkBridge")] public RobotNetworkBridge robotNetworkBridge;
-
         private const float MaxAngularVelocity = 120f;
         private const float TagBuffer = 0.3f;
         private const string BeaconName = "Beacon";
-        
-        private SinglePlayerDirector _singlePlayerDirector;
-        private GameObject _beaconObject;
-        private GameDirector _gameDirector;
-        private bool _partsAreLoaded;
-        private bool _shouldColor;
-        private Color _newColor;
-        private Transform _robotBody;
-        private Rigidbody _rigidbody;
-        private ScheduledFlip _scheduledFlipComponent;
 
         private const float TintCombineAmount = 0.9f;
         private const float MinStuckAngularVelocity = 1f;
+        private static bool _showingBeacons;
+
+        public static Action<Collider, RobotMain> OnTriggerEnterCallbacks = (collider, robotMain) => { };
+        private GameObject _beaconObject;
+        private GameDirector _gameDirector;
+        private Color _newColor;
+        private bool _partsAreLoaded;
+        private Rigidbody _rigidbody;
+        private Transform _robotBody;
+        private ScheduledFlip _scheduledFlipComponent;
+        private bool _shouldColor;
+
+        private SinglePlayerDirector _singlePlayerDirector;
+
+        public int robotIndex;
+
+        [FormerlySerializedAs("_robotNetworkBridge")]
+        public RobotNetworkBridge robotNetworkBridge;
 
         public void OnPartsLoaded()
         {
@@ -52,7 +50,7 @@ namespace Main
         public void CombineTint(Color tint, bool undo = false)
         {
             print("Combining color. Undo = " + undo);
-            
+
             if (!_partsAreLoaded)
             {
                 _shouldColor = true;
@@ -61,14 +59,10 @@ namespace Main
 
             float t;
             if (undo)
-            {
                 t = 1f - 1f / (1f - TintCombineAmount);
-            }
             // undoes combine;
             else
-            {
                 t = TintCombineAmount;
-            }
 
             foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
             {
@@ -91,10 +85,9 @@ namespace Main
 
         private void AddSphereTrigger()
         {
-
             var bounds = new Bounds();
             var colliders = GetComponentsInChildren<Collider>();
-            
+
             foreach (var collider in colliders)
                 bounds.Encapsulate(collider.bounds.extents + collider.transform.localPosition);
 
@@ -102,7 +95,6 @@ namespace Main
 
             sphereCollider.radius = bounds.extents.magnitude + TagBuffer;
             sphereCollider.isTrigger = true;
-
         }
 
         private void InitializeScripts()
@@ -124,14 +116,14 @@ namespace Main
             TryShowBeacons();
 
             var turtled = CheckUpsideDownAndStuck();
-            
+
             if (_scheduledFlipComponent.enabled && !turtled)
                 _scheduledFlipComponent.TryCancelFlip();
-            
+
             else if (!_scheduledFlipComponent.enabled && turtled)
                 _scheduledFlipComponent.enabled = true;
         }
-        
+
         private bool CheckUpsideDownAndStuck()
         {
             return _robotBody.up.y < 0 && _rigidbody.angularVelocity.magnitude < MinStuckAngularVelocity;
@@ -139,10 +131,10 @@ namespace Main
 
         private void TryShowBeacons()
         {
-            if ((robotNetworkBridge && !robotNetworkBridge.isLocal) 
-                || (_singlePlayerDirector 
-                    && !(_singlePlayerDirector.SelectedRobot == robotIndex)))
-                
+            if (robotNetworkBridge && !robotNetworkBridge.isLocal
+                || _singlePlayerDirector
+                && !(_singlePlayerDirector.SelectedRobot == robotIndex))
+
                 SetBeaconActive(_showingBeacons);
 
             else
@@ -163,11 +155,11 @@ namespace Main
         private void InitializeSinglePlayerScripts()
         {
             _singlePlayerDirector = FindObjectOfType<SinglePlayerDirector>();
-            
+
             GetComponent<UserScriptInterpreter>().enabled = true;
             GetComponent<RobotStateSender>().enabled = true;
             GetComponent<DesignLoaderPlay>().enabled = true;
-            
+
             GetComponent<DesignLoaderPlay>().BuildRobot();
         }
 
@@ -175,17 +167,14 @@ namespace Main
         {
             var rigidbodies = GetComponentsInChildren<Rigidbody>();
 
-            foreach (var rigidbody in rigidbodies)
-            {
-                rigidbody.maxAngularVelocity = MaxAngularVelocity;
-            }
+            foreach (var rigidbody in rigidbodies) rigidbody.maxAngularVelocity = MaxAngularVelocity;
         }
-        
+
         private void KeyCheck()
         {
-            if (Input.GetKeyDown(KeyCode.Q) 
-                && robotIndex == 0 
-                && (robotNetworkBridge && robotNetworkBridge.isLocal  || !robotNetworkBridge))
+            if (Input.GetKeyDown(KeyCode.Q)
+                && robotIndex == 0
+                && (robotNetworkBridge && robotNetworkBridge.isLocal || !robotNetworkBridge))
                 _showingBeacons = !_showingBeacons;
         }
 
@@ -193,6 +182,5 @@ namespace Main
         {
             OnTriggerEnterCallbacks(other, this);
         }
-
     }
 }
