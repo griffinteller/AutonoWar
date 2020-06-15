@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -55,6 +56,9 @@ namespace UI
 
         public static void ReturnToMainMenu()
         {
+            if (PhotonNetwork.InRoom)
+                PhotonNetwork.LeaveRoom();
+            
             SceneManager.LoadScene(0);
         }
     }
