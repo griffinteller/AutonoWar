@@ -24,7 +24,7 @@ namespace GameDirection
         public static readonly Dictionary<MapEnum, Vector3> BaseStartingPositions = new Dictionary<MapEnum, Vector3>
         {
             {MapEnum.Highlands, new Vector3(-280, 0, -410)},
-            {MapEnum.Desert, new Vector3(-385, 0, -1326)}
+            {MapEnum.Desert, new Vector3(98, 0, -130)}
         };
 
         private bool _fullyLoaded;
@@ -33,8 +33,7 @@ namespace GameDirection
 
         public abstract GameModeEnum GameMode { get; }
         public MapEnum Map { get; set; }
-
-
+        
         public bool FullyLoaded
         {
             get => _fullyLoaded;

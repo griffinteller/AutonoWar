@@ -1,0 +1,10 @@
+README.md
+setup.py
+awconnection/__init__.py
+awconnection/interface.py
+awconnection/utility.py
+awconnection.egg-info/PKG-INFO
+awconnection.egg-info/SOURCES.txt
+awconnection.egg-info/dependency_links.txt
+awconnection.egg-info/requires.txt
+awconnection.egg-info/top_level.txt
