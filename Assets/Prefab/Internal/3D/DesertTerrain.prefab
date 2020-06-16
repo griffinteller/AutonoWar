@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8764433350868936292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2723258013395397630}
   - component: {fileID: 1183151070088205258}
   - component: {fileID: 4802647434915469588}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1227416031021623225}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5906341211013231194}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5761190717723888535}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 5238580705790828517}
   - component: {fileID: 846119094771076375}
   - component: {fileID: 2344297634549473796}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8601113565139040108}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 2759940909489390163}
   - component: {fileID: 4063284050353095846}
   - component: {fileID: 500667063284534557}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_0_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 6179843335641905183}
   - component: {fileID: 5010691680792049486}
   - component: {fileID: 8945303924737410525}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_0_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
