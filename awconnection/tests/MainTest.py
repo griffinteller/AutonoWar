@@ -16,7 +16,7 @@ def set__torque(torque):
     r.set_tire_torque("1", torque)
     r.set_tire_torque("2", -torque)
 
-set__torque(1000)
+set__torque(2000)
 while True:
 
     r.lock_info()

@@ -49,7 +49,7 @@ namespace GameDirection
         {
         }
 
-        public virtual Dictionary<int, Vector3> GetStartingPositions()
+        public virtual Dictionary<int, PositionRotationPair> GetStartingPositionsAndRotations()
         {
             const float radius = 10f;
             const float distanceOffGround = 1f;
@@ -58,17 +58,21 @@ namespace GameDirection
 
             var playersSorted = NetworkUtility.PlayerArrayByActorNumber();
 
-            var result = new Dictionary<int, Vector3>();
+            var result = new Dictionary<int, PositionRotationPair>();
             for (var i = 0; i < playersSorted.Length; i++)
             {
                 var player = playersSorted[i];
+                var resultElement = new PositionRotationPair();
 
                 var pos = center;
                 pos.x += radius * Mathf.Cos(2 * Mathf.PI / players.Count * i);
                 pos.z += radius * Mathf.Sin(2 * Mathf.PI / players.Count * i);
                 pos.y = TerrainUtility.GetClosestCurrentTerrain(pos).SampleHeight(pos) + distanceOffGround;
+                
+                resultElement.position = pos;
+                resultElement.rotation = Quaternion.Euler(0, 360f / players.Count * i - 90, 0);
 
-                result.Add(player.ActorNumber, pos);
+                result.Add(player.ActorNumber, resultElement);
             }
 
             return result;

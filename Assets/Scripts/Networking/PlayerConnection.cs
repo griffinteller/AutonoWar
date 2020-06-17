@@ -5,6 +5,7 @@ using GameDirection;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using Utility;
 
 namespace Networking
 {
@@ -23,10 +24,12 @@ namespace Networking
         public Dictionary<int, Rigidbody> robotRigidbodies = new Dictionary<int, Rigidbody>();
 
         public Dictionary<int, GameObject> robots = new Dictionary<int, GameObject>();
-        [HideInInspector] public Vector3 startingPosition;
+        [HideInInspector] public PositionRotationPair startingPositionAndRotation;
 
-        public void Start()
+        public override void OnEnable()
         {
+            base.OnEnable();
+            
             if (!PhotonNetwork.InRoom)
             {
                 DestroyImmediate(gameObject);
@@ -36,13 +39,17 @@ namespace Networking
             gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
             InstantiateGameDirector();
 
-            startingPosition =
-                _gameDirector.GetStartingPositions()[PhotonNetwork.LocalPlayer.ActorNumber];
-            print(startingPosition);
+            startingPositionAndRotation =
+                _gameDirector.GetStartingPositionsAndRotations()[PhotonNetwork.LocalPlayer.ActorNumber];
+            print(startingPositionAndRotation.position);
             print(PhotonNetwork.LocalPlayer.ActorNumber);
 
             var playerObj =
-                PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate(
+                    playerObjectPrefab.name, 
+                    startingPositionAndRotation.position,
+                    startingPositionAndRotation.rotation);
+            
             cameraMotionScript.SetCenterObject(playerObj);
         }
         
@@ -77,6 +84,7 @@ namespace Networking
             }
 
             _gameDirector.CurrentMap = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
+            print(_gameDirector.CurrentMap);
         }
 
         public void OnFullyLoaded()
