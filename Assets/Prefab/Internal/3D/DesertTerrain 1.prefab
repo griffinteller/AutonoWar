@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3720422341910762278}
   - component: {fileID: 3720422341910762276}
   - component: {fileID: 3720422341910762279}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720422342311089064}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720422342521802224}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720422342629302128}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 3720422342908885893}
   - component: {fileID: 3720422342908886011}
   - component: {fileID: 3720422342908886010}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_0_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 3720422343190565072}
   - component: {fileID: 3720422343190565078}
   - component: {fileID: 3720422343190565073}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_0_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720422343482531778}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 3720422343635323257}
   - component: {fileID: 3720422343635323263}
   - component: {fileID: 3720422343635323262}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DesertTerrain_1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720422343737796257}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WC_ObjectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
