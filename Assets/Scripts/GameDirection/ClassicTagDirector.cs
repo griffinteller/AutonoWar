@@ -12,10 +12,8 @@ using Random = UnityEngine.Random;
 
 namespace GameDirection
 {
-    public class ClassicTagDirector : GameDirector, IOnEventCallback
+    public class ClassicTagDirector : DefaultCycleGameDirector
     {
-        private const float WaitingTime = 10f;
-
         private const float DistanceFromItPointHalvingDistance = 30f;
 
         // per second
@@ -35,10 +33,6 @@ namespace GameDirection
 
         private Scoreboard _scoreboard;
 
-        private float _timeGameStarted;
-
-        private float _timeIntroStarted;
-
         public int currentItActorNumber = -1;
 
         public Color itTint = Color.red;
@@ -52,8 +46,10 @@ namespace GameDirection
         public float tagCooldownTime = 10;
         public override GameModeEnum GameMode => GameModeEnum.ClassicTag;
 
-        public void OnEvent(EventData photonEvent)
+        public override void OnEvent(EventData photonEvent)
         {
+            base.OnEvent(photonEvent);
+            
             switch (photonEvent.Code)
             {
                 case (byte) PhotonEventCode.NewIt:
@@ -61,18 +57,7 @@ namespace GameDirection
                     SetNewIt(((int[]) photonEvent.CustomData)[0]);
                     if (PhotonNetwork.IsMasterClient)
                         _scoreboard.AddToScore(lastItActorNumber, TagPoints);
-                    break;
 
-                case (byte) PhotonEventCode.StartingGame:
-
-                    gameState = GameState.Initializing;
-                    GameStartSetup();
-                    break;
-
-                case (byte) PhotonEventCode.EndingGame:
-
-                    gameState = GameState.Ended;
-                    EndGameSetup();
                     break;
             }
         }
@@ -84,7 +69,6 @@ namespace GameDirection
             _lastTagTime = -tagCooldownTime;
             _playerConnection = GameObject.FindGameObjectWithTag("ConnectionObject")
                 .GetComponent<PlayerConnection>();
-            _timeIntroStarted = Time.time;
             _messageText = GameObject.FindWithTag("MessageText").GetComponent<Text>();
             _gameLength = (int) PhotonNetwork.CurrentRoom.CustomProperties["gameLength"];
 
@@ -94,15 +78,6 @@ namespace GameDirection
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.InstantiateSceneObject(
                     scoreboardPrefab.name, scoreboardOffset, Quaternion.identity);
-
-            PhotonNetwork.AddCallbackTarget(this);
-        }
-
-        public override void OnDisable()
-        {
-            base.OnDisable();
-
-            PhotonNetwork.RemoveCallbackTarget(this);
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -131,12 +106,11 @@ namespace GameDirection
             TryRaiseNewItEvent(newItActorNumber, true);
         }
 
-        private void GameStartSetup()
+        protected override void GameStartSetup()
         {
             SetRobotsKinematic(false);
             SetInitialIt();
             gameState = GameState.Started;
-            _timeGameStarted = Time.time;
             _messageText.text = "";
             _clock.StartClock();
             RobotMain.OnTriggerEnterCallbacks += OnTriggerEnterTagCallback;
@@ -152,9 +126,10 @@ namespace GameDirection
             RaiseEventDefaultSettings(PhotonEventCode.NewIt, new[] {actorNumber});
         }
 
-        protected override void OnFullyLoaded()
+        protected override void PreGameSetup()
         {
-            gameState = GameState.Initializing;
+            base.PreGameSetup();
+            
             SetRobotsKinematic(true);
         }
 
@@ -179,28 +154,7 @@ namespace GameDirection
             _scoreboard.SetEntryColor(currentItActorNumber, scoreboardEntryItColor);
         }
 
-        public void Update()
-        {
-            switch (gameState)
-            {
-                case GameState.Initializing:
-
-                    PreGameUpdate();
-                    break;
-
-                case GameState.Started:
-
-                    InGameUpdate();
-                    break;
-
-                case GameState.Ended:
-
-                    EndGameUpdate();
-                    break;
-            }
-        }
-
-        private void EndGameSetup()
+        protected override void GameEndSetup()
         {
             SetRobotsKinematic(true);
             //var winningPlayerName = _scoreboard.GetNameOfRank(1);
@@ -209,11 +163,11 @@ namespace GameDirection
             GameObject.FindWithTag("Hud").SetActive(false);
         }
 
-        private void EndGameUpdate()
+        protected override void GameEndUpdate()
         {
         }
 
-        private void InGameUpdate()
+        protected override void InGameUpdate()
         {
             var timeRemaining = _clock.Seconds;
             var gameOver = timeRemaining < 0;
@@ -270,23 +224,6 @@ namespace GameDirection
             return (MaxNotItPoints - MinNotItPoints)
                    * Mathf.Pow(2, -(distanceToIt / DistanceFromItPointHalvingDistance))
                    + MinNotItPoints;
-        }
-
-        private void PreGameUpdate()
-        {
-            var starting = Time.time - _timeIntroStarted < WaitingTime;
-
-            if (starting)
-            {
-                _messageText.text = "Starting in: " + ((int) (WaitingTime - (Time.time - _timeIntroStarted)) + 1) +
-                                    "...";
-                return;
-            }
-
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
-            RaiseStartGameEvent();
         }
 
         private void SetRobotsKinematic(bool isKinematic)

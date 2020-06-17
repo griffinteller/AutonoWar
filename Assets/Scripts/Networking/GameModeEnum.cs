@@ -6,7 +6,8 @@ namespace Networking
     {
         SinglePlayer,
         FreePlay,
-        ClassicTag
+        ClassicTag,
+        GrandPrix
     }
 
     public class GameModeEnumWrapper : EnumWrapper
@@ -15,7 +16,8 @@ namespace Networking
         {
             "Singleplayer",
             "Freeplay",
-            "Classic Tag"
+            "Classic Tag",
+            "Grand Prix"
         };
     }
 }

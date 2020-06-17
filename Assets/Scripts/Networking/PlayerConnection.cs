@@ -64,7 +64,7 @@ namespace Networking
                     throw new NotImplementedException();
             }
 
-            _gameDirector.Map = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
+            _gameDirector.CurrentMap = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
         }
 
         public void OnFullyLoaded()

@@ -17,11 +17,11 @@ namespace UI
             var directorComponent = directorObject.GetComponent<SinglePlayerDirector>();
 
             directorComponent.Init();
-            directorComponent.Map = (MapEnum) mapSlider.enumWrapper.Index;
+            directorComponent.CurrentMap = (MapEnum) mapSlider.enumWrapper.Index;
             directorComponent.numControllableBots = (int) numControllableBotsSlider.slider.value;
 
             print(directorComponent.numControllableBots);
-            SceneManager.LoadScene(MapEnumWrapper.MapSceneNames[directorComponent.Map]);
+            SceneManager.LoadScene(MapEnumWrapper.MapSceneNames[directorComponent.CurrentMap]);
         }
     }
 }

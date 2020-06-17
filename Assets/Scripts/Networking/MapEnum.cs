@@ -13,6 +13,12 @@ namespace Networking
     [Serializable]
     public class MapEnumWrapper : EnumWrapper
     {
+        public static readonly MapEnum[] DefaultMaps =
+        {
+            MapEnum.Highlands,
+            MapEnum.Desert
+        };
+        
         public static readonly Dictionary<MapEnum, string> MapSceneNames = new Dictionary<MapEnum, string>
         {
             {MapEnum.Highlands, "HighlandsScene"},

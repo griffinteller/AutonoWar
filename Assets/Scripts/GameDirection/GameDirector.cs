@@ -21,7 +21,7 @@ namespace GameDirection
 
     public abstract class GameDirector : MonoBehaviourPunCallbacks
     {
-        public static readonly Dictionary<MapEnum, Vector3> BaseStartingPositions = new Dictionary<MapEnum, Vector3>
+        public virtual Dictionary<MapEnum, Vector3> BaseStartingPositions => new Dictionary<MapEnum, Vector3>
         {
             {MapEnum.Highlands, new Vector3(-280, 0, -410)},
             {MapEnum.Desert, new Vector3(98, 0, -130)}
@@ -29,11 +29,10 @@ namespace GameDirection
 
         private bool _fullyLoaded;
 
-        public GameState gameState;
-
         public abstract GameModeEnum GameMode { get; }
-        public MapEnum Map { get; set; }
-        
+        public virtual MapEnum[] AllowedMaps => MapEnumWrapper.DefaultMaps;
+        public MapEnum CurrentMap { get; set; }
+
         public bool FullyLoaded
         {
             get => _fullyLoaded;
@@ -53,17 +52,13 @@ namespace GameDirection
         {
             const float radius = 10f;
             const float distanceOffGround = 1f;
-            var center = BaseStartingPositions[Map];
+            var center = BaseStartingPositions[CurrentMap];
             var players = PhotonNetwork.CurrentRoom.Players;
 
-            var playersSorted = new List<Player>();
-            foreach (var pair in players) playersSorted.Add(pair.Value);
-            playersSorted.Sort(
-                Comparer<Player>.Create((x, y) => x.ActorNumber.CompareTo(y.ActorNumber))
-            );
+            var playersSorted = NetworkUtility.PlayerArrayByActorNumber();
 
             var result = new Dictionary<int, Vector3>();
-            for (var i = 0; i < playersSorted.Count; i++)
+            for (var i = 0; i < playersSorted.Length; i++)
             {
                 var player = playersSorted[i];
 
@@ -84,18 +79,6 @@ namespace GameDirection
             {
                 new EscapeMenuButtonInfo("Main Menu", MetaUtility.UnityEventFromFunc(HudUi.ReturnToMainMenu))
             };
-        }
-
-        protected void RaiseStartGameEvent()
-        {
-            RaiseEventDefaultSettings(PhotonEventCode.StartingGame);
-            gameState = GameState.WaitingForTransition;
-        }
-
-        protected void RaiseEndGameEvent()
-        {
-            RaiseEventDefaultSettings(PhotonEventCode.EndingGame);
-            gameState = GameState.WaitingForTransition;
         }
 
         public static void RaiseEventDefaultSettings(PhotonEventCode eventCode, object data = null)
