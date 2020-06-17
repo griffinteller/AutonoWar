@@ -582,8 +582,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b77dad9cc5042d4987a57c422a7382e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windowParent: {fileID: 6798268408146577924}
-  hotKeys: 1b000000
   events:
   - m_PersistentCalls:
       m_Calls:
@@ -598,3 +596,8 @@ MonoBehaviour:
           m_StringArgument: EscapeMenu
           m_BoolArgument: 0
         m_CallState: 2
+  hotKeys: 1b000000
+  windowParent: {fileID: 6798268408146577924}
+  elementEnums: 00000000
+  elementObjects:
+  - {fileID: 344803152953925372}

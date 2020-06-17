@@ -46,6 +46,11 @@ namespace GameDirection
         public float tagCooldownTime = 10;
         public override GameModeEnum GameMode => GameModeEnum.ClassicTag;
 
+        public override HashSet<HudElement> HudElements => new HashSet<HudElement>
+        {
+            HudElement.Clock
+        };
+
         public override void OnEvent(EventData photonEvent)
         {
             base.OnEvent(photonEvent);

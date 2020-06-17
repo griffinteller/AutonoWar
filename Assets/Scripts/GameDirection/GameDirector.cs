@@ -30,6 +30,7 @@ namespace GameDirection
         private bool _fullyLoaded;
 
         public abstract GameModeEnum GameMode { get; }
+        public virtual HashSet<HudElement> HudElements => new HashSet<HudElement>();
         public virtual MapEnum[] AllowedMaps => MapEnumWrapper.DefaultMaps;
         public MapEnum CurrentMap { get; set; }
 

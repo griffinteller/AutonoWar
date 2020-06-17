@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Networking;
+using UI;
 using UnityEngine;
 using Utility;
 
@@ -8,9 +9,13 @@ using Random = System.Random;
 
 namespace GameDirection
 {
-    public class GrandPrixDirector : GameDirector
+    public class GrandPrixDirector : DefaultCycleGameDirector
     {
         public override GameModeEnum GameMode => GameModeEnum.GrandPrix;
+        public override HashSet<HudElement> HudElements => new HashSet<HudElement>
+        {
+            HudElement.Clock
+        };
         public override Dictionary<MapEnum, Vector3> BaseStartingPositions => new Dictionary<MapEnum, Vector3>
         {
             {MapEnum.Highlands, new Vector3(-280, 0, -410)},

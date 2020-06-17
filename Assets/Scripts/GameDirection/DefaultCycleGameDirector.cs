@@ -16,14 +16,25 @@ namespace GameDirection
             gameInitializer.enabled = true;
         }
 
-        protected abstract void GameStartSetup();
-        protected abstract void GameEndSetup();
+        protected virtual void GameStartSetup()
+        {
+        }
+
+        protected virtual void GameEndSetup()
+        {
+        }
 
         protected virtual void PreGameUpdate()
         {
         }
-        protected abstract void InGameUpdate();
-        protected abstract void GameEndUpdate();
+
+        protected virtual void InGameUpdate()
+        {
+        }
+
+        protected virtual void GameEndUpdate()
+        {
+        }
         
         public void RaiseStartGameEvent()
         {
@@ -46,14 +57,12 @@ namespace GameDirection
         public override void OnEnable()
         {
             base.OnEnable();
-            
             PhotonNetwork.AddCallbackTarget(this);
         }
 
         public override void OnDisable()
         {
             base.OnDisable();
-            
             PhotonNetwork.RemoveCallbackTarget(this);
         }
         
