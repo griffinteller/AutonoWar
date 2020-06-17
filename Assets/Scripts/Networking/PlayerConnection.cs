@@ -15,6 +15,7 @@ namespace Networking
 
         public ClassicTagDirector classicTagDirector;
         public FreeplayDirector freeplayDirector;
+        public GrandPrixDirector grandPrixDirector;
         [HideInInspector] public GameModeEnum gameMode;
         [HideInInspector] public GameObject playerObject;
 
@@ -44,6 +45,12 @@ namespace Networking
                 PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
             cameraMotionScript.SetCenterObject(playerObj);
         }
+        
+        public static void SetRobotsKinematic(bool isKinematic)
+        {
+            foreach (var rigidbody in FindObjectOfType<PlayerConnection>().robotRigidbodies.Values)
+                rigidbody.isKinematic = isKinematic;
+        }
 
         private void InstantiateGameDirector()
         {
@@ -57,6 +64,11 @@ namespace Networking
                 case GameModeEnum.FreePlay:
 
                     _gameDirector = Instantiate(freeplayDirector.gameObject).GetComponent<FreeplayDirector>();
+                    break;
+                
+                case GameModeEnum.GrandPrix:
+                    
+                    _gameDirector = Instantiate(grandPrixDirector.gameObject).GetComponent<GrandPrixDirector>();
                     break;
 
                 default:

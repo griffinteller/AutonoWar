@@ -66,7 +66,7 @@ namespace GameDirection
                 var pos = center;
                 pos.x += radius * Mathf.Cos(2 * Mathf.PI / players.Count * i);
                 pos.z += radius * Mathf.Sin(2 * Mathf.PI / players.Count * i);
-                pos.y = TerrainUtility.GetClosestCurrentTerrain(center).SampleHeight(center) + distanceOffGround;
+                pos.y = TerrainUtility.GetClosestCurrentTerrain(pos).SampleHeight(pos) + distanceOffGround;
 
                 result.Add(player.ActorNumber, pos);
             }

@@ -113,10 +113,8 @@ namespace GameDirection
 
         protected override void GameStartSetup()
         {
-            SetRobotsKinematic(false);
+            base.GameStartSetup();
             SetInitialIt();
-            gameState = GameState.Started;
-            _messageText.text = "";
             _clock.StartClock();
             RobotMain.OnTriggerEnterCallbacks += OnTriggerEnterTagCallback;
         }
@@ -129,13 +127,6 @@ namespace GameDirection
             _lastTagTime = Time.time;
             print("Raising It Event!");
             RaiseEventDefaultSettings(PhotonEventCode.NewIt, new[] {actorNumber});
-        }
-
-        protected override void PreGameSetup()
-        {
-            base.PreGameSetup();
-            
-            SetRobotsKinematic(true);
         }
 
         private void SetInitialIt()
@@ -161,15 +152,10 @@ namespace GameDirection
 
         protected override void GameEndSetup()
         {
-            SetRobotsKinematic(true);
-            //var winningPlayerName = _scoreboard.GetNameOfRank(1);
+            base.GameEndSetup();
             _scoreboard.SetExpand(true);
             _scoreboard.positionLocked = true;
             GameObject.FindWithTag("Hud").SetActive(false);
-        }
-
-        protected override void GameEndUpdate()
-        {
         }
 
         protected override void InGameUpdate()
@@ -229,12 +215,6 @@ namespace GameDirection
             return (MaxNotItPoints - MinNotItPoints)
                    * Mathf.Pow(2, -(distanceToIt / DistanceFromItPointHalvingDistance))
                    + MinNotItPoints;
-        }
-
-        private void SetRobotsKinematic(bool isKinematic)
-        {
-            foreach (var rigidbody in _playerConnection.robotRigidbodies.Values)
-                rigidbody.isKinematic = isKinematic;
         }
 
         private void SetNewIt(int actorNumber)

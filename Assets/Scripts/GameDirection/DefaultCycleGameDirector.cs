@@ -14,14 +14,18 @@ namespace GameDirection
             var gameInitializer = gameObject.AddComponent<GameInitializer>();
             gameInitializer.gameDirector = this;
             gameInitializer.enabled = true;
+            
+            PlayerConnection.SetRobotsKinematic(true);
         }
 
         protected virtual void GameStartSetup()
         {
+            PlayerConnection.SetRobotsKinematic(false);
         }
 
         protected virtual void GameEndSetup()
         {
+            PlayerConnection.SetRobotsKinematic(true);
         }
 
         protected virtual void PreGameUpdate()
