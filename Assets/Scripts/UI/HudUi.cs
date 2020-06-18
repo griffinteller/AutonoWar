@@ -20,6 +20,11 @@ namespace UI
 
         private GameObject _hudObject;
 
+        private static readonly HashSet<HudElement> CompleteElementSet = new HashSet<HudElement>
+        {
+            HudElement.Clock
+        };
+
         public void Awake()
         {
             _hudObject = GameObject.FindWithTag("Hud");
@@ -77,13 +82,11 @@ namespace UI
 
         public void BuildFromDescription(HashSet<HudElement> elements)
         {
-            foreach (Transform child in _hudObject.transform)
-                child.gameObject.SetActive(false);
-            
-            foreach (var element in elements)
-            {
-                elementObjects[Array.IndexOf(elementEnums, element)].SetActive(true);
-            }
+            foreach (var element in CompleteElementSet)
+                if (!elements.Contains(element))
+                {
+                    elementObjects[Array.IndexOf(elementEnums, element)].SetActive(false);
+                }
         }
     }
 

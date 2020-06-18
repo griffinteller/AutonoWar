@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Photon.Pun;
@@ -13,13 +14,12 @@ namespace UI
     {
         public bool invertRank;
 
-        private readonly List<int> _actorNumberOrder = new List<int>();
+        private List<int> _actorNumberOrder = new List<int>();
 
         private readonly Dictionary<int, ScoreboardEntry> _entriesByActorNumber =
             new Dictionary<int, ScoreboardEntry>();
         
-        private readonly Dictionary<int, int> _lockedActorNumbersAndRank =
-            new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _lockedActorNumbersAndRanks = new Dictionary<int, int>();
 
         private bool _changedSinceLastUpdate;
         private bool _expanded;
@@ -48,6 +48,66 @@ namespace UI
                 UpdateScores(scoreDict);
                 RefreshOrder();
             }
+        }
+
+        private void RefreshOrder()
+        {
+            var resultArray = new int[_entriesByActorNumber.Count];
+
+            foreach (var pair in _lockedActorNumbersAndRanks)
+                resultArray[pair.Value - 1] = pair.Key;
+
+            _actorNumberOrder.Sort(new EntryComparerByActorNumber(_entriesByActorNumber, invertRank));
+            
+            var iResult = 0;
+            var iActorNumberOrder = 0;
+            while (iResult < resultArray.Length)
+            {
+                if (resultArray[iResult] != 0) // already in array, thus entry is locked;
+                {
+                    iResult++;
+                    continue;
+                }
+
+                if (_lockedActorNumbersAndRanks.ContainsKey(_actorNumberOrder[iActorNumberOrder]))
+                {
+                    iActorNumberOrder++;
+                    continue;
+                }
+
+                resultArray[iResult] = _actorNumberOrder[iActorNumberOrder];
+                iResult++;
+                iActorNumberOrder++;
+            }
+
+            _actorNumberOrder = new List<int>(resultArray);
+            SyncEntryRanks();
+            SyncSiblingIndices();
+        }
+
+        private void SyncEntryRanks()
+        {
+            for (var i = 0; i < _actorNumberOrder.Count; i++)
+            {
+                var actorNumber = _actorNumberOrder[i];
+                _entriesByActorNumber[actorNumber].Rank = i + 1;
+            }
+        }
+
+        private void SyncSiblingIndices()
+        {
+            for (var i = 0; i < _actorNumberOrder.Count; i++)
+            {
+                var actorNumber = _actorNumberOrder[i];
+                _entriesByActorNumber[actorNumber].transform.SetSiblingIndex(i + 1); // i=0 is title bar
+            }
+        }
+
+        public void LockEntry(int actorNumber, Color? newColor = null)
+        {
+            _lockedActorNumbersAndRanks.Add(actorNumber, _actorNumberOrder.IndexOf(actorNumber) + 1);
+            if (newColor != null)
+                SetEntryColor(actorNumber, (Color) newColor);
         }
 
         private Dictionary<int, int> GetScoreDict()
@@ -177,20 +237,6 @@ namespace UI
             _entriesByActorNumber[actorNumber].Score += addition;
             _changedSinceLastUpdate = true;
             RefreshOrder();
-        }
-
-        private void RefreshOrder()
-        {
-            _actorNumberOrder.Sort(new EntryComparerByActorNumber(_entriesByActorNumber, invertRank));
-
-            for (var i = 0; i < _actorNumberOrder.Count; i++)
-            {
-                var actorNumber = _actorNumberOrder[i];
-                var entry = _entriesByActorNumber[actorNumber];
-
-                entry.transform.SetSiblingIndex(i + 1);
-                entry.Rank = i + 1;
-            }
         }
 
         public void SetEntryColor(int actorNumber, Color color)

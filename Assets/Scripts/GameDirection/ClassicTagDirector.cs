@@ -67,10 +67,8 @@ namespace GameDirection
             }
         }
 
-        public override void OnEnable()
+        public void Start()
         {
-            base.OnEnable();
-
             _lastTagTime = -tagCooldownTime;
             _playerConnection = GameObject.FindGameObjectWithTag("ConnectionObject")
                 .GetComponent<PlayerConnection>();
