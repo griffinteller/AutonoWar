@@ -2,17 +2,24 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Photon.Pun;
+using Photon.Realtime;
+using Unity.VectorGraphics;
 using UnityEngine;
 using Utility;
 
 namespace UI
 {
-    public class Scoreboard : MonoBehaviour, IPunObservable
+    public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable
     {
+        public bool invertRank;
+
         private readonly List<int> _actorNumberOrder = new List<int>();
 
         private readonly Dictionary<int, ScoreboardEntry> _entriesByActorNumber =
             new Dictionary<int, ScoreboardEntry>();
+        
+        private readonly Dictionary<int, int> _lockedActorNumbersAndRank =
+            new Dictionary<int, int>();
 
         private bool _changedSinceLastUpdate;
         private bool _expanded;
@@ -94,12 +101,27 @@ namespace UI
 
         private void UpdateScores(Dictionary<int, int> scoreDict)
         {
+            var actorNumbersNotInDictArray = new int[scoreDict.Count];
+            scoreDict.Keys.CopyTo(actorNumbersNotInDictArray, 0);
+            var actorNumbersNotInDict = new HashSet<int>(actorNumbersNotInDictArray);
+
             foreach (var pair in scoreDict)
+            {
                 _entriesByActorNumber[pair.Key].Score = pair.Value;
+                actorNumbersNotInDict.Remove(pair.Key);
+            }
+
+            foreach (var actorNumber in actorNumbersNotInDict)
+            {
+                RemoveEntry(actorNumber);
+            }
         }
 
         public void OnEnable()
         {
+            base.OnEnable();
+            PhotonNetwork.AddCallbackTarget(this);
+            
             var t = GetComponent<RectTransform>();
             t.SetParent(GameObject.FindWithTag("Canvas").transform);
             t.SetSiblingIndex(t.parent.childCount - 2); // put behind windows
@@ -132,7 +154,18 @@ namespace UI
             RefreshOrder();
         }
 
-        public void ChangeScore(int actorNumber, float newScore)
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            PhotonNetwork.RemoveCallbackTarget(this);
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            RemoveEntry(otherPlayer.ActorNumber);
+        }
+
+        public void SetScore(int actorNumber, float newScore)
         {
             _entriesByActorNumber[actorNumber].Score = newScore;
             _changedSinceLastUpdate = true;
@@ -148,7 +181,7 @@ namespace UI
 
         private void RefreshOrder()
         {
-            _actorNumberOrder.Sort(new EntryComparerByActorNumber(_entriesByActorNumber));
+            _actorNumberOrder.Sort(new EntryComparerByActorNumber(_entriesByActorNumber, invertRank));
 
             for (var i = 0; i < _actorNumberOrder.Count; i++)
             {
@@ -190,23 +223,30 @@ namespace UI
         private readonly struct EntryComparerByActorNumber : IComparer<int>
         {
             private readonly Dictionary<int, ScoreboardEntry> _entriesByActorNumber;
+            private readonly bool reverse;
 
-            public EntryComparerByActorNumber(Dictionary<int, ScoreboardEntry> entries)
+            public EntryComparerByActorNumber(Dictionary<int, ScoreboardEntry> entries, bool reverse)
             {
                 _entriesByActorNumber = entries;
+                this.reverse = reverse;
             }
 
             public int Compare(int xNum, int yNum)
             {
                 var x = _entriesByActorNumber[xNum];
                 var y = _entriesByActorNumber[yNum];
+                var inversion = 1;
+                if (reverse)
+                    inversion = -1;
+                
+                
                 if (x == null || y == null)
                 {
                     if (x != null)
-                        return -1;
+                        return -1 * inversion;
 
                     if (y != null)
-                        return 1;
+                        return 1 * inversion;
 
                     return 0;
                 }
@@ -215,12 +255,12 @@ namespace UI
                 var yScore = (int) y.Score;
 
                 if (xScore < yScore)
-                    return 1;
+                    return 1 * inversion;
 
                 if (xScore == yScore)
                     return 0;
 
-                return -1;
+                return -1 * inversion;
             }
         }
     }

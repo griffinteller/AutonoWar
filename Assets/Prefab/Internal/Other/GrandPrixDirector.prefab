@@ -43,9 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaaa289f95124675b4e8107ab724dc63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerConnection: {fileID: 0}
   gameState: 0
   startPointObject: {fileID: 550028251497894267, guid: 6392ce68bfb583a44a9a2c3bf69e5b89,
     type: 3}
   beaconObject: {fileID: 6226200332777473226, guid: aebaf5f4c0a04bc408451608aef0feae,
     type: 3}
   beaconColor: {r: 0.9433962, g: 0, b: 0, a: 1}
+  scoreboardPrefab: {fileID: 9211103622828421445, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+    type: 3}

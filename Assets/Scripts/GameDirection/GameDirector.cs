@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Main;
 using Networking;
@@ -33,6 +34,12 @@ namespace GameDirection
         public virtual HashSet<HudElement> HudElements => new HashSet<HudElement>();
         public virtual MapEnum[] AllowedMaps => MapEnumWrapper.DefaultMaps;
         public MapEnum CurrentMap { get; set; }
+        public PlayerConnection playerConnection;
+
+        public void Awake()
+        {
+            playerConnection = FindObjectOfType<PlayerConnection>();
+        }
 
         public bool FullyLoaded
         {

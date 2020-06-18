@@ -41,10 +41,12 @@ namespace GameDirection
         [FormerlySerializedAs("endpointObject")] public GameObject startPointObject;
         public GameObject beaconObject;
         public Color beaconColor;
+        public GameObject scoreboardPrefab;
 
         private const float Spacing = 5;
 
         private UiClock _clock;
+        private Scoreboard _scoreboard;
         
         public Vector3 Endpoint { get; private set; }
 
@@ -83,6 +85,10 @@ namespace GameDirection
             Endpoint = GetEndpoint();
 
             var beacon = Instantiate(beaconObject, Endpoint, Quaternion.identity);
+            
+            if (PhotonNetwork.IsMasterClient)
+                PhotonNetwork.InstantiateSceneObject(
+                    scoreboardPrefab.name, Vector3.zero, Quaternion.identity);
 
             Instantiate(startPointObject,
                 BaseStartingPositions[CurrentMap],
@@ -113,13 +119,53 @@ namespace GameDirection
         {
             base.PreGameSetup();
             _clock.stopwatch = true;
-            
         }
 
         protected override void GameStartSetup()
         {
             base.GameStartSetup();
             _clock.StartClock();
+        }
+
+        protected override void PreGameUpdate()
+        {
+            base.PreGameUpdate();
+            CheckScoreBoardIsInstantiated();
+        }
+
+        protected override void InGameUpdate()
+        {
+            base.InGameUpdate();
+            if (CheckScoreBoardIsInstantiated() && PhotonNetwork.IsMasterClient)
+                UpdateScoreboard();
+        }
+
+        private void UpdateScoreboard()
+        {
+            foreach (var pair in PhotonNetwork.CurrentRoom.Players)
+            {
+                var actorNumber = pair.Key;
+                var player = pair.Value;
+                
+                _scoreboard.SetScore(
+                    actorNumber, 
+                    Vector3.Distance(
+                        playerConnection.robots[actorNumber].transform.position,
+                        Endpoint));
+            }
+        }
+
+        private bool CheckScoreBoardIsInstantiated()
+        {
+            if (_scoreboard)
+                return true;
+
+            _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
+
+            if (_scoreboard)
+                _scoreboard.invertRank = true;
+            
+            return _scoreboard;
         }
 
         private static void Shuffle<T>(IList<T> list)  

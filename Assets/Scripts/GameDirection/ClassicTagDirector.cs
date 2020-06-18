@@ -87,8 +87,6 @@ namespace GameDirection
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            _scoreboard.RemoveEntry(otherPlayer.ActorNumber);
-
             if (otherPlayer.ActorNumber == currentItActorNumber && PhotonNetwork.IsMasterClient)
                 OnItLeftRoom();
         }
