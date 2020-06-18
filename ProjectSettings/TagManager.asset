@@ -12,6 +12,7 @@ TagManager:
   - Canvas
   - Clock
   - Hud
+  - GrandPrixEndPoint
   layers:
   - Default
   - TransparentFX

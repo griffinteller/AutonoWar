@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GameDirection;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,9 +15,25 @@ namespace UI
         public List<KeyCode> hotKeys;
 
         public Transform windowParent;
+        public HudElement[] elementEnums;
+        public GameObject[] elementObjects;
+
+        private GameObject _hudObject;
+
+        private static readonly HashSet<HudElement> CompleteElementSet = new HashSet<HudElement>
+        {
+            HudElement.Clock
+        };
+
+        public void Awake()
+        {
+            _hudObject = GameObject.FindWithTag("Hud");
+        }
 
         public void Start()
         {
+            BuildFromDescription(GameObject.FindWithTag("GameDirector").GetComponent<GameDirector>().HudElements);
+            
             foreach (Transform window in windowParent)
             {
                 _windows.Add(window.name, window.gameObject);
@@ -61,5 +79,19 @@ namespace UI
             
             SceneManager.LoadScene(0);
         }
+
+        public void BuildFromDescription(HashSet<HudElement> elements)
+        {
+            foreach (var element in CompleteElementSet)
+                if (!elements.Contains(element))
+                {
+                    elementObjects[Array.IndexOf(elementEnums, element)].SetActive(false);
+                }
+        }
+    }
+
+    public enum HudElement
+    {
+        Clock
     }
 }

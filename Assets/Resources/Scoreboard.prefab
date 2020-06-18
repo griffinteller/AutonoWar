@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27da1c2a955f40af86220ac228fd6992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invertRank: 0
   defaultTransform: {fileID: 3045912235035093247, guid: 87655cef3cda0b74096011c454a4cd48,
     type: 3}
   expandedTransform: {fileID: 6442654498870046640, guid: 185b4f869b87bdd4c94e1f875f032388,

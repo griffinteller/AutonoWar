@@ -5,6 +5,7 @@ using GameDirection;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using Utility;
 
 namespace Networking
 {
@@ -15,6 +16,7 @@ namespace Networking
 
         public ClassicTagDirector classicTagDirector;
         public FreeplayDirector freeplayDirector;
+        public GrandPrixDirector grandPrixDirector;
         [HideInInspector] public GameModeEnum gameMode;
         [HideInInspector] public GameObject playerObject;
 
@@ -22,10 +24,12 @@ namespace Networking
         public Dictionary<int, Rigidbody> robotRigidbodies = new Dictionary<int, Rigidbody>();
 
         public Dictionary<int, GameObject> robots = new Dictionary<int, GameObject>();
-        [HideInInspector] public Vector3 startingPosition;
+        [HideInInspector] public PositionRotationPair startingPositionAndRotation;
 
-        public void Start()
+        public override void OnEnable()
         {
+            base.OnEnable();
+            
             if (!PhotonNetwork.InRoom)
             {
                 DestroyImmediate(gameObject);
@@ -35,14 +39,24 @@ namespace Networking
             gameMode = (GameModeEnum) PhotonNetwork.CurrentRoom.CustomProperties["gameMode"];
             InstantiateGameDirector();
 
-            startingPosition =
-                _gameDirector.GetStartingPositions()[PhotonNetwork.LocalPlayer.ActorNumber];
-            print(startingPosition);
+            startingPositionAndRotation =
+                _gameDirector.GetStartingPositionsAndRotations()[PhotonNetwork.LocalPlayer.ActorNumber];
+            print(startingPositionAndRotation.position);
             print(PhotonNetwork.LocalPlayer.ActorNumber);
 
             var playerObj =
-                PhotonNetwork.Instantiate(playerObjectPrefab.name, startingPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate(
+                    playerObjectPrefab.name, 
+                    startingPositionAndRotation.position,
+                    startingPositionAndRotation.rotation);
+            
             cameraMotionScript.SetCenterObject(playerObj);
+        }
+        
+        public static void SetRobotsKinematic(bool isKinematic)
+        {
+            foreach (var rigidbody in FindObjectOfType<PlayerConnection>().robotRigidbodies.Values)
+                rigidbody.isKinematic = isKinematic;
         }
 
         private void InstantiateGameDirector()
@@ -58,13 +72,19 @@ namespace Networking
 
                     _gameDirector = Instantiate(freeplayDirector.gameObject).GetComponent<FreeplayDirector>();
                     break;
+                
+                case GameModeEnum.GrandPrix:
+                    
+                    _gameDirector = Instantiate(grandPrixDirector.gameObject).GetComponent<GrandPrixDirector>();
+                    break;
 
                 default:
 
                     throw new NotImplementedException();
             }
 
-            _gameDirector.Map = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
+            _gameDirector.CurrentMap = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
+            print(_gameDirector.CurrentMap);
         }
 
         public void OnFullyLoaded()

@@ -165,7 +165,7 @@ namespace Main
             var gameDirector = FindObjectOfType<GameDirector>();
 
             gameMode = gameDirector.GameMode;
-            map = gameDirector.Map;
+            map = gameDirector.CurrentMap;
             actorNumber = -1;
             classicTagScript = null;
 

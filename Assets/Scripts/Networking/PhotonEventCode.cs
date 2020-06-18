@@ -4,6 +4,7 @@
     {
         NewIt = 0,
         StartingGame,
-        EndingGame
+        EndingGame,
+        NewEndpoint
     }
 }

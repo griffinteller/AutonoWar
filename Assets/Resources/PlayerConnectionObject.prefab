@@ -49,6 +49,8 @@ MonoBehaviour:
     type: 3}
   freeplayDirector: {fileID: 4140264822069007822, guid: cf1c247b6d0590b4588a589e80c9ff66,
     type: 3}
+  grandPrixDirector: {fileID: 3319331019488313970, guid: 2c1a1d86357d36846b504b2d688fb799,
+    type: 3}
   gameMode: 0
   playerObject: {fileID: 0}
   playerObjectPrefab: {fileID: 4421177872403235923, guid: d5b926445abbe244f94ecf6a59e62e03,

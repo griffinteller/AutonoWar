@@ -59,7 +59,7 @@ namespace GameDirection
 
         private void PlaceRobot(int index)
         {
-            var startingPosition = BaseStartingPositions[Map];
+            var startingPosition = BaseStartingPositions[CurrentMap];
             var xDisplacement = (Random.value * 2 - 1)
                                 * maxPlacementRadius / Mathf.Sqrt(2); // +/- rad
             var zDisplacement = (Random.value * 2 - 1)

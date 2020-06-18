@@ -22,7 +22,8 @@ namespace UI
                 {"gameMode", (GameModeEnum) gameModeOptionsSlider.enumWrapper.Index},
                 {"map", (MapEnum) mapOptionsSlider.enumWrapper.Index},
                 {"maxPlayers", (byte) maxPlayersOptionsSlider.slider.value},
-                {"gameLength", (int) gameLengthOptionsSlider.slider.value}
+                {"gameLength", (int) gameLengthOptionsSlider.slider.value},
+                {"commonRandomSeed", Random.Range(0, 1000)}
             };
 
             return result;
