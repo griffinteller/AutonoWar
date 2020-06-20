@@ -8,6 +8,7 @@ using Photon.Realtime;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 using Random = UnityEngine.Random;
 
 namespace GameDirection
@@ -54,7 +55,7 @@ namespace GameDirection
         public static readonly ScoreboardColumn[] DefaultColumns =
         {
             new ScoreboardColumn("Rank", "0"),
-            new ScoreboardColumn("Name", ""),
+            new ScoreboardColumn("Name", "", expand: true),
             new ScoreboardColumn("Score", 0, true),
         };
 
@@ -88,7 +89,7 @@ namespace GameDirection
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.InstantiateSceneObject(
                     scoreboardPrefab.name, scoreboardOffset, Quaternion.identity,
-                    0, new object[] {DefaultColumns, "Score"});
+                    0, new object[] {NetworkUtility.Serialize(new object[] {DefaultColumns, "Score"})});
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)

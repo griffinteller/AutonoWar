@@ -11,8 +11,8 @@ namespace UI
         public int actorNumber;
         public bool locked;
         public Color defaultColor;
-        private readonly List<ScoreboardCell> _cells = new List<ScoreboardCell>();
-        private readonly Dictionary<string, ScoreboardCell> _cellsByName = new Dictionary<string, ScoreboardCell>();
+        protected readonly List<ScoreboardCell> Cells = new List<ScoreboardCell>();
+        protected readonly Dictionary<string, ScoreboardCell> CellsByName = new Dictionary<string, ScoreboardCell>();
 
         public void BuildFromColumns(IEnumerable<ScoreboardColumn> columns)
         {
@@ -21,24 +21,33 @@ namespace UI
                 AddCell(column);
         }
 
-        public void AddCell(ScoreboardColumn column, int index = -1)
+        public virtual void AddCell(ScoreboardColumn column, int index = -1)
         {
             if (index == -1)
-                index = _cells.Count;
+                index = Cells.Count;
             
             var cellObject = Instantiate(cellPrefab, transform);
             cellObject.transform.SetSiblingIndex(index);
 
+            var cellLayoutElement = cellObject.GetComponent<LayoutElement>();
+            cellLayoutElement.minWidth = column.DefaultWidth;
+            if (column.Expand)
+                cellLayoutElement.preferredWidth = 9999;
+
+            print("Column: " + column.Name);
+            print("IsFloat: " + column.IsFloat);
+            print("Default Value Type: " + column.InitialValue.GetType());
+            
             var cellInstance = new ScoreboardCell(cellObject, actorNumber, column, column.DecimalPlaces);
-            _cells.Add(cellInstance);
-            _cellsByName.Add(column.Name, cellInstance);
+            Cells.Add(cellInstance);
+            CellsByName.Add(column.Name, cellInstance);
         }
 
         public void RemoveCell(ScoreboardCell cell)
         {
             Destroy(cell.GameObject);
-            _cells.Remove(cell);
-            _cellsByName.Remove(cell.Column.Name);
+            Cells.Remove(cell);
+            CellsByName.Remove(cell.Column.Name);
         }
 
         public void RemoveCell(string name)
@@ -53,12 +62,12 @@ namespace UI
 
         public ScoreboardCell GetCell(int index)
         {
-            return _cells[index];
+            return Cells[index];
         }
 
         public ScoreboardCell GetCell(string name)
         {
-            return _cellsByName[name];
+            return CellsByName[name];
         }
         
         public string GetStringValue(string name)
@@ -75,13 +84,13 @@ namespace UI
 
         public string GetStringValue(int index)
         {
-            var cell = _cells[index];
+            var cell = Cells[index];
             return cell.StringValue;
         }
 
         public float GetFloatValue(int index)
         {
-            var cell = _cells[index];
+            var cell = Cells[index];
             return cell.FloatValue;
         }
 
@@ -97,7 +106,7 @@ namespace UI
 
         public void SetAllCellColors(Color color)
         {
-            foreach (var cell in _cells)
+            foreach (var cell in Cells)
                 cell.SetColor(color);
         }
 

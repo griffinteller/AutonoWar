@@ -7,6 +7,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1203585937553968573, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203585937553968573, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203585937553968573, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203585937553968573, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203585937553968573, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2168666427200207498, guid: e7da09588e0f2bb4aabbf91a7730da0e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -112,10 +137,35 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7085208773988668611, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085208773988668611, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085208773988668611, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085208773988668611, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085208773988668611, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9211103622828421445, guid: e7da09588e0f2bb4aabbf91a7730da0e,
         type: 3}
       propertyPath: m_Name
-      value: Scoreboard
+      value: DefaultScoreboard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7da09588e0f2bb4aabbf91a7730da0e, type: 3}

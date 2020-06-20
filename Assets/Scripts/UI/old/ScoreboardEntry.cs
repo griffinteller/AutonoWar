@@ -7,7 +7,7 @@ using Utility;
 
 namespace UI
 {
-    [RequireComponent(typeof(HorizontalLayoutGroup))]
+    /*[RequireComponent(typeof(HorizontalLayoutGroup))]
     public class ScoreboardEntry : MonoBehaviour
     {
         
@@ -125,6 +125,6 @@ namespace UI
                 var childLayoutElement = child.GetComponent<LayoutElement>();
                 childLayoutElement.minWidth = columns
             }
-        }*/
-    }
+        }
+    }*/
 }

@@ -71,8 +71,8 @@ namespace UI
             {
                 if (IsFloat)
                     return FloatValue;
-                else
-                    return StringValue;
+                
+                return StringValue;
             }
         }
         
@@ -80,7 +80,7 @@ namespace UI
         public CellLocation CellLoc { get; }
         public int ActorNumber { get; }
 
-        public readonly bool IsFloat;
+        public bool IsFloat;
         public readonly GameObject GameObject;
         
         private readonly Text _text;
@@ -104,9 +104,14 @@ namespace UI
             DecimalPlaces = decimalPlaces;
             ActorNumber = actorNumber;
             CellLoc = new CellLocation(actorNumber, column.Name);
-            
+
             if (IsFloat)
-                FloatValue = (float) column.InitialValue;
+            {
+                if (column.InitialValue is int)
+                    FloatValue = (int) column.InitialValue;
+                else
+                    FloatValue = (float) column.InitialValue;
+            }
             else
                 StringValue = (string) column.InitialValue;
         }

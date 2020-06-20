@@ -11,15 +11,17 @@ namespace UI
 {
     public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
+        [Serializable]
         private class CellChangeDescription
         {
-            public object NewValue;
+            public object newValue;
         }
 
+        [Serializable]
         private class RowChangeDescription
         {
-            public bool? Locked = null;
-            public Color? NewColor = null;
+            public bool? locked;
+            public Color? newColor;
         }
 
         private class RowComparer : Comparer<ScoreboardRow>
@@ -59,7 +61,10 @@ namespace UI
         }
 
         public ScoreboardRow rowPrefab;
+        public ScoreboardCell cellPrefab;
         public Transform rowParent;
+        public ScoreboardTitle title;
+        public RectTransform defaultPosition;
         public bool reverseRank;
 
         private Dictionary<ScoreboardRow, int> _lockedRowsAndIndices = new Dictionary<ScoreboardRow, int>();
@@ -88,9 +93,20 @@ namespace UI
         public void OnPhotonInstantiate(PhotonMessageInfo info)
         {
             // info.photonView.InstantiationData = {columns, sortingColumnName}
-            _columns = new List<ScoreboardColumn>((ScoreboardColumn[]) info.photonView.InstantiationData[0]);
-            _sortingColumnName = (string) info.photonView.InstantiationData[1];
+            var data = NetworkUtility.Deserialize<object[]>((byte[]) info.photonView.InstantiationData[0]);
+            _columns = new List<ScoreboardColumn>((ScoreboardColumn[]) data[0]);
+            _sortingColumnName = (string) data[1];
+            InitPosition();
             BuildFromColumns();
+        }
+
+        private void InitPosition()
+        {
+            var t = GetComponent<RectTransform>();
+            t.SetParent(GameObject.FindWithTag("Canvas").transform);
+            t.SetSiblingIndex(t.parent.childCount - 2); // put behind windows
+            t.anchoredPosition = defaultPosition.anchoredPosition;
+            t.localScale = Vector3.one;
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -139,6 +155,11 @@ namespace UI
             SortRows(_sortingColumnName, reverseRank);
         }
 
+        private void SetUpTitle()
+        {
+            title.BuildFromColumns(_columns);
+        }
+
         public void LockRowAtIndex(int index)
         {
             var row = _rows[index];
@@ -159,6 +180,7 @@ namespace UI
 
         public void BuildFromColumns()
         {
+            SetUpTitle();
             foreach (var pair in PhotonNetwork.CurrentRoom.Players)
             {
                 var actorNumber = pair.Key;
@@ -309,8 +331,8 @@ namespace UI
         {
             var description = new RowChangeDescription
             {
-                Locked = locked,
-                NewColor = newColor
+                locked = locked,
+                newColor = newColor
             };
             
             if (!_rowChanges.ContainsKey(actorNumber))
@@ -323,7 +345,7 @@ namespace UI
         {
             var description = new CellChangeDescription
             {
-                NewValue = newValue
+                newValue = newValue
             };
 
             if (!_cellChanges.ContainsKey(location))
@@ -339,8 +361,8 @@ namespace UI
                 var location = pair.Key;
                 var description = pair.Value;
                 
-                if (description.NewValue != null)
-                    SetCellByActorNumber(location.ActorNumber, location.ColumnName, description.NewValue);
+                if (description.newValue != null)
+                    SetCellByActorNumber(location.ActorNumber, location.ColumnName, description.newValue);
             }
             
             foreach (var pair in _rowChanges)
@@ -348,11 +370,11 @@ namespace UI
                 var actorNumber = pair.Key;
                 var description = pair.Value;
                 
-                if (description.Locked == true)
+                if (description.locked == true)
                     LockRowByActorNumber(actorNumber);
                 
-                if (description.NewColor != null)
-                    SetRowColorByActorNumber(actorNumber, (Color) description.NewColor);
+                if (description.newColor != null)
+                    SetRowColorByActorNumber(actorNumber, (Color) description.newColor);
                 
                 _cellChanges = new Dictionary<ScoreboardCell.CellLocation, CellChangeDescription>();
                 _rowChanges = new Dictionary<int, RowChangeDescription>();

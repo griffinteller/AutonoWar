@@ -54,7 +54,7 @@ namespace GameDirection
         private List<ScoreboardColumn> _columns = new List<ScoreboardColumn>
         {
             new ScoreboardColumn("Rank"),
-            new ScoreboardColumn("Name", isFloat: true),
+            new ScoreboardColumn("Name", expand: true),
             new ScoreboardColumn("Distance", isFloat: true),
             new ScoreboardColumn("Time")
         };
@@ -101,7 +101,7 @@ namespace GameDirection
                 PhotonNetwork.InstantiateSceneObject(
                     scoreboardPrefab.name, Vector3.zero, Quaternion.identity,
                     0,
-                    new object[] {_columns, "Distance"});
+                    new object[] {NetworkUtility.Serialize(new object[] {_columns, "Distance"})});
 
             Instantiate(startPointObject,
                 BaseStartingPositions[CurrentMap],

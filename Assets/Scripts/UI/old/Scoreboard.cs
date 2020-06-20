@@ -10,7 +10,7 @@ using Utility;
 
 namespace UI
 {
-    public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
+    /*public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
         public string RankingKey
         {
@@ -345,5 +345,5 @@ namespace UI
                 return -1 * inversion;
             }
         }
-    }
+    }*/
 }

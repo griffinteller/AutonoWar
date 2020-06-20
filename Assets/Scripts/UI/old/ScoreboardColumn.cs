@@ -2,7 +2,7 @@
 
 namespace UI
 {
-    [Serializable]
+    /*[Serializable]
     public class ScoreboardColumn
     {
         public string name;
@@ -17,5 +17,5 @@ namespace UI
         {
             this.name = name;
         }
-    }
+    }*/
 }
