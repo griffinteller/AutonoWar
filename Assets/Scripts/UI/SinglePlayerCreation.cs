@@ -20,7 +20,6 @@ namespace UI
             directorComponent.CurrentMap = (MapEnum) mapSlider.enumWrapper.Index;
             directorComponent.numControllableBots = (int) numControllableBotsSlider.slider.value;
 
-            print(directorComponent.numControllableBots);
             SceneManager.LoadScene(MapEnumWrapper.MapSceneNames[directorComponent.CurrentMap]);
         }
     }

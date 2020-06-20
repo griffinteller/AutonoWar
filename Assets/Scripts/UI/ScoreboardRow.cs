@@ -29,15 +29,6 @@ namespace UI
             var cellObject = Instantiate(cellPrefab, transform);
             cellObject.transform.SetSiblingIndex(index);
 
-            var cellLayoutElement = cellObject.GetComponent<LayoutElement>();
-            cellLayoutElement.minWidth = column.DefaultWidth;
-            if (column.Expand)
-                cellLayoutElement.preferredWidth = 9999;
-
-            print("Column: " + column.Name);
-            print("IsFloat: " + column.IsFloat);
-            print("Default Value Type: " + column.InitialValue.GetType());
-            
             var cellInstance = new ScoreboardCell(cellObject, actorNumber, column, column.DecimalPlaces);
             Cells.Add(cellInstance);
             CellsByName.Add(column.Name, cellInstance);

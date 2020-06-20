@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Configuration;
 using Photon.Pun;
 using Photon.Realtime;
-using Unity.VectorGraphics;
 using UnityEngine;
 using Utility;
 
@@ -66,17 +64,19 @@ namespace UI
         public ScoreboardTitle title;
         public RectTransform defaultPosition;
         public bool reverseRank;
+        public bool built;
 
         private Dictionary<ScoreboardRow, int> _lockedRowsAndIndices = new Dictionary<ScoreboardRow, int>();
         private Dictionary<int, ScoreboardRow> _rowByActorNumber = new Dictionary<int, ScoreboardRow>();
 
-        private Dictionary<ScoreboardCell.CellLocation, CellChangeDescription> _cellChanges =
-            new Dictionary<ScoreboardCell.CellLocation, CellChangeDescription>();
+        private Dictionary<CellLocation, CellChangeDescription> _cellChanges =
+            new Dictionary<CellLocation, CellChangeDescription>();
 
         private Dictionary<int, RowChangeDescription> _rowChanges = new Dictionary<int, RowChangeDescription>();
         private List<ScoreboardColumn> _columns = new List<ScoreboardColumn>();
         private List<ScoreboardRow> _rows = new List<ScoreboardRow>();
         private string _sortingColumnName;
+        private string _rankColumnName;
 
         public override void OnEnable()
         {
@@ -94,7 +94,7 @@ namespace UI
         {
             // info.photonView.InstantiationData = {columns, sortingColumnName}
             var data = NetworkUtility.Deserialize<object[]>((byte[]) info.photonView.InstantiationData[0]);
-            _columns = new List<ScoreboardColumn>((ScoreboardColumn[]) data[0]);
+            _columns = (List<ScoreboardColumn>) data[0];
             _sortingColumnName = (string) data[1];
             InitPosition();
             BuildFromColumns();
@@ -116,14 +116,14 @@ namespace UI
                 var message = new object[] {_cellChanges, _rowChanges};
                 var serializedMessage = NetworkUtility.Serialize(message);
                 stream.SendNext(stream);
-                _cellChanges = new Dictionary<ScoreboardCell.CellLocation, CellChangeDescription>();
+                _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
                 _rowChanges = new Dictionary<int, RowChangeDescription>();
             }
             else
             {
                 var messageEncoded = (byte[]) stream.ReceiveNext();
                 var message = NetworkUtility.Deserialize<object[]>(messageEncoded);
-                _cellChanges = (Dictionary<ScoreboardCell.CellLocation, CellChangeDescription>) message[0];
+                _cellChanges = (Dictionary<CellLocation, CellChangeDescription>) message[0];
                 _rowChanges = (Dictionary<int, RowChangeDescription>) message[1];
                 ImplementChanges();
             }
@@ -148,6 +148,18 @@ namespace UI
 
             foreach (var pair in _lockedRowsAndIndices) // put locked rows back
                 pair.Key.transform.SetSiblingIndex(pair.Value);
+
+            if (string.IsNullOrEmpty(_rankColumnName))
+                return;
+
+            for (var i = 0; i < _rows.Count; i++)
+            {
+                var cell = _rows[i].GetCell(_rankColumnName);
+                if (cell.IsFloat)
+                    cell.FloatValue = i + 1;
+                else
+                    cell.StringValue = (i + 1).ToString();
+            }
         }
 
         private void SortRows()
@@ -186,6 +198,9 @@ namespace UI
                 var actorNumber = pair.Key;
                 AddRow(actorNumber);
             }
+
+            built = true;
+            print("Scoreboard built");
         }
 
         public void AddRow(int actorNumber)
@@ -197,6 +212,7 @@ namespace UI
             rowComponent.BuildFromColumns(_columns);
 
             _rowByActorNumber.Add(actorNumber, rowComponent);
+            _rows.Add(rowComponent);
 
             SortRows();
         }
@@ -341,7 +357,7 @@ namespace UI
                 _rowChanges[actorNumber] = description;
         }
 
-        private void AddCellChange(ScoreboardCell.CellLocation location, object newValue = null)
+        private void AddCellChange(CellLocation location, object newValue = null)
         {
             var description = new CellChangeDescription
             {
@@ -376,8 +392,24 @@ namespace UI
                 if (description.newColor != null)
                     SetRowColorByActorNumber(actorNumber, (Color) description.newColor);
                 
-                _cellChanges = new Dictionary<ScoreboardCell.CellLocation, CellChangeDescription>();
+                _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
                 _rowChanges = new Dictionary<int, RowChangeDescription>();
+            }
+        }
+
+        public void SetRankColumn(string columnName)
+        {
+            _rankColumnName = columnName;
+            SortRows();
+        }
+
+        public void NameRows(string columnName)
+        {
+            foreach (var row in _rows)
+            {
+                var actorNumber = row.actorNumber;
+                var nickName = PhotonNetwork.CurrentRoom.Players[actorNumber].NickName;
+                row.GetCell(columnName).StringValue = nickName;
             }
         }
     }

@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace GameDirection
 {
-    public class ClassicTagDirector : DefaultCycleGameDirector
+    public class ClassicTagDirector : DefaultGameDirectorScoreboard
     {
         private const float DistanceFromItPointHalvingDistance = 30f;
 
@@ -32,8 +32,6 @@ namespace GameDirection
         private Text _messageText;
         private PlayerConnection _playerConnection;
 
-        private Scoreboard _scoreboard;
-
         public int currentItActorNumber = -1;
 
         public Color itTint = Color.red;
@@ -42,8 +40,6 @@ namespace GameDirection
 
         public Vector3 scoreboardOffset = new Vector3(0, 0, 0);
 
-        public Scoreboard scoreboardPrefab;
-
         public float tagCooldownTime = 10;
         public override GameModeEnum GameMode => GameModeEnum.ClassicTag;
 
@@ -51,13 +47,19 @@ namespace GameDirection
         {
             HudElement.Clock
         };
+        
+        protected override List<ScoreboardColumn> DefaultScoreboardColumns =>
+            new List<ScoreboardColumn>
+            {
+                new ScoreboardColumn("Rank", "0", 
+                    cellLayout: new CellLayout(defaultWidth: 40)),
+                new ScoreboardColumn("Name", "", 
+                    cellLayout: new CellLayout(true, textAnchor: TextAnchor.MiddleLeft)),
+                new ScoreboardColumn("Score", 0, true, 
+                    cellLayout: new CellLayout(defaultWidth: 40)),
+            };
 
-        public static readonly ScoreboardColumn[] DefaultColumns =
-        {
-            new ScoreboardColumn("Rank", "0"),
-            new ScoreboardColumn("Name", "", expand: true),
-            new ScoreboardColumn("Score", 0, true),
-        };
+        protected override string DefaultSortingColumnName => "Score";
 
         public override void OnEvent(EventData photonEvent)
         {
@@ -75,8 +77,9 @@ namespace GameDirection
             }
         }
 
-        public void Start()
+        public override void Start()
         {
+            base.Start();
             _lastTagTime = -tagCooldownTime;
             _playerConnection = GameObject.FindGameObjectWithTag("ConnectionObject")
                 .GetComponent<PlayerConnection>();
@@ -85,11 +88,6 @@ namespace GameDirection
 
             _clock = GameObject.FindWithTag("Clock").GetComponent<UiClock>();
             _clock.Seconds = _gameLength * 60;
-
-            if (PhotonNetwork.IsMasterClient)
-                PhotonNetwork.InstantiateSceneObject(
-                    scoreboardPrefab.name, scoreboardOffset, Quaternion.identity,
-                    0, new object[] {NetworkUtility.Serialize(new object[] {DefaultColumns, "Score"})});
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -142,17 +140,8 @@ namespace GameDirection
             lastItActorNumber = currentItActorNumber;
 
             CombineTintWithRobot(currentItActorNumber, itTint);
-
-            try
-            {
-                _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
-            }
-            catch (NullReferenceException)
-            {
-                return; // scoreboard has not been instantiated yet
-            }
-
-            _scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
+            
+            Scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
         }
 
         protected override void GameEndSetup()
@@ -180,17 +169,13 @@ namespace GameDirection
                 return;
             }
 
-            if (!_scoreboard)
-                try
-                {
-                    _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
-                }
-                catch (NullReferenceException)
-                {
-                    return; // scoreboard has not been instantiated yet
-                }
-
             ScorePlayers();
+        }
+
+        protected override void SetupScoreboard()
+        {
+            Scoreboard.SetRankColumn("Rank");
+            Scoreboard.NameRows("Name");
         }
 
         private void ScorePlayers()
@@ -217,7 +202,7 @@ namespace GameDirection
 
         private void AddToScore(int actorNumber, float addition)
         {
-            _scoreboard.AddToCellByActorNumber(actorNumber, "Score", addition);
+            Scoreboard.AddToCellByActorNumber(actorNumber, "Score", addition);
         }
 
         private static float NotItPointsPerSecond(float distanceToIt)
@@ -235,12 +220,12 @@ namespace GameDirection
             currentItActorNumber = actorNumber;
 
             CombineTintWithRobot(currentItActorNumber, itTint);
-            _scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
+            Scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
 
             try
             {
                 CombineTintWithRobot(lastItActorNumber, itTint, true); // reset to old color
-                _scoreboard.ResetRowColorByActorNumber(lastItActorNumber);
+                Scoreboard.ResetRowColorByActorNumber(lastItActorNumber);
             }
             catch (KeyNotFoundException)
             {

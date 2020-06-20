@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace UI
 {
@@ -9,11 +10,10 @@ namespace UI
         public readonly bool IsFloat;
         public readonly byte DecimalPlaces;
         public readonly object InitialValue;
-        public readonly bool Expand;
-        public readonly float DefaultWidth;
+        public readonly CellLayout Layout;
 
         public ScoreboardColumn(string name, object initialValue = null, bool isFloat = false, byte decimalPlaces = 0,
-            bool expand = false, float defaultWidth = 30)
+            CellLayout cellLayout = null)
         {
             Name = name;
             IsFloat = isFloat;
@@ -28,8 +28,7 @@ namespace UI
             }
 
             InitialValue = initialValue;
-            Expand = expand;
-            DefaultWidth = defaultWidth;
+            Layout = cellLayout ?? CellLayout.Default();
         }
     }
 }

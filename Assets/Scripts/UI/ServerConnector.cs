@@ -32,7 +32,6 @@ namespace UI
 
         public void StartServer()
         {
-            print("starting server");
             _creatingServer = true;
 
             if (!PhotonNetwork.IsConnected)
