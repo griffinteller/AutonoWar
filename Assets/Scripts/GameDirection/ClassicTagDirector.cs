@@ -51,6 +51,13 @@ namespace GameDirection
             HudElement.Clock
         };
 
+        public static readonly ScoreboardColumn[] DefaultColumns =
+        {
+            new ScoreboardColumn("Rank", "0"),
+            new ScoreboardColumn("Name", ""),
+            new ScoreboardColumn("Score", 0, true),
+        };
+
         public override void OnEvent(EventData photonEvent)
         {
             base.OnEvent(photonEvent);
@@ -61,7 +68,7 @@ namespace GameDirection
 
                     SetNewIt(((int[]) photonEvent.CustomData)[0]);
                     if (PhotonNetwork.IsMasterClient)
-                        _scoreboard.AddToScore(lastItActorNumber, TagPoints);
+                        AddToScore(lastItActorNumber, TagPoints);
 
                     break;
             }
@@ -80,7 +87,8 @@ namespace GameDirection
 
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.InstantiateSceneObject(
-                    scoreboardPrefab.name, scoreboardOffset, Quaternion.identity);
+                    scoreboardPrefab.name, scoreboardOffset, Quaternion.identity,
+                    0, new object[] {DefaultColumns, "Score"});
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -143,14 +151,14 @@ namespace GameDirection
                 return; // scoreboard has not been instantiated yet
             }
 
-            _scoreboard.SetEntryColor(currentItActorNumber, scoreboardEntryItColor);
+            _scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
         }
 
         protected override void GameEndSetup()
         {
             base.GameEndSetup();
-            _scoreboard.SetExpand(true);
-            _scoreboard.positionLocked = true;
+            //_scoreboard.SetExpand(true);
+            //_scoreboard.positionLocked = true;
             GameObject.FindWithTag("Hud").SetActive(false);
         }
 
@@ -195,15 +203,20 @@ namespace GameDirection
 
                 if (actorNumber == currentItActorNumber)
                 {
-                    _scoreboard.AddToScore(currentItActorNumber, -ItPointDetraction * Time.deltaTime);
+                    AddToScore(currentItActorNumber, -ItPointDetraction * Time.deltaTime);
                 }
                 else
                 {
                     var distanceToIt = (robot.transform.position - itLocation).magnitude;
                     var pointsPerSecond = NotItPointsPerSecond(distanceToIt);
-                    _scoreboard.AddToScore(actorNumber, pointsPerSecond * Time.deltaTime);
+                    AddToScore(actorNumber, pointsPerSecond * Time.deltaTime);
                 }
             }
+        }
+
+        private void AddToScore(int actorNumber, float addition)
+        {
+            _scoreboard.AddToCellByActorNumber(actorNumber, "Score", addition);
         }
 
         private static float NotItPointsPerSecond(float distanceToIt)
@@ -221,12 +234,12 @@ namespace GameDirection
             currentItActorNumber = actorNumber;
 
             CombineTintWithRobot(currentItActorNumber, itTint);
-            _scoreboard.SetEntryColor(currentItActorNumber, scoreboardEntryItColor);
+            _scoreboard.SetRowColorByActorNumber(currentItActorNumber, scoreboardEntryItColor);
 
             try
             {
                 CombineTintWithRobot(lastItActorNumber, itTint, true); // reset to old color
-                _scoreboard.ResetEntryColor(lastItActorNumber);
+                _scoreboard.ResetRowColorByActorNumber(lastItActorNumber);
             }
             catch (KeyNotFoundException)
             {

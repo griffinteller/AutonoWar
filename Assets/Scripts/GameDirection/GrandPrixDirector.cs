@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Networking;
 using Photon.Pun;
+using Photon.Realtime;
 using UI;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
@@ -48,6 +51,14 @@ namespace GameDirection
         private UiClock _clock;
         private Scoreboard _scoreboard;
         
+        private List<ScoreboardColumn> _columns = new List<ScoreboardColumn>
+        {
+            new ScoreboardColumn("Rank"),
+            new ScoreboardColumn("Name", isFloat: true),
+            new ScoreboardColumn("Distance", isFloat: true),
+            new ScoreboardColumn("Time")
+        };
+        
         public Vector3 Endpoint { get; private set; }
 
         public override Dictionary<int, PositionRotationPair> GetStartingPositionsAndRotations()
@@ -85,10 +96,12 @@ namespace GameDirection
             Endpoint = GetEndpoint();
 
             var beacon = Instantiate(beaconObject, Endpoint, Quaternion.identity);
-            
+
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.InstantiateSceneObject(
-                    scoreboardPrefab.name, Vector3.zero, Quaternion.identity);
+                    scoreboardPrefab.name, Vector3.zero, Quaternion.identity,
+                    0,
+                    new object[] {_columns, "Distance"});
 
             Instantiate(startPointObject,
                 BaseStartingPositions[CurrentMap],
@@ -145,10 +158,10 @@ namespace GameDirection
             foreach (var pair in PhotonNetwork.CurrentRoom.Players)
             {
                 var actorNumber = pair.Key;
-                var player = pair.Value;
-                
-                _scoreboard.SetScore(
-                    actorNumber, 
+
+                _scoreboard.SetCellByActorNumber(
+                    actorNumber,
+                    "Distance",
                     Vector3.Distance(
                         playerConnection.robots[actorNumber].transform.position,
                         Endpoint));
@@ -163,7 +176,7 @@ namespace GameDirection
             _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
 
             if (_scoreboard)
-                _scoreboard.invertRank = true;
+                _scoreboard.reverseRank = true;
             
             return _scoreboard;
         }

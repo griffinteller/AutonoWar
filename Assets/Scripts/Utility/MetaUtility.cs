@@ -43,5 +43,16 @@ namespace Utility
             toBeChanged.localScale = source.localScale;
             toBeChanged.sizeDelta = source.sizeDelta;
         }
+
+        public static void DestroyAllChildren(Transform transform)
+        {
+            foreach (Transform child in transform)
+                UnityEngine.Object.Destroy(child.gameObject);
+        }
+        
+        public static void DestroyAllChildren(GameObject gameObject)
+        {
+            DestroyAllChildren(gameObject.transform);
+        }
     }
 }
