@@ -1,4 +1,5 @@
 ﻿using System;
+using GameDirection;
 using Networking;
 using UnityEngine;
 using Utility;
@@ -8,17 +9,18 @@ namespace Cam
     public class CameraMotionScript : MonoBehaviour
     {
         private float _bearingDiff;
-
         private Vector3 _currentDelta;
         private float _currentRobotBearing;
         private Vector3 _desiredDelta;
         private bool _smooth;
         private Vector3 _velocity;
+        private Bounds _mapBounds;
 
         public CameraMode cameraMode;
 
         public Transform centerObject;
         public float groundBuffer = 0.05f;
+        public const float SideBuffer = 10f;
 
         public bool interactable = true;
         public float lookSensitivity = 50;
@@ -51,6 +53,13 @@ namespace Cam
             transform.position = viewCenter + startingDisplacement;
             _currentDelta = transform.position - viewCenter;
             _desiredDelta = _currentDelta;
+            
+            _mapBounds = new Bounds();
+            _mapBounds.size = MapEnumWrapper.MapSizes[FindObjectOfType<GameDirector>().CurrentMap]
+                - Vector3.one * SideBuffer;
+
+            print(_mapBounds);
+            
             transform.LookAt(viewCenter);
         }
 
@@ -66,8 +75,7 @@ namespace Cam
                 return;
 
             if (centerObject) viewCenter = centerObject.position;
-
-
+            
             transform.position = _currentDelta + viewCenter;
             _currentRobotBearing = GetRobotBearing();
 
@@ -86,6 +94,7 @@ namespace Cam
 
             _desiredDelta = RotateDeltaFromMouse(_desiredDelta);
             _desiredDelta *= finalMagnitude / _desiredDelta.magnitude;
+            _desiredDelta = KeepDeltaInBounds(_desiredDelta);
             _desiredDelta = RaiseDeltaAboveTerrain(_desiredDelta);
 
             if (_smooth)
@@ -99,6 +108,19 @@ namespace Cam
             if (centerObject) _bearingDiff = _currentRobotBearing - GetDeltaBearing(_desiredDelta);
 
             transform.LookAt(viewCenter);
+        }
+
+        private Vector3 KeepDeltaInBounds(Vector3 delta)
+        {
+            var pos = centerObject.transform.position + delta;
+            if (!_mapBounds.Contains(pos))
+            {
+                var result = _mapBounds.ClosestPoint(pos);
+                print("point: " + result);
+                return _mapBounds.ClosestPoint(pos) - centerObject.position;
+            }
+            
+            return delta;
         }
 
         private Vector3 TrackRobotRotationYaw(Vector3 delta)
