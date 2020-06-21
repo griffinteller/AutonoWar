@@ -35,7 +35,7 @@ namespace GameDirection
             {MapEnum.Desert, new Vector3(1300, 0, 1300)}
         };
 
-        private const float MinimumFlatDistance = 1500;
+        private const float MinimumFlatDistance = 2000;
 
         [FormerlySerializedAs("endpointObject")] public GameObject startPointObject;
         public GameObject beaconObject;
@@ -48,12 +48,13 @@ namespace GameDirection
             new List<ScoreboardColumn>
             {
                 new ScoreboardColumn("Rank"),
-                new ScoreboardColumn("Name", cellLayout: new CellLayout(true)),
-                new ScoreboardColumn("Distance", isFloat: true),
+                new ScoreboardColumn("Name", 
+                    cellLayout: new CellLayout(true, textAnchor: TextAnchor.MiddleLeft)),
+                new ScoreboardColumn("Dist.", isFloat: true),
                 new ScoreboardColumn("Time")
             };
 
-        protected override string DefaultSortingColumnName => "Distance";
+        protected override string DefaultSortingColumnName => "Dist.";
 
         public Vector3 Endpoint { get; private set; }
 
@@ -153,7 +154,7 @@ namespace GameDirection
 
                 Scoreboard.SetCellByActorNumber(
                     actorNumber,
-                    "Distance",
+                    "Dist.",
                     Vector3.Distance(
                         playerConnection.robots[actorNumber].transform.position,
                         Endpoint));

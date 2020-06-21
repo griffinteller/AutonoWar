@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2066477073723273619}
   - component: {fileID: 7320850027585615446}
   m_Layer: 5
-  m_Name: ScoreboardEntry
+  m_Name: ScoreboardRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,4 +138,4 @@ MonoBehaviour:
     type: 3}
   actorNumber: 0
   locked: 0
-  defaultColor: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 0.5882353}
+  defaultColor: {r: 1, g: 1, b: 1, a: 0.23529412}

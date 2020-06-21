@@ -30,6 +30,7 @@ namespace UI
             cellObject.transform.SetSiblingIndex(index);
 
             var cellInstance = new ScoreboardCell(cellObject, actorNumber, column, column.DecimalPlaces);
+            cellInstance.SetColor(defaultColor);
             Cells.Add(cellInstance);
             CellsByName.Add(column.Name, cellInstance);
         }
