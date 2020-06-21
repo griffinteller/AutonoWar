@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Utility;
 
 namespace Networking
@@ -23,6 +24,12 @@ namespace Networking
         {
             {MapEnum.Highlands, "HighlandsScene"},
             {MapEnum.Desert, "DesertScene"}
+        };
+        
+        public static readonly Dictionary<MapEnum, Vector3> MapSizes = new Dictionary<MapEnum, Vector3>
+        {
+            {MapEnum.Highlands, new Vector3(4096, 10000, 4096)},
+            {MapEnum.Desert, new Vector3(4096, 10000, 4096)}
         };
 
         protected override string[] Strings => new[]
