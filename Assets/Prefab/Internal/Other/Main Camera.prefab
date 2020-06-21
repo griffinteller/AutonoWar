@@ -96,17 +96,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d71210dd3fa5bf4e8f5757635f94c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
+  cameraMode: 0
   centerObject: {fileID: 0}
-  playerConnection: {fileID: 0}
-  viewCenter: {x: 0, y: 0, z: 0}
-  startingDisplacement: {x: 0, y: 3, z: 3}
-  zoomSensitivity: 50
+  groundBuffer: 0.5
+  interactable: 1
   lookSensitivity: 50
-  smoothTime: 0.01
+  maxCameraAngle: 80
+  maxDistance: 100
   maxSmoothSpeed: 10
   minDistance: 3
-  maxDistance: 500
-  groundBuffer: 0.5
-  maxCameraAngle: 80
-  cameraMode: 0
+  playerConnection: {fileID: 0}
+  smoothTime: 0.01
+  startingDisplacement: {x: 0, y: 3, z: 3}
+  viewCenter: {x: 0, y: 0, z: 0}
+  zoomSensitivity: 50

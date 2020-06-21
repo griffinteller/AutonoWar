@@ -49,7 +49,6 @@ namespace Main
 
         public void CombineTint(Color tint, bool undo = false)
         {
-            print("Combining color. Undo = " + undo);
 
             if (!_partsAreLoaded)
             {

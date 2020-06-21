@@ -32,7 +32,6 @@ namespace Main
 
         public void OnEnable()
         {
-            print("Flipping!");
             _startTime = Time.time;
             _startPosition = transform.position;
             _startRotation = transform.rotation;
