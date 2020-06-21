@@ -15,8 +15,7 @@ public class EasySuspension : MonoBehaviour
 
     private void Start()
     {
-        print("Setting Suspension");
-        // work out the stiffness and damper parameters based on the better spring model
+	    // work out the stiffness and damper parameters based on the better spring model
         foreach (var wc in GetComponentsInChildren<WheelCollider>())
         {
             var spring = wc.suspensionSpring;

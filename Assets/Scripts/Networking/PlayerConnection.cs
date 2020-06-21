@@ -41,8 +41,6 @@ namespace Networking
 
             startingPositionAndRotation =
                 _gameDirector.GetStartingPositionsAndRotations()[PhotonNetwork.LocalPlayer.ActorNumber];
-            print(startingPositionAndRotation.position);
-            print(PhotonNetwork.LocalPlayer.ActorNumber);
 
             var playerObj =
                 PhotonNetwork.Instantiate(
@@ -84,7 +82,6 @@ namespace Networking
             }
 
             _gameDirector.CurrentMap = (MapEnum) PhotonNetwork.CurrentRoom.CustomProperties["map"];
-            print(_gameDirector.CurrentMap);
         }
 
         public void OnFullyLoaded()

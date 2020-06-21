@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Networking;
 using Photon.Pun;
 using UI;
@@ -11,7 +10,7 @@ using Random = System.Random;
 
 namespace GameDirection
 {
-    public class GrandPrixDirector : DefaultCycleGameDirector
+    public class GrandPrixDirector : DefaultGameDirectorScoreboard
     {
         public override GameModeEnum GameMode => GameModeEnum.GrandPrix;
         public override HashSet<HudElement> HudElements => new HashSet<HudElement>
@@ -36,18 +35,27 @@ namespace GameDirection
             {MapEnum.Desert, new Vector3(1300, 0, 1300)}
         };
 
-        private const float MinimumFlatDistance = 1500;
+        private const float MinimumFlatDistance = 2000;
 
         [FormerlySerializedAs("endpointObject")] public GameObject startPointObject;
         public GameObject beaconObject;
         public Color beaconColor;
-        public GameObject scoreboardPrefab;
 
         private const float Spacing = 5;
 
         private UiClock _clock;
-        private Scoreboard _scoreboard;
-        
+        protected override List<ScoreboardColumn> DefaultScoreboardColumns => 
+            new List<ScoreboardColumn>
+            {
+                new ScoreboardColumn("Rank"),
+                new ScoreboardColumn("Name", 
+                    cellLayout: new CellLayout(true, textAnchor: TextAnchor.MiddleLeft)),
+                new ScoreboardColumn("Dist.", isFloat: true),
+                new ScoreboardColumn("Time")
+            };
+
+        protected override string DefaultSortingColumnName => "Dist.";
+
         public Vector3 Endpoint { get; private set; }
 
         public override Dictionary<int, PositionRotationPair> GetStartingPositionsAndRotations()
@@ -78,17 +86,21 @@ namespace GameDirection
             return result;
         }
 
-        public void Start()
+        protected override void SetupScoreboard()
         {
+            Scoreboard.SetRankColumn("Rank");
+            Scoreboard.NameRows("Name");
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            
             _clock = FindObjectOfType<UiClock>();
 
             Endpoint = GetEndpoint();
 
             var beacon = Instantiate(beaconObject, Endpoint, Quaternion.identity);
-            
-            if (PhotonNetwork.IsMasterClient)
-                PhotonNetwork.InstantiateSceneObject(
-                    scoreboardPrefab.name, Vector3.zero, Quaternion.identity);
 
             Instantiate(startPointObject,
                 BaseStartingPositions[CurrentMap],
@@ -127,16 +139,10 @@ namespace GameDirection
             _clock.StartClock();
         }
 
-        protected override void PreGameUpdate()
-        {
-            base.PreGameUpdate();
-            CheckScoreBoardIsInstantiated();
-        }
-
         protected override void InGameUpdate()
         {
             base.InGameUpdate();
-            if (CheckScoreBoardIsInstantiated() && PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
                 UpdateScoreboard();
         }
 
@@ -145,27 +151,14 @@ namespace GameDirection
             foreach (var pair in PhotonNetwork.CurrentRoom.Players)
             {
                 var actorNumber = pair.Key;
-                var player = pair.Value;
-                
-                _scoreboard.SetScore(
-                    actorNumber, 
+
+                Scoreboard.SetCellByActorNumber(
+                    actorNumber,
+                    "Dist.",
                     Vector3.Distance(
                         playerConnection.robots[actorNumber].transform.position,
                         Endpoint));
             }
-        }
-
-        private bool CheckScoreBoardIsInstantiated()
-        {
-            if (_scoreboard)
-                return true;
-
-            _scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
-
-            if (_scoreboard)
-                _scoreboard.invertRank = true;
-            
-            return _scoreboard;
         }
 
         private static void Shuffle<T>(IList<T> list)  

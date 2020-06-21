@@ -53,7 +53,6 @@ namespace UI
 
         public void ToggleWindowOpen(string windowName)
         {
-            print(windowName);
             var window = _windows[windowName];
             SetWindowOpen(window, !window.activeSelf);
         }

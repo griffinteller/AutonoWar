@@ -37,7 +37,6 @@ namespace GameDirection
             if (!PhotonNetwork.IsMasterClient)
                 return;
             
-            print("raising event");
             gameDirector.RaiseStartGameEvent();
         }
     }
