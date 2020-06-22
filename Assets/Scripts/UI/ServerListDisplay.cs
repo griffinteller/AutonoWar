@@ -23,9 +23,12 @@ namespace UI
         {
             if (!PhotonNetwork.IsConnected)
             {
+                print("Not connected in server list display. Connecting...");
                 PhotonNetwork.GameVersion = Application.version;
                 PhotonNetwork.ConnectUsingSettings();
             }
+            else
+                print("Already connected on: " + PhotonNetwork.CurrentLobby.Name);
         }
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)

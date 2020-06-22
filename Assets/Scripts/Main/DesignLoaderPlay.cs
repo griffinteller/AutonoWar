@@ -25,7 +25,8 @@ namespace Main
         [PunRPC]
         public void BuildRobotRpc(object data)
         {
-            BuildRobot();
+            var structure = JsonUtility.FromJson<RobotStructure>((string) data);
+            BuildRobot(structure);
         }
 
         private void ReplaceColliders()
@@ -50,12 +51,16 @@ namespace Main
             _robotRigidbody.centerOfMass = Vector3.zero;
         }
 
-        public void BuildRobot()
+        public void BuildRobot(RobotStructure structure = null)
         {
             LoadPartListIntoDict();
             _robotRigidbody = GetComponent<Rigidbody>();
 
-            var structure = BuildHandler.GetRobotStructure();
+            if (structure == null)
+            {
+                structure = BuildHandler.GetRobotStructure();
+            }
+            
             CreateParts(structure);
             ReplaceColliders();
 
