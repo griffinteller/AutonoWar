@@ -18,6 +18,10 @@ namespace UI
             set => SetSeconds(value);
         }
 
+        public string StringValue => ((int) (Seconds / 60)).ToString("D2") 
+                                     + ":" 
+                                     + (Seconds % 60).ToString("00.00");
+
         public void Stop()
         {
             _active = false;

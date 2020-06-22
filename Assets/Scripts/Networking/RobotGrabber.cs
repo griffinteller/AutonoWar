@@ -21,8 +21,8 @@ namespace Networking
             if (playerConnection.robots.Count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 Debug.Log("Fully Loaded!");
-                playerConnection.OnFullyLoaded();
                 enabled = false;
+                playerConnection.OnFullyLoaded();
             }
         }
     }

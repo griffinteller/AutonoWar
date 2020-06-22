@@ -1,4 +1,5 @@
 ﻿using System;
+using Cam;
 using GameDirection;
 using Networking;
 using Photon.Pun;
@@ -9,7 +10,7 @@ namespace Main
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(ScheduledFlip))]
-    public class RobotMain : MonoBehaviour
+    public class RobotMain : MonoBehaviourPun
     {
         private const float MaxAngularVelocity = 120f;
         private const float TagBuffer = 0.3f;
@@ -180,6 +181,20 @@ namespace Main
         public void OnTriggerEnter(Collider other)
         {
             OnTriggerEnterCallbacks(other, this);
+        }
+
+        public void DestroyRobotRpc()
+        {
+            photonView.RPC("DestroyRobot", RpcTarget.AllBuffered);
+        }
+
+        [PunRPC]
+        public void DestroyRobot()
+        {
+            Destroy(gameObject);
+            
+            if (!robotNetworkBridge || robotNetworkBridge.isLocal)
+                FindObjectOfType<CameraMotionScript>().interactable = false;
         }
     }
 }

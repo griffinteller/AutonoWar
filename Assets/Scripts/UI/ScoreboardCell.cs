@@ -118,6 +118,7 @@ namespace UI
         }
     }
 
+    [Serializable]
     public class CellLocation
     {
         public int ActorNumber;

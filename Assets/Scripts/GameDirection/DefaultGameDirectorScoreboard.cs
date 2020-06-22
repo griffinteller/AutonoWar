@@ -39,9 +39,16 @@ namespace GameDirection
             if (Scoreboard)
                 return true;
 
-            Scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
-
-            if (Scoreboard && Scoreboard.built)
+            try
+            {
+                Scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
+            }
+            catch (NullReferenceException)
+            {
+                return false;
+            }
+            
+            if (Scoreboard.built)
             {
                 print("Setting up scoreboard");
                 SetupScoreboard();

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Main;
 using Networking;
 using Photon.Pun;
+using Photon.Realtime;
 using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,13 +22,13 @@ namespace GameDirection
         public override Dictionary<MapEnum, Vector3> BaseStartingPositions => new Dictionary<MapEnum, Vector3>
         {
             {MapEnum.Highlands, new Vector3(862.9f, 88.8f, 1118.2f)},
-            {MapEnum.Desert, new Vector3(1143.9f, 83.23f, -808.7f)}
+            {MapEnum.Desert, new Vector3(1118.1f, 103.9f, -943.3f)}
         };
 
         private readonly Dictionary<MapEnum, Quaternion> _startingLineUpRotations = new Dictionary<MapEnum, Quaternion>
         {
             {MapEnum.Highlands, Quaternion.Euler(0, -152, 0)},
-            {MapEnum.Desert, Quaternion.Euler(0, -57, 0)},
+            {MapEnum.Desert, Quaternion.Euler(0, -90, 0)},
         };
 
         private readonly Dictionary<MapEnum, Vector3> _endpointRanges = new Dictionary<MapEnum, Vector3>
@@ -34,16 +36,20 @@ namespace GameDirection
             {MapEnum.Highlands, new Vector3(1300, 0, 1300)},
             {MapEnum.Desert, new Vector3(1300, 0, 1300)}
         };
+        
+        private readonly HashSet<int> _activePlayers = new HashSet<int>();
 
-        private const float MinimumFlatDistance = 2000;
+        private const float MinRouteLength = 2000;
+        private const float MaxRouteLength = 10000;
 
-        [FormerlySerializedAs("endpointObject")] public GameObject startPointObject;
-        public GameObject beaconObject;
-        public Color beaconColor;
+        public GameObject startPointObject;
+        public GameObject endPointObject;
+        public Color finishedScoreboardRowColor;
 
         private const float Spacing = 5;
 
         private UiClock _clock;
+        
         protected override List<ScoreboardColumn> DefaultScoreboardColumns => 
             new List<ScoreboardColumn>
             {
@@ -51,7 +57,8 @@ namespace GameDirection
                 new ScoreboardColumn("Name", 
                     cellLayout: new CellLayout(true, textAnchor: TextAnchor.MiddleLeft)),
                 new ScoreboardColumn("Dist.", isFloat: true),
-                new ScoreboardColumn("Time")
+                new ScoreboardColumn("Time",
+                    cellLayout: new CellLayout(defaultWidth: 70))
             };
 
         protected override string DefaultSortingColumnName => "Dist.";
@@ -100,8 +107,10 @@ namespace GameDirection
 
             Endpoint = GetEndpoint();
 
-            var beacon = Instantiate(beaconObject, Endpoint, Quaternion.identity);
+            foreach (var pair in PhotonNetwork.CurrentRoom.Players)
+                _activePlayers.Add(pair.Key);
 
+            Instantiate(endPointObject, Endpoint, Quaternion.identity);
             Instantiate(startPointObject,
                 BaseStartingPositions[CurrentMap],
                 _startingLineUpRotations[CurrentMap]);
@@ -122,7 +131,11 @@ namespace GameDirection
             } while (Vector3.Distance(
                          BaseStartingPositions[CurrentMap],
                          endpoint)
-                     < MinimumFlatDistance);
+                     < MinRouteLength
+                || Vector3.Distance(
+                    BaseStartingPositions[CurrentMap],
+                    endpoint)
+                > MaxRouteLength);
 
             return endpoint;
         }
@@ -148,17 +161,18 @@ namespace GameDirection
 
         private void UpdateScoreboard()
         {
-            foreach (var pair in PhotonNetwork.CurrentRoom.Players)
-            {
-                var actorNumber = pair.Key;
-
+            foreach (var actorNumber in _activePlayers)
                 Scoreboard.SetCellByActorNumber(
                     actorNumber,
                     "Dist.",
                     Vector3.Distance(
                         playerConnection.robots[actorNumber].transform.position,
                         Endpoint));
-            }
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            _activePlayers.Remove(otherPlayer.ActorNumber);
         }
 
         private static void Shuffle<T>(IList<T> list)  
@@ -173,6 +187,22 @@ namespace GameDirection
                 list[k] = list[n];  
                 list[n] = value;  
             }  
+        }
+
+        public void RobotHasFinished(int actorNumber)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            playerConnection.robots[actorNumber].GetComponent<RobotMain>().DestroyRobotRpc();
+
+            _activePlayers.Remove(actorNumber);
+            
+            Scoreboard.SetCellByActorNumber(actorNumber, "Time", _clock.StringValue);
+            Scoreboard.SetCellByActorNumber(actorNumber, "Dist.", 0);
+            Scoreboard.LockRowByActorNumber(actorNumber);
+            Scoreboard.SetRowColorByActorNumber(actorNumber, finishedScoreboardRowColor);
+            Scoreboard.ExpandForGameEndRpc(PhotonNetwork.CurrentRoom.Players[actorNumber]);
         }
     }
 }
