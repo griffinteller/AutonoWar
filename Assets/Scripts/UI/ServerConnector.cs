@@ -37,6 +37,7 @@ namespace UI
 
             if (!PhotonNetwork.IsConnected)
             {
+                print("Not connected in server connector. Connecting...");
                 PhotonNetwork.GameVersion = Application.version;
                 PhotonNetwork.ConnectUsingSettings();
                 return;
@@ -44,6 +45,7 @@ namespace UI
 
             if (!PhotonNetwork.InLobby)
             {
+                print("Not connected to lobby in server connector. Connecting...");
                 PhotonNetwork.JoinLobby();
                 return;
             }
@@ -70,6 +72,7 @@ namespace UI
 
         public override void OnJoinedLobby()
         {
+            print("Joined lobby");
             if (!_creatingServer)
                 return;
 
