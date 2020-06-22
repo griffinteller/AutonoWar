@@ -326,6 +326,7 @@ MonoBehaviour:
     type: 3}
   reverseRank: 0
   built: 0
+  positionLocked: 0
 --- !u!114 &-7452662658673405598
 MonoBehaviour:
   m_ObjectHideFlags: 0

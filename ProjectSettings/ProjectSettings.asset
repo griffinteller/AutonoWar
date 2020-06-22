@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.3.3-alpha.5
+  bundleVersion: 0.3.4-alpha.1-dev
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}

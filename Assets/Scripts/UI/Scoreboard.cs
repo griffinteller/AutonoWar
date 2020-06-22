@@ -10,6 +10,7 @@ namespace UI
 {
     public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
+        // TODO: make cells dynamically adjust width
         [Serializable]
         private class CellChangeDescription
         {
@@ -20,7 +21,7 @@ namespace UI
         private class RowChangeDescription
         {
             public bool? locked;
-            public Color? newColor;
+            public SerializableColor newColor;
         }
 
         private class RowComparer : Comparer<ScoreboardRow>
@@ -120,7 +121,7 @@ namespace UI
             {
                 var message = new object[] {_cellChanges, _rowChanges};
                 var serializedMessage = NetworkUtility.Serialize(message);
-                stream.SendNext(stream);
+                stream.SendNext(serializedMessage);
                 _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
                 _rowChanges = new Dictionary<int, RowChangeDescription>();
             }
@@ -136,7 +137,7 @@ namespace UI
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            RemoveRowByActorNumber(otherPlayer.ActorNumber);
+            TryRemoveRowByActorNumber(otherPlayer.ActorNumber);
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -222,16 +223,16 @@ namespace UI
             SortRows();
         }
 
-        public void RemoveRowByActorNumber(int actorNumber)
+        public void TryRemoveRowByActorNumber(int actorNumber)
         {
             var row = _rowByActorNumber[actorNumber];
-            RemoveRow(row);
+            TryRemoveRow(row);
         }
 
-        public void RemoveRowAtIndex(int index)
+        public void TryRemoveRowAtIndex(int index)
         {
             var row = _rows[index];
-            RemoveRow(row);
+            TryRemoveRow(row);
         }
 
         public void TrySetExpand(bool expand)
@@ -245,8 +246,11 @@ namespace UI
                 rectTransform);
         }
 
-        public void RemoveRow(ScoreboardRow row)
+        public void TryRemoveRow(ScoreboardRow row)
         {
+            if (row.locked)
+                return;
+            
             Destroy(row.gameObject);
             _rows.Remove(row);
             _rowByActorNumber.Remove(row.actorNumber);
@@ -272,20 +276,25 @@ namespace UI
             AddToCell(_rowByActorNumber[actorNumber].GetCell(columnName), addition);
         }
 
-        public void SetCellByActorNumber(int actorNumber, string columnName, object value)
+        public void SetCellByActorNumber(int actorNumber, string columnName, object value, bool registerChanges = true)
         {
-            SetCell(_rowByActorNumber[actorNumber].GetCell(columnName), value);
+            SetCell(_rowByActorNumber[actorNumber].GetCell(columnName), value, registerChanges);
         }
 
-        public void SetCellAtIndex(int index, string columnName, object value)
+        public void SetCellAtIndex(int index, string columnName, object value, bool registerChanges = true)
         {
-            SetCell(_rows[index].GetCell(columnName), value);
+            SetCell(_rows[index].GetCell(columnName), value, registerChanges);
         }
 
-        public void SetCell(ScoreboardCell cell, object value)
+        public void SetCell(ScoreboardCell cell, object value, bool registerChanges = true)
         {
             switch (value)
             {
+                case int intValue:
+                    
+                    SetCell(cell, (float) intValue);
+                    break;
+                    
                 case float floatValue:
 
                     if (!cell.IsFloat)
@@ -310,7 +319,8 @@ namespace UI
             if (cell.Column.Name.Equals(_sortingColumnName))
                 SortRows();
 
-            AddCellChange(cell.CellLoc, value);
+            if (registerChanges)
+                AddCellChange(cell.CellLoc, value);
         }
 
         public void SetRowColor(ScoreboardRow row, Color color)
@@ -388,7 +398,10 @@ namespace UI
 
         private void ImplementChanges()
         {
-            foreach (var pair in _cellChanges)
+            var cellChangesCopy = new Dictionary<CellLocation, CellChangeDescription>(_cellChanges);
+            var rowChangesCopy = new Dictionary<int, RowChangeDescription>(_rowChanges);
+            
+            foreach (var pair in cellChangesCopy)
             {
                 var location = pair.Key;
                 var description = pair.Value;
@@ -397,7 +410,7 @@ namespace UI
                     SetCellByActorNumber(location.ActorNumber, location.ColumnName, description.newValue);
             }
             
-            foreach (var pair in _rowChanges)
+            foreach (var pair in rowChangesCopy)
             {
                 var actorNumber = pair.Key;
                 var description = pair.Value;
@@ -407,10 +420,10 @@ namespace UI
                 
                 if (description.newColor != null)
                     SetRowColorByActorNumber(actorNumber, (Color) description.newColor);
-                
-                _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
-                _rowChanges = new Dictionary<int, RowChangeDescription>();
             }
+            
+            _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
+            _rowChanges = new Dictionary<int, RowChangeDescription>();
         }
 
         public void SetRankColumn(string columnName)
@@ -440,6 +453,19 @@ namespace UI
                 TrySetExpand(true);
             else if (Input.GetKeyUp(ExpandKey))
                 TrySetExpand(false);
+        }
+
+        public void ExpandForGameEndRpc(Player player)
+        {
+            photonView.RPC("ExpandForGameEnd", player);
+        }
+
+        [PunRPC]
+        public void ExpandForGameEnd()
+        {
+            TrySetExpand(true);
+            positionLocked = true;
+            GameObject.FindWithTag("Hud").SetActive(false);
         }
     }
 }
