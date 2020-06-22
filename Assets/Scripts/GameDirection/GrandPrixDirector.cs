@@ -22,13 +22,13 @@ namespace GameDirection
         public override Dictionary<MapEnum, Vector3> BaseStartingPositions => new Dictionary<MapEnum, Vector3>
         {
             {MapEnum.Highlands, new Vector3(862.9f, 88.8f, 1118.2f)},
-            {MapEnum.Desert, new Vector3(1143.9f, 83.23f, -808.7f)}
+            {MapEnum.Desert, new Vector3(1118.1f, 103.9f, -943.3f)}
         };
 
         private readonly Dictionary<MapEnum, Quaternion> _startingLineUpRotations = new Dictionary<MapEnum, Quaternion>
         {
             {MapEnum.Highlands, Quaternion.Euler(0, -152, 0)},
-            {MapEnum.Desert, Quaternion.Euler(0, -57, 0)},
+            {MapEnum.Desert, Quaternion.Euler(0, -90, 0)},
         };
 
         private readonly Dictionary<MapEnum, Vector3> _endpointRanges = new Dictionary<MapEnum, Vector3>
