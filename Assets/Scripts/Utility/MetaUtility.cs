@@ -54,5 +54,17 @@ namespace Utility
         {
             DestroyAllChildren(gameObject.transform);
         }
+        
+        public static void DestroyImmediateAllChildren(Transform transform)
+        {
+            foreach (Transform child in transform)
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
+        }
+        
+        public static void DestroyImmediateAllChildren(GameObject gameObject)
+        {
+            foreach (Transform child in gameObject.transform)
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
+        }
     }
 }
