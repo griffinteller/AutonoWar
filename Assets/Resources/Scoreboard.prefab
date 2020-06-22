@@ -322,6 +322,8 @@ MonoBehaviour:
   title: {fileID: 3820344580663202125}
   defaultPosition: {fileID: 3045912235035093247, guid: 87655cef3cda0b74096011c454a4cd48,
     type: 3}
+  expandedPosition: {fileID: 6442654498870046640, guid: 185b4f869b87bdd4c94e1f875f032388,
+    type: 3}
   reverseRank: 0
   built: 0
 --- !u!114 &-7452662658673405598

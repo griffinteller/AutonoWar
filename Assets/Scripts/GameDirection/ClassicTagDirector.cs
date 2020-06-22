@@ -147,8 +147,8 @@ namespace GameDirection
         protected override void GameEndSetup()
         {
             base.GameEndSetup();
-            //_scoreboard.SetExpand(true);
-            //_scoreboard.positionLocked = true;
+            Scoreboard.TrySetExpand(true);
+            Scoreboard.positionLocked = true;
             GameObject.FindWithTag("Hud").SetActive(false);
         }
 

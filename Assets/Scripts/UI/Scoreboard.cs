@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Win32;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -63,8 +64,10 @@ namespace UI
         public Transform rowParent;
         public ScoreboardTitle title;
         public RectTransform defaultPosition;
+        public RectTransform expandedPosition;
         public bool reverseRank;
         public bool built;
+        public bool positionLocked;
 
         private Dictionary<ScoreboardRow, int> _lockedRowsAndIndices = new Dictionary<ScoreboardRow, int>();
         private Dictionary<int, ScoreboardRow> _rowByActorNumber = new Dictionary<int, ScoreboardRow>();
@@ -77,6 +80,8 @@ namespace UI
         private List<ScoreboardRow> _rows = new List<ScoreboardRow>();
         private string _sortingColumnName;
         private string _rankColumnName;
+
+        private const KeyCode ExpandKey = KeyCode.Tab;
 
         public override void OnEnable()
         {
@@ -105,8 +110,8 @@ namespace UI
             var t = GetComponent<RectTransform>();
             t.SetParent(GameObject.FindWithTag("Canvas").transform);
             t.SetSiblingIndex(t.parent.childCount - 2); // put behind windows
-            t.anchoredPosition = defaultPosition.anchoredPosition;
-            t.localScale = Vector3.one;
+            
+            MetaUtility.SyncRectTransforms(defaultPosition, t);
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -227,6 +232,17 @@ namespace UI
         {
             var row = _rows[index];
             RemoveRow(row);
+        }
+
+        public void TrySetExpand(bool expand)
+        {
+            if (positionLocked)
+                return;
+            
+            var rectTransform = GetComponent<RectTransform>();
+            MetaUtility.SyncRectTransforms(
+                expand ? expandedPosition : defaultPosition, 
+                rectTransform);
         }
 
         public void RemoveRow(ScoreboardRow row)
@@ -411,6 +427,19 @@ namespace UI
                 var nickName = PhotonNetwork.CurrentRoom.Players[actorNumber].NickName;
                 row.GetCell(columnName).StringValue = nickName;
             }
+        }
+
+        public void Update()
+        {
+            KeyCheck();
+        }
+
+        private void KeyCheck()
+        {
+            if (Input.GetKeyDown(ExpandKey))
+                TrySetExpand(true);
+            else if (Input.GetKeyUp(ExpandKey))
+                TrySetExpand(false);
         }
     }
 }
