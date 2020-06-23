@@ -20,7 +20,7 @@ set__torque(2000)
 while True:
 
     r.lock_info()
-    print(r.info.map)
+    print(r.info.gps.destination.x)
     r.unlock_info()
     time.sleep(0.05)
 
