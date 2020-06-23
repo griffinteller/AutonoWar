@@ -145,6 +145,7 @@ class GPS(object):
 
         self.position = Vector3.from_dict(position_dict)
         self.velocity = Vector3.from_dict(info_dict["gps"]["velocity"])
+        self.destination = Vector3.from_dict(info_dict["gps"]["destination"])
         self.__info_object_reference = info_object_reference
 
 

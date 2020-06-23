@@ -63,8 +63,8 @@ namespace Main
         {
             _platform = SystemUtility.GetSimplePlatform();
 
-            GetRoomVariables(out var gameMode, out var map, out var actorNumber, out var classicTagScript);
-            _robotStateDescription = new RobotDescription(robotBody, gameMode, map, actorNumber, classicTagScript);
+            GetRoomVariables(out var gameMode, out var map, out var actorNumber);
+            _robotStateDescription = new RobotDescription(robotBody, gameMode, map, actorNumber);
 
             _robotMain = GetComponent<RobotMain>();
             PipeName += _robotMain.robotIndex;
@@ -159,23 +159,19 @@ namespace Main
         private void GetRoomVariables(
             out GameModeEnum gameMode,
             out MapEnum map,
-            out int actorNumber,
-            out ClassicTagDirector classicTagScript)
+            out int actorNumber)
         {
             var gameDirector = FindObjectOfType<GameDirector>();
 
             gameMode = gameDirector.GameMode;
             map = gameDirector.CurrentMap;
             actorNumber = -1;
-            classicTagScript = null;
 
-            if (PhotonNetwork.InRoom)
-            {
-                var robotNetworkBridge = GetComponent<RobotNetworkBridge>();
-                actorNumber = robotNetworkBridge.actorNumber;
-                if (gameMode == GameModeEnum.ClassicTag)
-                    classicTagScript = gameDirector.GetComponent<ClassicTagDirector>();
-            }
+            if (!PhotonNetwork.InRoom) 
+                return;
+            
+            var robotNetworkBridge = GetComponent<RobotNetworkBridge>();
+            actorNumber = robotNetworkBridge.actorNumber;
         }
     }
 }

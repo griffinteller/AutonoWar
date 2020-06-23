@@ -10,8 +10,9 @@ namespace Main
     [Serializable]
     public class RobotDescription
     {
-        private ClassicTagDirector _classicTagScript;
         private int _id;
+        private GameDirector _gameDirector;
+        
         public Altimeter altimeter;
         public string gameMode;
         public string map;
@@ -23,14 +24,13 @@ namespace Main
         public Radar radar;
         public float timestamp;
 
-        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0,
-            ClassicTagDirector classicTagScript = null)
+        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0)
         {
             lidar = new Lidar(gameObject);
             gyroscope = new Gyroscope(gameObject);
             gps = new GPS(gameObject);
             altimeter = new Altimeter(gameObject);
-            radar = new Radar(gameObject, gameMode);
+            radar = new Radar(gameObject);
             this.gameMode = new GameModeEnumWrapper
             {
                 Index = (int) gameMode
@@ -39,9 +39,9 @@ namespace Main
             {
                 Index = (int) map
             }.ToString();
-
-            _classicTagScript = classicTagScript;
+            
             _id = actorNumber;
+            _gameDirector = UnityEngine.Object.FindObjectOfType<GameDirector>();
         }
 
         public void Update()
@@ -53,7 +53,8 @@ namespace Main
             radar.Update();
             timestamp = Time.fixedTime * 1000f;
 
-            if (gameMode.Equals("Classic Tag")) isIt = _classicTagScript.currentItActorNumber == _id;
+            if (gameMode.Equals("Classic Tag")) 
+                isIt = ((ClassicTagDirector) _gameDirector).currentItActorNumber == _id;
         }
     }
 }
