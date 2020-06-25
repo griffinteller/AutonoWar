@@ -1,6 +1,6 @@
 Metadata-Version: 1.2
 Name: awconnection
-Version: 0.3.2.post2
+Version: 0.3.3
 Summary: An interface between Python and AutonoWar
 Home-page: https://github.com/griffinteller/awconnection
 Author: Griffin Teller

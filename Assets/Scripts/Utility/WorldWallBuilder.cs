@@ -9,13 +9,15 @@ namespace Utility
     {
         public float depth;
         public float height;
+        public float inset;
         public MapEnum map;
 
         private Vector3 _size;
 
-        public void Awake()
+        public void Update()
         {
             _size = MapEnumWrapper.MapSizes[map];
+            _size -= Vector3.one * inset;
         }
 
         public void BuildWalls()
