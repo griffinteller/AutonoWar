@@ -5,7 +5,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utility;
 
 using Random = System.Random;
