@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 
+    AppIdRealtime: 1f33b2dd-5d40-40c0-ac29-e6f8523ca982
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -21,7 +21,9 @@ MonoBehaviour:
     FixedRegion: 
     Server: 
     Port: 0
+    ProxyServer: 
     Protocol: 0
+    EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
@@ -30,7 +32,12 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList: []
-  DisableAutoOpenWizard: 0
+  RpcList:
+  - BuildRobotRpc
+  - ClickRpc
+  - DestroyRobot
+  - DestroyRpc
+  - ExpandForGameEnd
+  DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
