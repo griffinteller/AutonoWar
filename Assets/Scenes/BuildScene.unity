@@ -460,9 +460,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75973f042d71427b920616333e4a2f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tireNamingWindow: {fileID: 268055659}
   buildHandler: {fileID: 1387718833}
   cameraMotionScript: {fileID: 2140307362}
+  tireNamingWindow: {fileID: 268055659}
 --- !u!1 &268055658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,19 +2752,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d71210dd3fa5bf4e8f5757635f94c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
-  centerObject: {fileID: 1387718832}
-  playerConnection: {fileID: 0}
-  viewCenter: {x: 0, y: 0, z: 0}
-  startingDisplacement: {x: 0, y: 1, z: -4}
-  zoomSensitivity: 50
-  lookSensitivity: 50
-  smoothTime: 0.05
-  minDistance: 0.5
-  maxDistance: 20
-  groundBuffer: 0.5
-  maxCameraAngle: 80
   cameraMode: 0
+  centerObject: {fileID: 1387718832}
+  groundBuffer: 0.5
+  interactable: 1
+  lookSensitivity: 50
+  maxCameraAngle: 80
+  maxDistance: 20
+  maxSmoothSpeed: 10
+  minDistance: 0.5
+  playerConnection: {fileID: 0}
+  smoothTime: 0.05
+  startingDisplacement: {x: 0, y: 1, z: -4}
+  viewCenter: {x: 0, y: 0, z: 0}
+  zoomSensitivity: 50
+  useCustomBounds: 1
+  customBounds: {x: 100, y: 100, z: 100}
 --- !u!1001 &5563761088419352138
 PrefabInstance:
   m_ObjectHideFlags: 0
