@@ -1,6 +1,4 @@
-﻿using System;
-using Main;
-using Networking;
+﻿using Networking;
 using Photon.Pun;
 using UnityEngine;
 

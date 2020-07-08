@@ -36,6 +36,10 @@ namespace Cam
 
         public float zoomSensitivity = 50;
 
+        public bool useCustomBounds;
+        public Vector3 customBounds;
+        
+
         private void Start()
         {
             zoomSensitivity /= 17;
@@ -53,10 +57,14 @@ namespace Cam
             transform.position = viewCenter + startingDisplacement;
             _currentDelta = transform.position - viewCenter;
             _desiredDelta = _currentDelta;
-            
+
             _mapBounds = new Bounds();
-            _mapBounds.size = MapEnumWrapper.MapSizes[FindObjectOfType<GameDirector>().CurrentMap]
-                - Vector3.one * SideBuffer;
+
+            if (useCustomBounds)
+                _mapBounds.size = customBounds;
+            else
+                _mapBounds.size = MapEnumWrapper.MapSizes[FindObjectOfType<GameDirector>().CurrentMap]
+                                - Vector3.one * SideBuffer;
 
             print(_mapBounds);
             
@@ -116,7 +124,6 @@ namespace Cam
             if (!_mapBounds.Contains(pos))
             {
                 var result = _mapBounds.ClosestPoint(pos);
-                print("point: " + result);
                 return _mapBounds.ClosestPoint(pos) - centerObject.position;
             }
             
