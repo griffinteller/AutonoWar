@@ -3,6 +3,6 @@
     public enum CameraMode
     {
         Free,
-        Chase,
+        Chase
     }
 }

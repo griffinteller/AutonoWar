@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using GameDirection;
+﻿using GameDirection;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Utility;
 
@@ -11,7 +9,7 @@ namespace UI
     public class EscapeMenu : MonoBehaviour
     {
         public Button buttonPrefab;
-        
+
         public void Start()
         {
             var buttonInfos = GameObject.FindWithTag("GameDirector")
@@ -23,7 +21,7 @@ namespace UI
             {
                 var buttonObj = Instantiate(buttonPrefab.gameObject, transform);
                 buttonObj.GetComponentInChildren<Text>().text = buttonInfo.name;
-                buttonObj.GetComponent<Button>().onClick = 
+                buttonObj.GetComponent<Button>().onClick =
                     MetaUtility.UnityEventToButtonClickedEvent(buttonInfo.clickEvent);
 
                 var rect = buttonObj.GetComponent<RectTransform>().rect;
@@ -32,7 +30,7 @@ namespace UI
 
             var verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
             totalHeight += verticalLayoutGroup.padding.top + verticalLayoutGroup.padding.bottom
-                + verticalLayoutGroup.spacing * (buttonInfos.Count - 1);
+                                                           + verticalLayoutGroup.spacing * (buttonInfos.Count - 1);
             var totalWidth = verticalLayoutGroup.padding.left + verticalLayoutGroup.padding.right + width;
             GetComponent<RectTransform>().sizeDelta = new Vector2(totalWidth, totalHeight);
         }

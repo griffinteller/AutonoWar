@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8191324641388225868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1131646273315010209}
+  - component: {fileID: 3319331019488313970}
+  m_Layer: 0
+  m_Name: GrandPrixDirector
+  m_TagString: GameDirector
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1131646273315010209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8191324641388225868}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1539.7634, y: -1955.2993, z: 2193.0579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3319331019488313970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8191324641388225868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaaa289f95124675b4e8107ab724dc63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerConnection: {fileID: 0}
+  gameState: 0
+  scoreboardPrefab: {fileID: 3406339999369865286, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+    type: 3}
+  startPointObject: {fileID: 550028251497894267, guid: 6392ce68bfb583a44a9a2c3bf69e5b89,
+    type: 3}
+  endPointObject: {fileID: 8476203557148703083, guid: 9c7f4ffb12d849849ba3147c78016946,
+    type: 3}
+  finishedScoreboardRowColor: {r: 0.21226418, g: 1, b: 0.38525712, a: 0.7019608}

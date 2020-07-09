@@ -4,10 +4,10 @@ namespace Building
 {
     public abstract class BuildObjectComponent : MonoBehaviour
     {
+        public int mass;
+        public string partName;
 
         public bool removable = true;
-        public string partName;
-        public int mass;
 
         public abstract ConnectionDescription GetConnection(Vector3 hitPointWorldSpace);
 
@@ -20,6 +20,5 @@ namespace Building
         public virtual void LoadInfoFromPartDescription(RobotPart part)
         {
         }
-
     }
 }

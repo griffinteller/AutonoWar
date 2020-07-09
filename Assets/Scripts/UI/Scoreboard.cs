@@ -1,197 +1,471 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Win32;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
+using Utility;
 
 namespace UI
 {
-    
-    public class Scoreboard : MonoBehaviour, IPunObservable
+    public class Scoreboard : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
-        private readonly struct EntryComparerByActorNumber : IComparer<int>
+        // TODO: make cells dynamically adjust width
+        [Serializable]
+        private class CellChangeDescription
         {
-            private readonly Dictionary<int, ScoreboardEntry> _entriesByActorNumber;
-            
-            public EntryComparerByActorNumber(Dictionary<int, ScoreboardEntry> entries)
+            public object newValue;
+        }
+
+        [Serializable]
+        private class RowChangeDescription
+        {
+            public bool? locked;
+            public SerializableColor newColor;
+        }
+
+        private class RowComparer : Comparer<ScoreboardRow>
+        {
+            private string _sortingColumnName;
+            private int _reverse = 1;
+
+            public RowComparer(string sortingColumnName, bool reverse = false)
             {
-                _entriesByActorNumber = entries;
+                _sortingColumnName = sortingColumnName;
+                if (reverse)
+                    _reverse = -1;
             }
-            
-            public int Compare(int xNum, int yNum)
+
+            public override int Compare(ScoreboardRow x, ScoreboardRow y)
             {
-                var x = _entriesByActorNumber[xNum];
-                var y = _entriesByActorNumber[yNum];
-                if (x == null || y == null)
-                {
-                    if (x != null)
-                        return -1;
+                var cellX = x.GetCell(_sortingColumnName);
+                var cellY = y.GetCell(_sortingColumnName);
 
-                    if (y != null)
-                        return 1;
-
+                if (cellX == null && cellY == null)
                     return 0;
-                }
 
-                var xScore = (int) x.Score;
-                var yScore = (int) y.Score;
-                
-                if (xScore < yScore)
-                    return 1;
-            
-                if (xScore == yScore)
-                    return 0;
+                if (cellX == null)
+                    return -1 * _reverse;
 
-                return -1;
+                if (cellY == null)
+                    return 1 * _reverse;
+
+                if (cellX.IsFloat && cellY.IsFloat)
+                    return cellX.FloatValue.CompareTo(cellY.FloatValue);
+
+                if (!cellX.IsFloat && !cellY.IsFloat)
+                    return cellX.StringValue.CompareTo(cellY.StringValue);
+
+                throw new ArgumentException("Cells are not of same type");
             }
         }
-        
-        private readonly Dictionary<int, ScoreboardEntry> _entriesByActorNumber = 
-            new Dictionary<int, ScoreboardEntry>();
 
-        private readonly List<int> _actorNumberOrder = new List<int>();
-        private bool _changedSinceLastUpdate;
+        public ScoreboardRow rowPrefab;
+        public ScoreboardCell cellPrefab;
+        public Transform rowParent;
+        public ScoreboardTitle title;
+        public RectTransform defaultPosition;
+        public RectTransform expandedPosition;
+        public bool reverseRank;
+        public bool built;
+        public bool positionLocked;
 
-        [SerializeField] private ScoreboardEntry scoreboardEntryPrefab;
+        private Dictionary<ScoreboardRow, int> _lockedRowsAndIndices = new Dictionary<ScoreboardRow, int>();
+        private Dictionary<int, ScoreboardRow> _rowByActorNumber = new Dictionary<int, ScoreboardRow>();
 
-        private Dictionary<int, int> GetScoreDict()
+        private Dictionary<CellLocation, CellChangeDescription> _cellChanges =
+            new Dictionary<CellLocation, CellChangeDescription>();
+
+        private Dictionary<int, RowChangeDescription> _rowChanges = new Dictionary<int, RowChangeDescription>();
+        private List<ScoreboardColumn> _columns = new List<ScoreboardColumn>();
+        private List<ScoreboardRow> _rows = new List<ScoreboardRow>();
+        private string _sortingColumnName;
+        private string _rankColumnName;
+
+        private const KeyCode ExpandKey = KeyCode.Tab;
+
+        public override void OnEnable()
         {
-            var result = new Dictionary<int, int>();
-            foreach (var pair in _entriesByActorNumber)
-            {
-                var actorNumber = pair.Key;
-                var score = pair.Value.Score;
-
-                result.Add(actorNumber, (int) score);
-            }
-
-            return result;
+            base.OnEnable();
+            PhotonNetwork.AddCallbackTarget(this);
         }
 
-        private byte[] GetScoreDictSerialization()
+        public override void OnDisable()
         {
-            var memoryStream = new MemoryStream();
-            var binaryFormatter = new BinaryFormatter();
+            base.OnDisable();
+            PhotonNetwork.RemoveCallbackTarget(this);
+        }
+
+        public void OnPhotonInstantiate(PhotonMessageInfo info)
+        {
+            // info.photonView.InstantiationData = {columns, sortingColumnName}
+            var data = NetworkUtility.Deserialize<object[]>((byte[]) info.photonView.InstantiationData[0]);
+            _columns = (List<ScoreboardColumn>) data[0];
+            _sortingColumnName = (string) data[1];
+            InitPosition();
+            BuildFromColumns();
+        }
+
+        private void InitPosition()
+        {
+            var t = GetComponent<RectTransform>();
+            t.SetParent(GameObject.FindWithTag("Canvas").transform);
+            t.SetSiblingIndex(t.parent.childCount - 2); // put behind windows
             
-            binaryFormatter.Serialize(memoryStream, GetScoreDict());
-            return memoryStream.ToArray();
-        }
-
-        private Dictionary<int, int> DeserializeScoreDict(byte[] buffer)
-        {
-            var binaryFormatter = new BinaryFormatter();
-            var memoryStream = new MemoryStream();
-            
-            memoryStream.Write(buffer, 0, buffer.Length);
-
-            return (Dictionary<int, int>) binaryFormatter.Deserialize(memoryStream);
-        }
-
-        public int GetActorNumberOfRank(int rank)
-        {
-            return _actorNumberOrder[rank - 1];
-        }
-
-        public string GetNameOfRank(int rank)
-        {
-            return PhotonNetwork.CurrentRoom.Players[GetActorNumberOfRank(rank)].NickName;
-        }
-
-        private void UpdateScores(Dictionary<int, int> scoreDict)
-        {
-            foreach (var pair in scoreDict)
-                _entriesByActorNumber[pair.Key].Score = pair.Value;
+            MetaUtility.SyncRectTransforms(defaultPosition, t);
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
             {
-                if (!_changedSinceLastUpdate)
-                    return;
-                
-                stream.SendNext(GetScoreDict());
+                var message = new object[] {_cellChanges, _rowChanges};
+                var serializedMessage = NetworkUtility.Serialize(message);
+                stream.SendNext(serializedMessage);
+                _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
+                _rowChanges = new Dictionary<int, RowChangeDescription>();
             }
             else
             {
-                var scoreDict = (Dictionary<int, int>) stream.ReceiveNext();
-                UpdateScores(scoreDict);
-                RefreshOrder();
+                var messageEncoded = (byte[]) stream.ReceiveNext();
+                var message = NetworkUtility.Deserialize<object[]>(messageEncoded);
+                _cellChanges = (Dictionary<CellLocation, CellChangeDescription>) message[0];
+                _rowChanges = (Dictionary<int, RowChangeDescription>) message[1];
+                ImplementChanges();
             }
         }
-        
-        
-        [SerializeField] private Vector2 offset = new Vector2(0, 0);
 
-        public void OnEnable()
+        public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            var t = GetComponent<RectTransform>();
-            t.SetParent(GameObject.FindWithTag("Canvas").transform);
-            t.anchoredPosition = offset;
-            t.localScale = Vector3.one;
-            
+            TryRemoveRowByActorNumber(otherPlayer.ActorNumber);
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            AddRow(newPlayer.ActorNumber);
+        }
+
+        private void SortRows(string sortingColumnName, bool reverse = false)
+        {
+            _rows.Sort(new RowComparer(sortingColumnName, reverse));
+
+            for (var i = 0; i < _rows.Count; i++) // physically sort them in scene
+                _rows[i].transform.SetSiblingIndex(i);
+
+            foreach (var pair in _lockedRowsAndIndices) // put locked rows back
+                pair.Key.transform.SetSiblingIndex(pair.Value);
+
+            if (string.IsNullOrEmpty(_rankColumnName))
+                return;
+
+            for (var i = 0; i < _rows.Count; i++)
+            {
+                var cell = _rows[i].GetCell(_rankColumnName);
+                if (cell.IsFloat)
+                    cell.FloatValue = i + 1;
+                else
+                    cell.StringValue = (i + 1).ToString();
+            }
+        }
+
+        private void SortRows()
+        {
+            SortRows(_sortingColumnName, reverseRank);
+        }
+
+        private void SetUpTitle()
+        {
+            title.BuildFromColumns(_columns);
+        }
+
+        public void LockRowAtIndex(int index)
+        {
+            var row = _rows[index];
+            row.locked = true;
+            _lockedRowsAndIndices.Add(row, index);
+            AddRowChange(row.actorNumber, true);
+        }
+
+        public void LockRow(ScoreboardRow row)
+        {
+            LockRowAtIndex(_rows.IndexOf(row));
+        }
+
+        public void LockRowByActorNumber(int actorNumber)
+        {
+            LockRow(_rowByActorNumber[actorNumber]);
+        }
+
+        public void BuildFromColumns()
+        {
+            SetUpTitle();
             foreach (var pair in PhotonNetwork.CurrentRoom.Players)
             {
                 var actorNumber = pair.Key;
-                
-                var entry = Instantiate(scoreboardEntryPrefab, transform).GetComponent<ScoreboardEntry>();
-                entry.Name = pair.Value.NickName;
-                entry.Score = 0;
-                entry.ActorNumber = actorNumber;
-                
-                _entriesByActorNumber.Add(actorNumber, entry);
-                _actorNumberOrder.Add(actorNumber);
+                AddRow(actorNumber);
             }
 
-            RefreshOrder();
+            built = true;
+            print("Scoreboard built");
         }
 
-        public void RemoveEntry(int actorNumber)
+        public void AddRow(int actorNumber)
         {
-            _actorNumberOrder.Remove(actorNumber);
+            var rowObject = Instantiate(rowPrefab.gameObject, rowParent);
+
+            var rowComponent = rowObject.GetComponent<ScoreboardRow>();
+            rowComponent.actorNumber = actorNumber;
+            rowComponent.BuildFromColumns(_columns);
+
+            _rowByActorNumber.Add(actorNumber, rowComponent);
+            _rows.Add(rowComponent);
+
+            SortRows();
+        }
+
+        public void TryRemoveRowByActorNumber(int actorNumber)
+        {
+            var row = _rowByActorNumber[actorNumber];
+            TryRemoveRow(row);
+        }
+
+        public void TryRemoveRowAtIndex(int index)
+        {
+            var row = _rows[index];
+            TryRemoveRow(row);
+        }
+
+        public void TrySetExpand(bool expand)
+        {
+            if (positionLocked)
+                return;
             
-            Destroy(_entriesByActorNumber[actorNumber].gameObject);
-            _entriesByActorNumber.Remove(actorNumber);
+            var rectTransform = GetComponent<RectTransform>();
+            MetaUtility.SyncRectTransforms(
+                expand ? expandedPosition : defaultPosition, 
+                rectTransform);
+        }
+
+        public void TryRemoveRow(ScoreboardRow row)
+        {
+            if (row.locked)
+                return;
             
-            RefreshOrder();
+            Destroy(row.gameObject);
+            _rows.Remove(row);
+            _rowByActorNumber.Remove(row.actorNumber);
+            _lockedRowsAndIndices.Remove(row);
         }
 
-        public void ChangeScore(int actorNumber, float newScore)
+        public void AddToCell(ScoreboardCell cell, float addition)
         {
-            _entriesByActorNumber[actorNumber].Score = newScore;
-            _changedSinceLastUpdate = true;
-            RefreshOrder();
+            if (!cell.IsFloat)
+                throw new ArgumentException("Cell is not numeric");
+
+            cell.FloatValue += addition;
+            AddCellChange(cell.CellLoc, cell.Value);
         }
 
-        public void AddToScore(int actorNumber, float addition)
+        public void AddToCellAtIndex(int index, string columnName, float addition)
         {
-            _entriesByActorNumber[actorNumber].Score += addition;
-            _changedSinceLastUpdate = true;
-            RefreshOrder();
+            AddToCell(_rows[index].GetCell(columnName), addition);
         }
 
-        private void RefreshOrder()
+        public void AddToCellByActorNumber(int actorNumber, string columnName, float addition)
         {
-            _actorNumberOrder.Sort(new EntryComparerByActorNumber(_entriesByActorNumber));
+            AddToCell(_rowByActorNumber[actorNumber].GetCell(columnName), addition);
+        }
 
-            for (var i = 0; i < _actorNumberOrder.Count; i++)
+        public void SetCellByActorNumber(int actorNumber, string columnName, object value, bool registerChanges = true)
+        {
+            SetCell(_rowByActorNumber[actorNumber].GetCell(columnName), value, registerChanges);
+        }
+
+        public void SetCellAtIndex(int index, string columnName, object value, bool registerChanges = true)
+        {
+            SetCell(_rows[index].GetCell(columnName), value, registerChanges);
+        }
+
+        public void SetCell(ScoreboardCell cell, object value, bool registerChanges = true)
+        {
+            switch (value)
             {
-                var actorNumber = _actorNumberOrder[i];
-                var entry = _entriesByActorNumber[actorNumber];
+                case int intValue:
+                    
+                    SetCell(cell, (float) intValue);
+                    break;
+                    
+                case float floatValue:
+
+                    if (!cell.IsFloat)
+                        throw new ArgumentException("Cannot assign float to string cell!");
+
+                    cell.FloatValue = floatValue;
+                    break;
+
+                case string stringValue:
+
+                    if (cell.IsFloat)
+                        throw new ArgumentException("Cannot assign string to float cell!");
+
+                    cell.StringValue = stringValue;
+                    break;
+
+                default:
+
+                    throw new ArgumentException("Value must be either float or string!");
+            }
+
+            if (cell.Column.Name.Equals(_sortingColumnName))
+                SortRows();
+
+            if (registerChanges)
+                AddCellChange(cell.CellLoc, value);
+        }
+
+        public void SetRowColor(ScoreboardRow row, Color color)
+        {
+            row.SetAllCellColors(color);
+            AddRowChange(row.actorNumber, newColor: color);
+        }
+
+        public void SetRowColorAtIndex(int index, Color color)
+        {
+            SetRowColor(_rows[index], color);
+        }
+
+        public void SetRowColorByActorNumber(int actorNumber, Color color)
+        {
+            SetRowColor(_rowByActorNumber[actorNumber], color);
+        }
+
+        public void ResetRowColor(ScoreboardRow row)
+        {
+            row.ResetAllCellColors();
+            AddRowChange(row.actorNumber, null, row.defaultColor);
+        }
+
+        public void ResetRowColorByActorNumber(int actorNumber)
+        {
+            ResetRowColor(_rowByActorNumber[actorNumber]);
+        }
+
+        public void ResetRowColorAtIndex(int index)
+        {
+            ResetRowColor(_rows[index]);
+        }
+
+        public void SetNewColumns(List<ScoreboardColumn> columns)
+        {
+            MetaUtility.DestroyAllChildren(rowParent);
+
+            _columns = columns;
+            BuildFromColumns();
+        }
+
+        public void AddColumn(ScoreboardColumn column, int index = -1)
+        {
+            foreach (var row in _rows)
+                row.AddCell(column, index);
+        }
+
+        private void AddRowChange(int actorNumber, bool? locked = null, Color? newColor = null)
+        {
+            var description = new RowChangeDescription
+            {
+                locked = locked,
+                newColor = newColor
+            };
+            
+            if (!_rowChanges.ContainsKey(actorNumber))
+                _rowChanges.Add(actorNumber, description);
+            else
+                _rowChanges[actorNumber] = description;
+        }
+
+        private void AddCellChange(CellLocation location, object newValue = null)
+        {
+            var description = new CellChangeDescription
+            {
+                newValue = newValue
+            };
+
+            if (!_cellChanges.ContainsKey(location))
+                _cellChanges.Add(location, description);
+            else
+                _cellChanges[location] = description;
+        }
+
+        private void ImplementChanges()
+        {
+            var cellChangesCopy = new Dictionary<CellLocation, CellChangeDescription>(_cellChanges);
+            var rowChangesCopy = new Dictionary<int, RowChangeDescription>(_rowChanges);
+            
+            foreach (var pair in cellChangesCopy)
+            {
+                var location = pair.Key;
+                var description = pair.Value;
                 
-                entry.transform.SetSiblingIndex(i + 1);
-                entry.Rank = i + 1;
+                if (description.newValue != null)
+                    SetCellByActorNumber(location.ActorNumber, location.ColumnName, description.newValue);
+            }
+            
+            foreach (var pair in rowChangesCopy)
+            {
+                var actorNumber = pair.Key;
+                var description = pair.Value;
+                
+                if (description.locked == true)
+                    LockRowByActorNumber(actorNumber);
+                
+                if (description.newColor != null)
+                    SetRowColorByActorNumber(actorNumber, (Color) description.newColor);
+            }
+            
+            _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
+            _rowChanges = new Dictionary<int, RowChangeDescription>();
+        }
+
+        public void SetRankColumn(string columnName)
+        {
+            _rankColumnName = columnName;
+            SortRows();
+        }
+
+        public void NameRows(string columnName)
+        {
+            foreach (var row in _rows)
+            {
+                var actorNumber = row.actorNumber;
+                var nickName = PhotonNetwork.CurrentRoom.Players[actorNumber].NickName;
+                row.GetCell(columnName).StringValue = nickName;
             }
         }
 
-        public void SetEntryColor(int actorNumber, Color color)
+        public void Update()
         {
-            _entriesByActorNumber[actorNumber].SetColor(color);
+            KeyCheck();
         }
 
-        public void ResetEntryColor(int actorNumber)
+        private void KeyCheck()
         {
-            _entriesByActorNumber[actorNumber].ResetColor();
+            if (Input.GetKeyDown(ExpandKey))
+                TrySetExpand(true);
+            else if (Input.GetKeyUp(ExpandKey))
+                TrySetExpand(false);
+        }
+
+        public void ExpandForGameEndRpc(Player player)
+        {
+            photonView.RPC("ExpandForGameEnd", player);
+        }
+
+        [PunRPC]
+        public void ExpandForGameEnd()
+        {
+            TrySetExpand(true);
+            positionLocked = true;
+            GameObject.FindWithTag("Hud").SetActive(false);
         }
     }
 }

@@ -7,10 +7,10 @@ namespace UI
 {
     public class ServerSettingsHandler : MonoBehaviour
     {
+        [SerializeField] private OptionsSliderNumeric gameLengthOptionsSlider;
         [SerializeField] private OptionsSlider gameModeOptionsSlider;
         [SerializeField] private OptionsSlider mapOptionsSlider;
         [SerializeField] private OptionsSliderNumeric maxPlayersOptionsSlider;
-        [SerializeField] private OptionsSliderNumeric gameLengthOptionsSlider;
 
         [SerializeField] private InputField nameInputField;
 
@@ -22,7 +22,8 @@ namespace UI
                 {"gameMode", (GameModeEnum) gameModeOptionsSlider.enumWrapper.Index},
                 {"map", (MapEnum) mapOptionsSlider.enumWrapper.Index},
                 {"maxPlayers", (byte) maxPlayersOptionsSlider.slider.value},
-                {"gameLength", (int) gameLengthOptionsSlider.slider.value}
+                {"gameLength", (int) gameLengthOptionsSlider.slider.value},
+                {"commonRandomSeed", Random.Range(0, 1000)}
             };
 
             return result;

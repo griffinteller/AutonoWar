@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Win32;
+using GameDirection;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -9,15 +10,30 @@ namespace UI
 {
     public class HudUi : MonoBehaviour
     {
+        private readonly Dictionary<string, GameObject> _windows = new Dictionary<string, GameObject>();
+        public List<UnityEvent> events;
+        public List<KeyCode> hotKeys;
 
         public Transform windowParent;
-        public List<KeyCode> hotKeys;
-        public List<UnityEvent> events;
+        public HudElement[] elementEnums;
+        public GameObject[] elementObjects;
 
-        private readonly Dictionary<string, GameObject> _windows = new Dictionary<string, GameObject>();
+        private GameObject _hudObject;
+
+        private static readonly HashSet<HudElement> CompleteElementSet = new HashSet<HudElement>
+        {
+            HudElement.Clock
+        };
+
+        public void Awake()
+        {
+            _hudObject = GameObject.FindWithTag("Hud");
+        }
 
         public void Start()
         {
+            BuildFromDescription(GameObject.FindWithTag("GameDirector").GetComponent<GameDirector>().HudElements);
+            
             foreach (Transform window in windowParent)
             {
                 _windows.Add(window.name, window.gameObject);
@@ -37,7 +53,6 @@ namespace UI
 
         public void ToggleWindowOpen(string windowName)
         {
-            print(windowName);
             var window = _windows[windowName];
             SetWindowOpen(window, !window.activeSelf);
         }
@@ -52,16 +67,30 @@ namespace UI
             for (var i = 0; i < hotKeys.Count; i++)
             {
                 var keycode = hotKeys[i];
-                if (Input.GetKeyDown(keycode))
-                {
-                    events[i].Invoke();
-                }
+                if (Input.GetKeyDown(keycode)) events[i].Invoke();
             }
         }
 
         public static void ReturnToMainMenu()
         {
+            if (PhotonNetwork.InRoom)
+                PhotonNetwork.LeaveRoom();
+            
             SceneManager.LoadScene(0);
         }
+
+        public void BuildFromDescription(HashSet<HudElement> elements)
+        {
+            foreach (var element in CompleteElementSet)
+                if (!elements.Contains(element))
+                {
+                    elementObjects[Array.IndexOf(elementEnums, element)].SetActive(false);
+                }
+        }
+    }
+
+    public enum HudElement
+    {
+        Clock
     }
 }

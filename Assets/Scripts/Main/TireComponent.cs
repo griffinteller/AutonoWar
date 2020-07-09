@@ -1,18 +1,16 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Main
 {
     public class TireComponent : MonoBehaviour
     {
+        public float baseSteerAngle;
+
+        public float bearing;
 
         //public WheelCollider WheelCollider { get; set; }
         public WheelCollider WheelCollider;
-        
-        public float bearing;
 
-        public float baseSteerAngle;
-        
 
         public void ResetTireSteering()
         {

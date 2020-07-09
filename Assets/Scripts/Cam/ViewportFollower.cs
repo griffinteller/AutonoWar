@@ -1,13 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Cam
 {
     public class ViewportFollower : MonoBehaviour
     {
-        public RectTransform viewport;
-
         private Camera _camera;
+        public RectTransform viewport;
 
         public void Start()
         {

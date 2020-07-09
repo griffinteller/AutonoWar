@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Main;
 using Networking;
@@ -18,11 +19,27 @@ namespace GameDirection
         Ended,
         WaitingForTransition
     }
+
     public abstract class GameDirector : MonoBehaviourPunCallbacks
     {
-        public abstract GameModeEnum GameMode { get; }
+        public virtual Dictionary<MapEnum, Vector3> BaseStartingPositions => new Dictionary<MapEnum, Vector3>
+        {
+            {MapEnum.Highlands, new Vector3(-280, 0, -410)},
+            {MapEnum.Desert, new Vector3(98, 0, -130)}
+        };
 
-        public GameState gameState;
+        private bool _fullyLoaded;
+
+        public abstract GameModeEnum GameMode { get; }
+        public virtual HashSet<HudElement> HudElements => new HashSet<HudElement>();
+        public virtual MapEnum[] AllowedMaps => MapEnumWrapper.DefaultMaps;
+        public MapEnum CurrentMap { get; set; }
+        public PlayerConnection playerConnection;
+
+        public void Awake()
+        {
+            playerConnection = FindObjectOfType<PlayerConnection>();
+        }
 
         public bool FullyLoaded
         {
@@ -35,36 +52,34 @@ namespace GameDirection
             }
         }
 
-        private bool _fullyLoaded;
+        protected virtual void OnFullyLoaded()
+        {
+        }
 
-        protected virtual void OnFullyLoaded() {}
-
-        public virtual Dictionary<int, Vector3> GetStartingPositions(Vector3 center)
+        public virtual Dictionary<int, PositionRotationPair> GetStartingPositionsAndRotations()
         {
             const float radius = 10f;
             const float distanceOffGround = 1f;
+            var center = BaseStartingPositions[CurrentMap];
             var players = PhotonNetwork.CurrentRoom.Players;
-            
-            var playersSorted = new List<Player>();
-            foreach (var pair in players)
-            {
-                playersSorted.Add(pair.Value);
-            }
-            playersSorted.Sort(
-                Comparer<Player>.Create((x, y) => x.ActorNumber.CompareTo(y.ActorNumber))
-                );
 
-            var result = new Dictionary<int, Vector3>();
-            for (var i = 0; i < playersSorted.Count; i++)
+            var playersSorted = NetworkUtility.PlayerArrayByActorNumber();
+
+            var result = new Dictionary<int, PositionRotationPair>();
+            for (var i = 0; i < playersSorted.Length; i++)
             {
                 var player = playersSorted[i];
-                
+                var resultElement = new PositionRotationPair();
+
                 var pos = center;
                 pos.x += radius * Mathf.Cos(2 * Mathf.PI / players.Count * i);
                 pos.z += radius * Mathf.Sin(2 * Mathf.PI / players.Count * i);
-                pos.y = TerrainUtility.GetClosestCurrentTerrain(center).SampleHeight(center) + distanceOffGround;
+                pos.y = TerrainUtility.GetClosestCurrentTerrain(pos).SampleHeight(pos) + distanceOffGround;
+                
+                resultElement.position = pos;
+                resultElement.rotation = Quaternion.Euler(0, 360f / players.Count * i - 90, 0);
 
-                result.Add(player.ActorNumber, pos);
+                result.Add(player.ActorNumber, resultElement);
             }
 
             return result;
@@ -76,32 +91,20 @@ namespace GameDirection
             {
                 new EscapeMenuButtonInfo("Main Menu", MetaUtility.UnityEventFromFunc(HudUi.ReturnToMainMenu))
             };
-        } 
-
-        protected void RaiseStartGameEvent()
-        {
-            RaiseEventDefaultSettings(PhotonEventCode.StartingGame);
-            gameState = GameState.WaitingForTransition;
-        }
-
-        protected void RaiseEndGameEvent()
-        {
-            RaiseEventDefaultSettings(PhotonEventCode.EndingGame);
-            gameState = GameState.WaitingForTransition;
         }
 
         public static void RaiseEventDefaultSettings(PhotonEventCode eventCode, object data = null)
         {
             var content = data;
-            var raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            var sendOptions = new SendOptions { Reliability = true };
+            var raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
+            var sendOptions = new SendOptions {Reliability = true};
             PhotonNetwork.RaiseEvent((byte) eventCode, content, raiseEventOptions, sendOptions);
         }
 
         public static void ResetLocalRobot()
         {
             var playerConnectionObj = GameObject.FindWithTag("ConnectionObject");
-            
+
             if (playerConnectionObj)
             {
                 var playerConnection = playerConnectionObj.GetComponent<PlayerConnection>();
@@ -114,4 +117,4 @@ namespace GameDirection
             }
         }
     }
-} 
+}

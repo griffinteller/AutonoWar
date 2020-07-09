@@ -43,11 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a56882be3f4a419451ddd12cf704eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerConnection: {fileID: 0}
+  gameState: 0
   currentItActorNumber: -1
-  lastItActorNumber: -1
   itTint: {r: 1, g: 0, b: 0, a: 1}
+  lastItActorNumber: -1
   scoreboardEntryItColor: {r: 1, g: 0, b: 0, a: 0.5803922}
   scoreboardOffset: {x: 0, y: 0, z: 0}
-  tagCooldownTime: 10
-  scoreboardPrefab: {fileID: 5456218985899944062, guid: e7da09588e0f2bb4aabbf91a7730da0e,
+  scoreboardPrefab: {fileID: 3406339999369865286, guid: e7da09588e0f2bb4aabbf91a7730da0e,
     type: 3}
+  tagCooldownTime: 10
