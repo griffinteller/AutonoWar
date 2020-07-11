@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Building;
 using Photon.Pun;
 using UnityEngine;
+using Utility;
 
 namespace Main
 {
@@ -29,28 +30,6 @@ namespace Main
             BuildRobot(structure);
         }
 
-        private void ReplaceColliders()
-        {
-            var newColliderRelativeBounds = new Bounds(Vector3.zero, Vector3.zero);
-            var buffer = new Vector3(1, 0, 1) * 2 * ColliderBuffer;
-
-            foreach (var boxCollider in structureRoot.GetComponentsInChildren<BoxCollider>())
-            {
-                var colliderBounds = new Bounds(
-                    boxCollider.transform.localPosition,
-                    boxCollider.size + buffer);
-
-                newColliderRelativeBounds.Encapsulate(colliderBounds);
-
-                Destroy(boxCollider);
-            }
-
-            var newBoxCollider = structureRoot.gameObject.AddComponent<BoxCollider>();
-            newBoxCollider.center = Vector3.zero;
-            newBoxCollider.size = newColliderRelativeBounds.size;
-            _robotRigidbody.centerOfMass = Vector3.zero;
-        }
-
         public void BuildRobot(RobotStructure structure = null)
         {
             LoadPartListIntoDict();
@@ -62,7 +41,6 @@ namespace Main
             }
             
             CreateParts(structure);
-            ReplaceColliders();
 
             robotMain.OnPartsLoaded();
         }
