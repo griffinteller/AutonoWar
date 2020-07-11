@@ -66,5 +66,10 @@ namespace Utility
             foreach (Transform child in gameObject.transform)
                 UnityEngine.Object.DestroyImmediate(child.gameObject);
         }
+
+        public static Vector3 Vector3Abs(Vector3 vector)
+        {
+            return new Vector3(Mathf.Abs(vector.x), Mathf.Abs(vector.y), Mathf.Abs(vector.y));
+        }
     }
 }
