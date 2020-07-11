@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using UI;
 using UnityEngine;
 using Utility;
@@ -12,6 +13,7 @@ namespace Building
 
         private BuildObjectComponent _currentItemBuildComponent;
         private GameObject _objectLastClickedOn;
+        private string originalName;
         public GameObject currentItemPrefab;
 
         public bool interactable; // can the player currently place blocks?
@@ -20,6 +22,8 @@ namespace Building
         public void Start()
         {
             SetCurrentObject(currentItemPrefab); // updates the build component reference
+            var buildData = FindObjectOfType<CrossSceneDataContainer>();
+            originalName = (string) buildData.data["robotName"];  // if we renamed, this was the original name
         }
 
         public void SetCurrentObject(GameObject prefab)
@@ -141,36 +145,29 @@ namespace Building
             return com;
         }
 
-        public void SaveDesign()
+        public void SaveDesign(string robotName)
         {
+            if (originalName != null)  // if we aren't creating a new robot, delete the old file
+                File.Delete(SystemUtility.GetAndCreateRobotsDirectory() + originalName + ".json");
+            
             var robotCenterOfMass = GetWorldCenterOfMass();
             var parts = LoadParts();
 
             var structure = new RobotStructure(parts, robotCenterOfMass);
             var structureJson = JsonUtility.ToJson(structure);
 
-            var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName, FileMode.Create,
+            var file = new FileStream(
+                SystemUtility.GetAndCreateRobotsDirectory() + robotName + ".json", 
+                FileMode.Create,
                 FileAccess.Write);
             var writer = new StreamWriter(file);
 
             writer.Write(structureJson);
             writer.Close();
-        }
+            
+            PlayerPrefs.SetString(PlayerPrefKeys.SelectedRobotNameKey, robotName); // set selected robot
 
-        public static RobotStructure GetRobotStructure()
-        {
-            var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + RobotFileName,
-                FileMode.Open,
-                FileAccess.Read);
-
-            var fileReader = new StreamReader(file);
-
-            var json = fileReader.ReadToEnd();
-            var structure = JsonUtility.FromJson<RobotStructure>(json);
-
-            fileReader.Close();
-
-            return structure;
+            originalName = robotName;  // if we do a second rename, we must delete our new file
         }
     }
 }

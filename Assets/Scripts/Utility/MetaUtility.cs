@@ -8,6 +8,8 @@ namespace Utility
 {
     public static class MetaUtility
     {
+        public const string BuildSceneName = "BuildScene";
+        
         public static T[] GetComponentsInProperChildren<T>(GameObject obj)
             where T : Component
         {

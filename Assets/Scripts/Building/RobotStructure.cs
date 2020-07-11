@@ -38,6 +38,7 @@ namespace Building
     [Serializable]
     public class RobotStructure
     {
+        public string name;
         public RobotPart[] parts;
 
         public RobotStructure(List<BuildObjectComponent> partsBuildComponents, Vector3 robotCenterOfMass)
@@ -56,6 +57,12 @@ namespace Building
         public static RobotStructure FromJson(string json)
         {
             return JsonUtility.FromJson<RobotStructure>(json);
+        }
+
+        public static RobotStructure FromSingleBuildComponent(BuildObjectComponent component)
+        {
+            var buildComponents = new List<BuildObjectComponent> {component};
+            return new RobotStructure(buildComponents, Vector3.zero);
         }
     }
 }

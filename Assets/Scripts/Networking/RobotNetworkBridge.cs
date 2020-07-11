@@ -30,7 +30,7 @@ namespace Networking
 
                 Camera.main.GetComponent<CameraMotionScript>().SetCenterObject(gameObject);
 
-                var robotStructure = BuildHandler.GetRobotStructure();
+                var robotStructure = DesignLoaderBuild.GetRobotStructure();
                 photonView.RPC(
                     "BuildRobotRpc",
                     RpcTarget.AllBuffered,

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Building;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
+using Utility;
 
 namespace Main
 {
@@ -57,10 +59,8 @@ namespace Main
             _robotRigidbody = GetComponent<Rigidbody>();
 
             if (structure == null)
-            {
-                structure = BuildHandler.GetRobotStructure();
-            }
-            
+                structure = DesignLoaderBuild.GetRobotStructure();
+
             CreateParts(structure);
             ReplaceColliders();
 

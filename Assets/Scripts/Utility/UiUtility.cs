@@ -8,7 +8,6 @@ namespace Utility
 {
     public class UiUtility : MonoBehaviour
     {
-        private const string NickNameKey = "NickName";
         private readonly List<CanvasGroup> _modalWindows = new List<CanvasGroup>();
 
         private readonly List<CanvasGroup> _panels = new List<CanvasGroup>();
@@ -63,7 +62,7 @@ namespace Utility
 
         public void StoreNickName(InputField inputField)
         {
-            PlayerPrefs.SetString(NickNameKey, inputField.text);
+            PlayerPrefs.SetString(PlayerPrefKeys.NickNameKey, inputField.text);
         }
 
         public void DisableAllPanels()

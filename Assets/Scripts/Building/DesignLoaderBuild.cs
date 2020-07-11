@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
+using Utility;
 
 namespace Building
 {
@@ -10,20 +12,17 @@ namespace Building
             new Dictionary<string, BuildObjectComponent>();
 
         [SerializeField] private List<BuildObjectComponent> partList; // list of possible parts
-        [SerializeField] private GameObject rootCube; // starting cube if new robot
+        [SerializeField] private BuildObjectComponent rootCube; // starting cube if new robot
+
+        [CanBeNull] public string currentRobotName;
 
         public void Start()
         {
-            LoadComponentListIntoDict();
+            var buildData = FindObjectOfType<CrossSceneDataContainer>();
+            currentRobotName = (string) buildData.data["robotName"];
 
-            try
-            {
-                CreateParts();
-            }
-            catch (IOException)
-            {
-                Instantiate(rootCube, transform);
-            }
+            LoadComponentListIntoDict();
+            CreateParts();
         }
 
         private void LoadComponentListIntoDict()
@@ -39,7 +38,12 @@ namespace Building
 
         private void CreateParts()
         {
-            var structure = BuildHandler.GetRobotStructure();
+            RobotStructure structure;
+            
+            if (currentRobotName == null)
+                structure = RobotStructure.FromSingleBuildComponent(rootCube);
+            else 
+                structure = GetRobotStructure(currentRobotName);
 
             foreach (var part in structure.parts)
             {
@@ -49,6 +53,25 @@ namespace Building
 
                 obj.GetComponent<BuildObjectComponent>().LoadInfoFromPartDescription(part);
             }
+        }
+
+        public static RobotStructure GetRobotStructure(string robotName = null)
+        {
+            if (robotName == null)
+                robotName = PlayerPrefs.GetString(PlayerPrefKeys.SelectedRobotNameKey);
+            
+            var file = new FileStream(SystemUtility.GetAndCreateRobotsDirectory() + robotName + ".json",
+                FileMode.Open,
+                FileAccess.Read);
+
+            var fileReader = new StreamReader(file);
+
+            var json = fileReader.ReadToEnd();
+            var structure = JsonUtility.FromJson<RobotStructure>(json);
+
+            fileReader.Close();
+
+            return structure;
         }
     }
 }
