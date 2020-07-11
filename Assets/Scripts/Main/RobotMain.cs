@@ -116,8 +116,9 @@ namespace Main
             TryShowBeacons();
 
             var turtled = CheckUpsideDownAndStuck();
+            var isUpsideDown = _robotBody.up.y < 0; // may me nudged, but shouldn't reset
 
-            if (_scheduledFlipComponent.enabled && !turtled)
+            if (_scheduledFlipComponent.enabled && !isUpsideDown)
                 _scheduledFlipComponent.TryCancelFlip();
 
             else if (!_scheduledFlipComponent.enabled && turtled)
