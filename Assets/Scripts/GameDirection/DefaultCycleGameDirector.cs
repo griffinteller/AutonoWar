@@ -2,12 +2,16 @@
 using Networking;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 
 namespace GameDirection
 {
     public abstract class DefaultCycleGameDirector : GameDirector, IOnEventCallback
     {
         public GameState gameState;
+        public float gameStartTime;
+
+        public float TimeSinceGameStart => Time.time - gameStartTime;
 
         protected virtual void PreGameSetup()
         {
@@ -21,6 +25,7 @@ namespace GameDirection
         protected virtual void GameStartSetup()
         {
             PlayerConnection.SetRobotsKinematic(false);
+            gameStartTime = Time.time;
         }
 
         protected virtual void GameEndSetup()

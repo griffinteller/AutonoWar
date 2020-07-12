@@ -197,7 +197,8 @@ namespace GameDirection
 
             _activePlayers.Remove(actorNumber);
             
-            Scoreboard.SetCellByActorNumber(actorNumber, "Time", _clock.StringValue);
+            Scoreboard.SetCellByActorNumber(actorNumber, "Time", 
+                TimeUtility.GetFormattedTime(TimeSinceGameStart));
             Scoreboard.SetCellByActorNumber(actorNumber, "Dist.", 0);
             Scoreboard.LockRowByActorNumber(actorNumber);
             Scoreboard.SetRowColorByActorNumber(actorNumber, finishedScoreboardRowColor);

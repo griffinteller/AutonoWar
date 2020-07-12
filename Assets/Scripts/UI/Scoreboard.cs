@@ -422,6 +422,8 @@ namespace UI
                     SetRowColorByActorNumber(actorNumber, (Color) description.newColor);
             }
             
+            SortRows();
+            
             _cellChanges = new Dictionary<CellLocation, CellChangeDescription>();
             _rowChanges = new Dictionary<int, RowChangeDescription>();
         }

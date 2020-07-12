@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 
 namespace UI
 {
@@ -18,9 +19,7 @@ namespace UI
             set => SetSeconds(value);
         }
 
-        public string StringValue => ((int) (Seconds / 60)).ToString("D2") 
-                                     + ":" 
-                                     + (Seconds % 60).ToString("00.00");
+        public string StringValue => TimeUtility.GetFormattedTime(Seconds);
 
         public void Stop()
         {
