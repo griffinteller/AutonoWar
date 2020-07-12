@@ -12,5 +12,12 @@ namespace Utility
             var currentEpochTime = (long) (DateTime.UtcNow - EpochStart).TotalSeconds;
             return currentEpochTime;
         }
+
+        public static string GetFormattedTime(float seconds)
+        {
+            return ((int) (seconds / 60)).ToString("D2") 
+                + ":" 
+                + (seconds % 60).ToString("00.00");
+        }
     }
 }
