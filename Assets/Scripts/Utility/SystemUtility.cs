@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using Building;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Utility
@@ -98,6 +102,66 @@ namespace Utility
             var path = GetAndCreateDataDirectory() + AddPlatformSlashes(RobotDirectoryName);
             Directory.CreateDirectory(path);
             return path;
+        }
+
+        public static RobotStructure GetRobotStructureByName(string robotName)
+        {
+            if (string.IsNullOrEmpty(robotName))
+                throw new ArgumentException("Robot name must not be null or empty");
+
+            return GetRobotStructureByPath(GetAndCreateRobotsDirectory() + robotName + ".json");
+        }
+
+        public static RobotStructure GetSelectedRobotStructure()
+        {
+            return GetRobotStructureByName(PlayerPrefs.GetString(PlayerPrefKeys.SelectedRobotNameKey));
+        }
+
+        public static RobotStructure GetRobotStructureByPath(string filePath)
+        {
+            if (!filePath.Substring(filePath.Length - 5).Equals(".json"))
+                throw new ArgumentException("Robot file must be json!");
+            
+            var file = new FileStream(filePath,
+                FileMode.Open,
+                FileAccess.Read);
+
+            var fileReader = new StreamReader(file);
+
+            var json = fileReader.ReadToEnd();
+            var structure = JsonUtility.FromJson<RobotStructure>(json);
+
+            fileReader.Close();
+
+            return structure;
+        }
+        
+        public static RobotStructure[] GetAllRobotStructures()
+        {
+            var robotDirectory = SystemUtility.GetAndCreateRobotsDirectory();
+            var robotFiles = Directory.GetFiles(robotDirectory, 
+                "*.json", 
+                SearchOption.AllDirectories);
+
+            var result = new List<RobotStructure>();
+            foreach (var robotFile in robotFiles)
+            {
+                RobotStructure structure;
+                
+                try
+                {
+                    structure = GetRobotStructureByPath(robotFile);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Could not load robot file: " + e.Message);
+                    continue;
+                }
+                
+                result.Add(structure);
+            }
+
+            return result.ToArray();
         }
     }
 }

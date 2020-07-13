@@ -153,7 +153,7 @@ namespace Building
             var robotCenterOfMass = GetWorldCenterOfMass();
             var parts = LoadParts();
 
-            var structure = new RobotStructure(parts, robotCenterOfMass);
+            var structure = new RobotStructure(robotName, parts, robotCenterOfMass);
             var structureJson = JsonUtility.ToJson(structure);
 
             var file = new FileStream(

@@ -41,8 +41,11 @@ namespace Building
         public string name;
         public RobotPart[] parts;
 
-        public RobotStructure(List<BuildObjectComponent> partsBuildComponents, Vector3 robotCenterOfMass)
+        public RobotStructure(string name, 
+            List<BuildObjectComponent> partsBuildComponents, 
+            Vector3 robotCenterOfMass)
         {
+            this.name = name;
             parts = new RobotPart[partsBuildComponents.Count];
 
             for (var i = 0; i < partsBuildComponents.Count; i++)
@@ -59,10 +62,10 @@ namespace Building
             return JsonUtility.FromJson<RobotStructure>(json);
         }
 
-        public static RobotStructure FromSingleBuildComponent(BuildObjectComponent component)
+        public static RobotStructure FromSingleBuildComponent(string name, BuildObjectComponent component)
         {
             var buildComponents = new List<BuildObjectComponent> {component};
-            return new RobotStructure(buildComponents, Vector3.zero);
+            return new RobotStructure(name, buildComponents, Vector3.zero);
         }
     }
 }

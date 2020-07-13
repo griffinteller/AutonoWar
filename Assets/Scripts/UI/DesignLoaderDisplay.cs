@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
+using Building;
 using JetBrains.Annotations;
 using UnityEngine;
 using Utility;
 
-namespace Building
+namespace UI
 {
-    public class DesignLoaderBuild : MonoBehaviour
+    public class DesignLoaderDisplay : MonoBehaviour
     {
         private readonly Dictionary<string, BuildObjectComponent> _partComponentDict =
             new Dictionary<string, BuildObjectComponent>();
@@ -14,15 +15,14 @@ namespace Building
         [SerializeField] private List<BuildObjectComponent> partList; // list of possible parts
         [SerializeField] private BuildObjectComponent rootCube; // starting cube if new robot
 
-        [CanBeNull] public string currentRobotName;
+        [HideInInspector] public RobotStructure structure;
+        public Vector3 maxDimensions = Vector3.one * 2;
 
         public void Start()
         {
-            var buildData = FindObjectOfType<CrossSceneDataContainer>();
-            currentRobotName = (string) buildData.data["robotName"];
-
             LoadComponentListIntoDict();
             CreateParts();
+            ScaleToFit();
         }
 
         private void LoadComponentListIntoDict()
@@ -38,12 +38,8 @@ namespace Building
 
         private void CreateParts()
         {
-            RobotStructure structure;
-            
-            if (currentRobotName == null)
-                structure = RobotStructure.FromSingleBuildComponent(currentRobotName, rootCube);
-            else 
-                structure = SystemUtility.GetRobotStructureByName(currentRobotName);
+            if (structure == null)
+                structure = SystemUtility.GetSelectedRobotStructure();
 
             foreach (var part in structure.parts)
             {
@@ -53,6 +49,15 @@ namespace Building
 
                 obj.GetComponent<BuildObjectComponent>().LoadInfoFromPartDescription(part);
             }
+        }
+        
+        private void ScaleToFit()
+        {
+            var meshSize = MeshUtility.GetCompoundMeshSize(gameObject);
+            var differenceFromDesiredSize = meshSize - maxDimensions;
+            var axis = MetaUtility.ArgMax(differenceFromDesiredSize);
+            var ratio = maxDimensions[axis] / meshSize[axis];
+            transform.localScale *= ratio;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Main
             _robotRigidbody = GetComponent<Rigidbody>();
 
             if (structure == null)
-                structure = DesignLoaderBuild.GetRobotStructure();
+                structure = SystemUtility.GetSelectedRobotStructure();
 
             CreateParts(structure);
             ReplaceColliders();

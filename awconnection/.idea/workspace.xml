@@ -2,8 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e286f8c4-650d-46b9-a05d-cf5696303101" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/awconnection.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/awconnection.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Assets/Scripts/UI/DesignLoaderDisplay.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Assets/Scripts/UI/DesignLoaderDisplay.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Assets/Scripts/UI/RobotDisplay.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Assets/Scripts/UI/RobotDisplay.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Building/BuildHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Building/BuildHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Building/DesignLoaderBuild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Building/DesignLoaderBuild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Building/RobotStructure.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Building/RobotStructure.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Main/DesignLoaderPlay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Main/DesignLoaderPlay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Utility/MeshUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Utility/MeshUtility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Utility/MetaUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Utility/MetaUtility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Utility/SystemUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Utility/SystemUtility.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +60,7 @@
       <updated>1594309295453</updated>
       <workItem from="1594309302876" duration="1226000" />
       <workItem from="1594317311621" duration="861000" />
+      <workItem from="1594578210718" duration="61000" />
     </task>
     <servers />
   </component>

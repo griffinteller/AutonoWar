@@ -3,6 +3,7 @@ using Cam;
 using Main;
 using Photon.Pun;
 using UnityEngine;
+using Utility;
 
 namespace Networking
 {
@@ -30,7 +31,7 @@ namespace Networking
 
                 Camera.main.GetComponent<CameraMotionScript>().SetCenterObject(gameObject);
 
-                var robotStructure = DesignLoaderBuild.GetRobotStructure();
+                var robotStructure = SystemUtility.GetSelectedRobotStructure();
                 photonView.RPC(
                     "BuildRobotRpc",
                     RpcTarget.AllBuffered,

@@ -68,5 +68,45 @@ namespace Utility
             foreach (Transform child in gameObject.transform)
                 UnityEngine.Object.DestroyImmediate(child.gameObject);
         }
+
+        public static int ArgMin(Vector3 vector)
+        {
+            var min = vector.x;
+            var index = 0;
+
+            if (vector.y < min)
+            {
+                min = vector.y;
+                index = 1;
+            }
+            
+            if (vector.z < min)
+            {
+                min = vector.z;
+                index = 2;
+            }
+
+            return index;
+        }
+
+        public static int ArgMax(Vector3 vector)
+        {
+            var max = vector.x;
+            var index = 0;
+
+            if (vector.y > max)
+            {
+                max = vector.y;
+                index = 1;
+            }
+            
+            if (vector.z > max)
+            {
+                max = vector.z;
+                index = 2;
+            }
+
+            return index;
+        }
     }
 }
