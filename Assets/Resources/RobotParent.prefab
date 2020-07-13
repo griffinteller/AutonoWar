@@ -190,7 +190,7 @@ MonoBehaviour:
   gamePartList:
   - {fileID: 567264566145193179, guid: 52e8c1fd7f6b2404fb227d15c8ecc7e8, type: 3}
   - {fileID: 5299458965186968501, guid: 0f865f8719734ee4abcf72f52d288e92, type: 3}
-  - {fileID: 2342486262294323141, guid: 0796e104400d28744b1992392d73c9f3, type: 3}
+  - {fileID: 9126678377298066390, guid: 0796e104400d28744b1992392d73c9f3, type: 3}
   robotMain: {fileID: 3365832499811330419}
   structureRoot: {fileID: 171596509867255858}
   tireMeshRoot: {fileID: 7147369648861061552}
