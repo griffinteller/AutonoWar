@@ -203,8 +203,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.31299046, y: 0.9060723, z: 0.9030622}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.31299046, y: 0.9229157, z: 0.9030622}
+  m_Center: {x: 0, y: -0.22177482, z: 0}
 --- !u!114 &5573408519385158023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,8 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2211cf0b3c94b189ae6cc6794db361b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removable: 1
-  partName: BasicTire
   mass: 20
+  partName: BasicTire
+  removable: 1
   collider: {fileID: 2160681236945319564}
   tireName: 

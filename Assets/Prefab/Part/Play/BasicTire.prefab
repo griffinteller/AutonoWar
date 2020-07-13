@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 3923196539191495623}
   - component: {fileID: 3226723001406992128}
   - component: {fileID: 4734048834668821019}
+  - component: {fileID: 8195048015080138190}
   m_Layer: 0
   m_Name: BasicTire
   m_TagString: Untagged
@@ -235,8 +236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782460a61c9c454b9fda77e87e8e3e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerMesh: {fileID: 212465993580246236}
   _tireComponent: {fileID: 4734048834668821019}
+  innerMesh: {fileID: 212465993580246236}
   tireMeshRoot: {fileID: 0}
   wheelCollider: {fileID: 0}
 --- !u!114 &4734048834668821019
@@ -251,5 +252,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1416999b371041a993ba1d4cc6fa7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bearing: 0
   baseSteerAngle: 0
+  bearing: 0
+  WheelCollider: {fileID: 0}
+--- !u!65 &8195048015080138190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5299458965186968501}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3406933, y: 0.42197776, z: 0.9126946}
+  m_Center: {x: 0, y: 0, z: 0}
