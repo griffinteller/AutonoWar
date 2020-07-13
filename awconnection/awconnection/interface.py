@@ -293,6 +293,7 @@ class RobotInfo(object):
         self.is_it = info_dict["isIt"]
         self.gamemode = info_dict["gameMode"]
         self.map = info_dict["map"]
+        self.has_game_started = info_dict["hasGameStarted"]
 
 
 class RobotConnection:

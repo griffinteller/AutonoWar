@@ -20,7 +20,7 @@ set__torque(2000)
 while True:
 
     r.lock_info()
-    print(r.info.gps.destination.x)
+    print(r.info.has_game_started)
     r.unlock_info()
     time.sleep(0.05)
 
