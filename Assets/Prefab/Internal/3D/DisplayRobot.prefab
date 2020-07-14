@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1719555244714194458}
   - component: {fileID: 6560617088860799723}
+  - component: {fileID: 431283598823703013}
   m_Layer: 0
   m_Name: DisplayRobot
   m_TagString: Untagged
@@ -53,3 +54,16 @@ MonoBehaviour:
     name: 
     parts: []
   maxDimensions: {x: 2, y: 2, z: 2}
+--- !u!114 &431283598823703013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4206837705832667361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13c51dc92c04e19a7a554795e83bcb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationsPerSecond: 0.03
