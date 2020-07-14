@@ -114,13 +114,13 @@ namespace Main
 
         private void WindowsUpdate()
         {
+            _robotStateDescription.Update();
+            
             if (!_connected &&
                 !SystemUtility.TryConnectPipeClientWindows((NamedPipeClientStream) _clientStream, out _connected))
                 // we are not connected and we can't connect
                 return; // therefore the API is not running
-
-            _robotStateDescription.Update();
-
+            
             try
             {
                 var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription);
@@ -145,15 +145,15 @@ namespace Main
             _currentWriteTask = Task.Factory.StartNew(ConnectUpdateAndWritePosix, this);
         }
 
-        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescriptionDescription)
+        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescription)
         {
             return Encoding.ASCII.GetBytes(
-                JsonUtility.ToJson(robotDescriptionDescription) + MessageSeparator);
+                JsonUtility.ToJson(robotDescription) + MessageSeparator);
         }
 
-        private static string GetRobotDescription(RobotDescription robotDescriptionDescription)
+        private static string GetRobotDescription(RobotDescription robotDescription)
         {
-            return JsonUtility.ToJson(robotDescriptionDescription);
+            return JsonUtility.ToJson(robotDescription);
         }
 
         private void GetRoomVariables(

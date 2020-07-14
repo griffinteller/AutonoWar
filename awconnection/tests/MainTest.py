@@ -1,8 +1,9 @@
 from awconnection import RobotConnection
+import matplotlib.pyplot as plt
 import time
 
 r = RobotConnection()
-r.connect(0)
+r.connect(3)
 
 
 def set_steering(bearing):
@@ -16,12 +17,11 @@ def set__torque(torque):
     r.set_tire_torque("1", torque)
     r.set_tire_torque("2", -torque)
 
-set__torque(2000)
 while True:
 
     r.lock_info()
-    print(r.info.has_game_started)
-    r.unlock_info()
-    time.sleep(0.05)
 
-r.disconnect()
+    set__torque(1000)
+
+    r.unlock_info()
+    r.disconnect()

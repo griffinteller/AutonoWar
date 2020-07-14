@@ -14,10 +14,13 @@ namespace Utility
     }
 
     [Serializable]
-    public class FloatArrayContainer : ArrayContainer<float>
+    public class FloatArrayContainer
     {
-        public FloatArrayContainer(float[] arr) : base(arr)
+        public float[] array;
+        
+        public FloatArrayContainer(float[] arr)
         {
+            array = arr;
         }
     }
 }
