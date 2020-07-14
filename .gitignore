@@ -73,3 +73,5 @@ crashlytics-build.properties
 .idea/**
 *.idea/**
 awconnection/.idea/
+
+awconnection/tests/
