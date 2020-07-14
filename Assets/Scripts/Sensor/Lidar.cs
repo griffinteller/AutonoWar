@@ -152,7 +152,7 @@ namespace Sensor
             var commands = GetRaycastCommands();
             _raycastsHandle = RaycastCommand.ScheduleBatch(commands, _raycastHits, 1);
         }
-
+        
         [BurstCompile]
         private struct MatrixRotater : IJobParallelFor
         {
