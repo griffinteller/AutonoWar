@@ -81,3 +81,5 @@ awconnection/awconnection.egg-info/
 awconnection/build/
 
 awconnection/dist/
+
+awconnection/awconnection/__pycache__/
