@@ -75,3 +75,9 @@ crashlytics-build.properties
 awconnection/.idea/
 
 awconnection/tests/
+
+awconnection/awconnection.egg-info/
+
+awconnection/build/
+
+awconnection/dist/
