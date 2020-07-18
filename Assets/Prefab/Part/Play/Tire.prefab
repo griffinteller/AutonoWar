@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8097141857374302623}
-  - component: {fileID: 9103153798066449305}
   m_Layer: 0
   m_Name: Tire
   m_TagString: Untagged
@@ -31,25 +30,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9103153798066449305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415604275571315344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f32c176f073427ebf94821631da41e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tireRadius: 1
-  bearingFriction: 0.05
-  forceAppPointDistance: 0
-  isGroundedDistance: 0.05
-  numberOfRaycasts: 10
-  raycastRange: 180
-  springConstant: 35000
-  length: 0
-  motorTorque: 0
-  brakeTorque: 0
