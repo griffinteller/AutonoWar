@@ -131,9 +131,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201311650}
+  - component: {fileID: 201311653}
   - component: {fileID: 201311652}
   - component: {fileID: 201311651}
-  - component: {fileID: 201311653}
+  - component: {fileID: 201311654}
   m_Layer: 0
   m_Name: 4
   m_TagString: Untagged
@@ -167,13 +168,13 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.1499939, y: -0.29999924, z: -1}
+  m_ConnectedAnchor: {x: -1.1499939, y: -0.3000002, z: -1}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
   m_YMotion: 2
   m_ZMotion: 0
-  m_AngularXMotion: 0
+  m_AngularXMotion: 2
   m_AngularYMotion: 0
   m_AngularZMotion: 0
   m_LinearLimitSpring:
@@ -215,7 +216,7 @@ ConfigurableJoint:
   m_YDrive:
     serializedVersion: 3
     positionSpring: 25000
-    positionDamper: 4000
+    positionDamper: 3000
     maximumForce: 3.4028233e+38
   m_ZDrive:
     serializedVersion: 3
@@ -240,15 +241,15 @@ ConfigurableJoint:
     positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
-  m_ProjectionMode: 0
+  m_ProjectionMode: 1
   m_ProjectionDistance: 0.1
-  m_ProjectionAngle: 180
+  m_ProjectionAngle: 1
   m_ConfiguredInWorldSpace: 0
-  m_SwapBodies: 0
+  m_SwapBodies: 1
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 0
-  m_EnablePreprocessing: 1
+  m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!54 &201311652
@@ -261,7 +262,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 20
   m_Drag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -274,12 +275,26 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201311649}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 713bf9b7fe139614a8f6c8a607dfc3a5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &201311654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201311649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2ffc12acee46409d685790ae7c9af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torque: 2000
+  multiplier: 1
 --- !u!1 &278035687
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,7 +846,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533719606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -419.4, y: 43.15, z: -104.3}
+  m_LocalPosition: {x: -419.4, y: 4.84, z: -104.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 842129167}
@@ -956,9 +971,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1921782497}
+  - component: {fileID: 1921782500}
   - component: {fileID: 1921782499}
   - component: {fileID: 1921782498}
-  - component: {fileID: 1921782500}
+  - component: {fileID: 1921782501}
   m_Layer: 0
   m_Name: 3
   m_TagString: Untagged
@@ -992,13 +1008,13 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.1499939, y: -0.29999924, z: -1}
+  m_ConnectedAnchor: {x: 1.1499939, y: -0.3000002, z: -1}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
   m_YMotion: 2
   m_ZMotion: 0
-  m_AngularXMotion: 0
+  m_AngularXMotion: 2
   m_AngularYMotion: 0
   m_AngularZMotion: 0
   m_LinearLimitSpring:
@@ -1040,7 +1056,7 @@ ConfigurableJoint:
   m_YDrive:
     serializedVersion: 3
     positionSpring: 25000
-    positionDamper: 4000
+    positionDamper: 3000
     maximumForce: 3.4028233e+38
   m_ZDrive:
     serializedVersion: 3
@@ -1065,15 +1081,15 @@ ConfigurableJoint:
     positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
-  m_ProjectionMode: 0
+  m_ProjectionMode: 1
   m_ProjectionDistance: 0.1
-  m_ProjectionAngle: 180
+  m_ProjectionAngle: 1
   m_ConfiguredInWorldSpace: 0
-  m_SwapBodies: 0
+  m_SwapBodies: 1
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 0
-  m_EnablePreprocessing: 1
+  m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!54 &1921782499
@@ -1086,7 +1102,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 20
   m_Drag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -1099,12 +1115,26 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921782496}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 713bf9b7fe139614a8f6c8a607dfc3a5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1921782501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921782496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2ffc12acee46409d685790ae7c9af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torque: 2000
+  multiplier: 1
 --- !u!1 &2036411891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,9 +1302,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2060141528}
+  - component: {fileID: 2060141531}
   - component: {fileID: 2060141530}
   - component: {fileID: 2060141529}
-  - component: {fileID: 2060141531}
+  - component: {fileID: 2060141532}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -1308,13 +1339,13 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.1499939, y: -0.29999924, z: 1}
+  m_ConnectedAnchor: {x: -1.1499939, y: -0.3000002, z: 1}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
   m_YMotion: 2
   m_ZMotion: 0
-  m_AngularXMotion: 0
+  m_AngularXMotion: 2
   m_AngularYMotion: 0
   m_AngularZMotion: 0
   m_LinearLimitSpring:
@@ -1356,7 +1387,7 @@ ConfigurableJoint:
   m_YDrive:
     serializedVersion: 3
     positionSpring: 25000
-    positionDamper: 4000
+    positionDamper: 3000
     maximumForce: 3.4028233e+38
   m_ZDrive:
     serializedVersion: 3
@@ -1381,15 +1412,15 @@ ConfigurableJoint:
     positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
-  m_ProjectionMode: 0
+  m_ProjectionMode: 1
   m_ProjectionDistance: 0.1
-  m_ProjectionAngle: 180
+  m_ProjectionAngle: 1
   m_ConfiguredInWorldSpace: 0
-  m_SwapBodies: 0
+  m_SwapBodies: 1
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 0
-  m_EnablePreprocessing: 1
+  m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!54 &2060141530
@@ -1402,7 +1433,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 20
   m_Drag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -1415,12 +1446,26 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060141527}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 713bf9b7fe139614a8f6c8a607dfc3a5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2060141532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060141527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2ffc12acee46409d685790ae7c9af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torque: 2000
+  multiplier: 1
 --- !u!1 &2084796700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1815,9 +1860,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4416062984863485159}
+  - component: {fileID: 4806337293499333784}
   - component: {fileID: 4806337293499333783}
   - component: {fileID: 4806337293499333782}
-  - component: {fileID: 4806337293499333784}
+  - component: {fileID: 4806337293499333785}
   m_Layer: 0
   m_Name: 1
   m_TagString: Untagged
@@ -1836,13 +1882,13 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.1499939, y: -0.29999924, z: 1}
+  m_ConnectedAnchor: {x: 1.1499939, y: -0.3000002, z: 1}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
   m_YMotion: 2
   m_ZMotion: 0
-  m_AngularXMotion: 0
+  m_AngularXMotion: 2
   m_AngularYMotion: 0
   m_AngularZMotion: 0
   m_LinearLimitSpring:
@@ -1884,7 +1930,7 @@ ConfigurableJoint:
   m_YDrive:
     serializedVersion: 3
     positionSpring: 25000
-    positionDamper: 4000
+    positionDamper: 3000
     maximumForce: 3.4028233e+38
   m_ZDrive:
     serializedVersion: 3
@@ -1909,15 +1955,15 @@ ConfigurableJoint:
     positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
-  m_ProjectionMode: 0
-  m_ProjectionDistance: 0.1
-  m_ProjectionAngle: 180
+  m_ProjectionMode: 1
+  m_ProjectionDistance: 0.02
+  m_ProjectionAngle: 0.01
   m_ConfiguredInWorldSpace: 0
-  m_SwapBodies: 0
+  m_SwapBodies: 1
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 0
-  m_EnablePreprocessing: 1
+  m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!54 &4806337293499333783
@@ -1930,7 +1976,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 20
   m_Drag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -1943,12 +1989,26 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4806337293499333781}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 713bf9b7fe139614a8f6c8a607dfc3a5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4806337293499333785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4806337293499333781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2ffc12acee46409d685790ae7c9af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torque: 2000
+  multiplier: 1
 --- !u!23 &6468039188402117867
 MeshRenderer:
   m_ObjectHideFlags: 0
