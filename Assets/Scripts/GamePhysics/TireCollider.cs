@@ -26,18 +26,21 @@ namespace GamePhysics
 
         public FrictionCurve forwardFriction;
         public FrictionCurve sidewaysFriction;
-
-        public float RadPerSec { get; private set; }
-        public float Rpm => RadPerSec * 2 * Mathf.PI / 60f;
+        
+        public float radPerSec;
+        public float Rpm => radPerSec / 2 / Mathf.PI / 60f;
         public float MomentOfIntertia => 0.5f * mass * radius * radius;
-        public float AngularMomentum => MomentOfIntertia * RadPerSec;
-        public Vector3 BottomOfTireRelativeVelocity => -RadPerSec * radius * 
+        public float AngularMomentum => MomentOfIntertia * radPerSec;
+        public Vector3 BottomOfTireRelativeVelocity => -radPerSec * radius * 
                                                        (Quaternion.Euler(0, steeringAngle, 0) * Vector3.forward);
-
+        public float SpringExtension => Vector3.Dot(transform.localPosition - _joint.connectedAnchor, transform.up);
+        public float SprungForce => SpringExtension * suspensionSpring;
+        
         private RaycastHit[] _raycastHits;
         private Rigidbody _rigidbody;
         private Rigidbody _parentRigidbody;
         private ConfigurableJoint _joint;
+        private SphereCollider _collider;
         
         private float _degreesBetweenRaycasts;
         private float _range;
@@ -53,11 +56,38 @@ namespace GamePhysics
 
         public void Start()
         {
-            ConfigureRigidBody();
+            ConfigureCollider();
+            ConfigureRigidbody();
             ConfigureJoint();
+            ConfigureMesh();
         }
 
-        private void ConfigureRigidBody()
+        private void ConfigureMesh()
+        {
+            var child = transform.GetChild(0);
+            if (!child)
+            {
+                Debug.LogWarning("Tire Collider has no child mesh.");
+                return;
+            }
+
+            var childAnimator = child.gameObject.AddComponent<TireMeshAnimation>();
+            childAnimator.parentCollider = this;
+        }
+
+        private void ConfigureCollider()
+        {
+            _collider = gameObject.AddComponent<SphereCollider>();
+            _collider.radius = radius;
+            _collider.material = new PhysicMaterial();
+
+            var mat = _collider.material;
+            mat.dynamicFriction = 0f;
+            mat.staticFriction = 0f;
+            mat.frictionCombine = PhysicMaterialCombine.Minimum;
+        }
+
+        private void ConfigureRigidbody()
         {
             _parentRigidbody = GetComponentInParent<Rigidbody>();
             _rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -92,15 +122,50 @@ namespace GamePhysics
         
         public void FixedUpdate()
         {
+            var starting = radPerSec;
             ApplyTorque(motorTorque);
             
             var numberOfHits = PopulateHitArray();
             ApplyForces(numberOfHits);
+            if (name.Equals("1"))
+                Debug.Log(radPerSec);
         }
+        
 
         private void ApplyForces(int numberOfHits)
         {
-            var relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+            if (numberOfHits == 0)
+                return;
+
+            var t = transform;
+            var right = t.right;
+
+            var hit = _raycastHits[0];
+            var normal = hit.normal;
+            var hitPoint = hit.point;
+            var rightOnSurface = Vector3.ProjectOnPlane(right, normal).normalized;
+            var forwardOnSurface = Vector3.Cross(rightOnSurface, normal);
+
+            var velocity = _rigidbody.velocity;
+            var contactPointEdgeVelocity = radPerSec * radius * -forwardOnSurface;
+            
+            var forwardVelocityOnSurface = Vector3.Project(velocity, forwardOnSurface);
+            var sidewaysSlip = Vector3.Dot(velocity, rightOnSurface);
+            var forwardsSlip = Vector3.Dot(forwardVelocityOnSurface + contactPointEdgeVelocity, forwardOnSurface);
+
+            var sprungWeight = (_parentRigidbody.mass / 4 + mass) * Physics.gravity.magnitude;
+
+            var forwardForce = -Mathf.Sign(forwardsSlip) * sprungWeight 
+                                                        * forwardFriction.GetCoefficientAt(forwardsSlip) * forwardOnSurface;
+            var sidewaysForce = -Mathf.Sign(sidewaysSlip) * sprungWeight 
+                                                          * sidewaysFriction.GetCoefficientAt(sidewaysSlip) * rightOnSurface;
+            
+            //Debug.Log(forwardForce);
+            _parentRigidbody.AddForceAtPosition(forwardForce + sidewaysForce, t.position);
+            ApplyTorque(Mathf.Sign(forwardsSlip) * forwardForce.magnitude / hit.distance);
+
+
+            /*var relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
             var slipVector = relativeVelocity - (-BottomOfTireRelativeVelocity);
             slipVector = Vector3.ProjectOnPlane(slipVector, Vector3.up); // we don't care about moving up or down
             // this is captured in the spring of the joint
@@ -131,12 +196,13 @@ namespace GamePhysics
                 var worldForceDirection = Vector3.Cross(Vector3.right, projectedNormal).normalized;
                 
                 _rigidbody.AddForce(forwardForce * worldForceDirection / numberOfHits);
-            }
+            }*/
         }
 
         private void ApplyTorque(float torque)
         {
-            RadPerSec += torque / MomentOfIntertia * Time.fixedDeltaTime;
+            var delta =  torque / MomentOfIntertia * Time.fixedDeltaTime;
+            radPerSec += delta;
         }
 
         private void ApplyForcesToBody(float numberOfHits)
