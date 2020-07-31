@@ -1,57 +1,124 @@
 using System;
+using System.Runtime.InteropServices;
+using GameDirection;
 using UnityEngine;
+using Utility;
 
 namespace GamePhysics
 {
-    [Serializable]
-    public class FrictionCurve
+    public class FrictionCurve : ScriptableObject
     {
-        public float adherentSlip = 0.5f;
-        public float adherentCoef = 0.95f;
-        public float peakSlip = 1.5f;
-        public float peakCoef = 1.1f;
-        public float asymtoteCoef = 0.5f;
-        public float asymtoteDecayRate = 2.5f;
-        public float stiffness = 1f;
+        [Serializable]
+        public class Integration
+        {
+            public float[] relativeTorques;
+            public float relativeTorqueStep;
+            public float startingSlip;
+            public float slipStep;
+            public float[] slips;
+            public FloatMatrix matrix;
+            
+            [NonSerialized] public FrictionCurve Curve;
+
+            public Integration(FrictionCurve curve, float[] relativeTorqueRange,
+                int relativeTorqueSamples = 50, float asymptoteDifferenceThreshold = 0.01f, int slipSamples = 100)
+            {
+
+                Curve = curve;
+                relativeTorques = MathUtil.Linspace(relativeTorqueRange[0], relativeTorqueRange[1],
+                    relativeTorqueSamples);
+                relativeTorqueStep = (relativeTorqueRange[1] - relativeTorqueRange[0])
+                                     / (relativeTorqueSamples - 1);
+
+                startingSlip = Mathf.Sqrt(-Mathf.Log((asymptoteDifferenceThreshold / (curve.y2 - curve.y3)))
+                                               / Mathf.Log(2))
+                    / curve.s + curve.x2;
+
+                slipStep = startingSlip / slipSamples;
+                slips = MathUtil.Linspace(slipStep, startingSlip, slipSamples);
+                matrix = new FloatMatrix(relativeTorques.Length, slips.Length);
+
+                GenerateMatrix();
+            }
+
+            private void GenerateMatrix()
+            {
+                for (var i = 0; i < relativeTorques.Length; i++)
+                    matrix[i, slips.Length - 1] = GetDeltaT(Curve.y3, relativeTorques[i]);
+
+                for (var j = 0; j < slips.Length - 1; j++)
+                {
+                    var coef = Curve.GetCoefficientAt(slips[j]);
+                    for (var i = 0; i < relativeTorques.Length; i++)
+                        matrix[i, j] = GetDeltaT(coef, relativeTorques[i]);
+                }
+            }
+
+            private float GetDeltaT(float coef, float relativeTorque)
+            {
+                return -slipStep / (-coef + relativeTorque);
+            }
+        }
+        
+        public float x1;
+        public float y1;
+        public float x2;
+        public float y2;
+        public float x3;
+        public float y3;
+        public float s;
+        public float stiffness;
+        public Integration integration;
+        
+        public int relativeTorqueSamples;
+        public float asymptoteDifferenceThreshold;
+        public int slipSamples;
+
+        public void Setup()
+        {
+            s = Mathf.Sqrt(1 / (2 * Mathf.Log(2) * Mathf.Pow(x3 - x2, 2)));
+            integration = new Integration(this, new [] {-2 * y2, 2 * y2}, 
+                relativeTorqueSamples, asymptoteDifferenceThreshold, slipSamples);
+        }
 
         public float GetCoefficientAt(float slipValue)
         {
             if (slipValue < 0)
                 slipValue *= -1;
 
-            if (slipValue <= adherentSlip)
+            if (slipValue <= x1)
                 return F1(slipValue);
 
-            if (adherentSlip < slipValue && slipValue <= peakSlip)
+            if (x1 < slipValue && slipValue <= x2)
                 return F2(slipValue);
             
-            if (peakSlip < slipValue)
+            if (x2 < slipValue)
                 return F3(slipValue);
 
-            return asymtoteCoef * stiffness;
+            return y3 * stiffness;
         }
         
         private float F1(float slipValue)
         {
-            return adherentCoef * stiffness / adherentSlip * slipValue;
+            return y1 * stiffness / x1 * slipValue;
         }
 
         private float F2(float slipValue)
         {
 
-            var ix = adherentSlip * peakCoef / adherentCoef;
-            var a = adherentSlip - 2 * ix + peakSlip;
-            var b = (adherentSlip - ix
-                     + Mathf.Sqrt((adherentSlip - ix) * (adherentSlip - ix) - (adherentSlip - slipValue) * a))
+            var ix = x1 * y2 / y1;
+            var a = x1 - 2 * ix + x2;
+            var b = (x1 - ix
+                     + Mathf.Sqrt((x1 - ix) * (x1 - ix) - (x1 - slipValue) * a))
                 / a - 1;
 
-            return ((adherentCoef - peakCoef) * b * b + peakCoef) * stiffness;
+            return ((y1 - y2) * b * b + y2) * stiffness;
         }
 
         private float F3(float slipValue)
         {
-            var exponentBase = asymtoteDecayRate * (slipValue - peakSlip);
-            return ((peakCoef - asymtoteCoef) * Mathf.Pow(2, -(exponentBase * exponentBase)) + asymtoteCoef) * stiffness;
+            var exponentBase = s * (slipValue - x2);
+            return ((y2 - y3) * Mathf.Pow(2, -(exponentBase * exponentBase)) + y3) * stiffness;
         }
     }
 }
