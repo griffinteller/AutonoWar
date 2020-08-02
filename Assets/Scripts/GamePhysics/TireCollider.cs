@@ -122,13 +122,7 @@ namespace GamePhysics
         
         public void FixedUpdate()
         {
-            var starting = radPerSec;
-            ApplyTorque(motorTorque);
-            
             var numberOfHits = PopulateHitArray();
-            ApplyForces(numberOfHits);
-            if (name.Equals("1"))
-                Debug.Log(radPerSec);
         }
         
 

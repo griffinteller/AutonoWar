@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using GameDirection;
+using Unity.Mathematics;
 using UnityEngine;
 using Utility;
 
@@ -41,6 +42,47 @@ namespace GamePhysics
                 GenerateMatrix();
             }
 
+            private float GetSlipAfterTimeWithTorqueIndex(float adjustedDeltaT, float currentSlip, int torqueIndex)
+            {
+                int lastSlipIndex;
+                var deltaTLeft = adjustedDeltaT - Mathf.Abs(ApproxDeltaTToNearestTestedSlip(currentSlip, torqueIndex,
+                    out lastSlipIndex));
+
+                while (deltaTLeft >= 0)
+                {
+                    var 
+                }
+                
+            }
+
+            public float GetSlipAfterTime(float deltaT, float currentSlip, float motorTorque, float sprungForce,
+                float radius, float momentOfInertia)
+            {
+                deltaT *= sprungForce * radius * radius / momentOfInertia;
+            
+                
+            }
+
+            private int2 GetNearestTorqueIndices(float torque)
+            {
+                var floorIndex = Mathf.Clamp((int) ((torque - relativeTorques[0]) / relativeTorqueStep), 
+                    0, relativeTorques.Length - 1);
+                var ceilIndex = floorIndex + 1;
+
+                return new int2(floorIndex, ceilIndex);
+            }
+
+            public float ApproxDeltaTToNearestTestedSlip(float slip, int torqueIndex, out int finalSlipIndex)
+            {
+                // this is always strictly greater than slip, but the math works out
+                var nearestSlipIndexAbove = Mathf.Clamp((int) (slip / slipStep), 0, slips.Length - 1);
+                var totalDeltaT = matrix[torqueIndex, nearestSlipIndexAbove];
+                var t = 1 - (slips[nearestSlipIndexAbove] - slip) / slipStep;
+
+                finalSlipIndex = nearestSlipIndexAbove - 1;
+                return t * totalDeltaT;
+            }
+
             private void GenerateMatrix()
             {
                 for (var i = 0; i < relativeTorques.Length; i++)
@@ -68,7 +110,7 @@ namespace GamePhysics
         public float y3;
         public float s;
         public float stiffness;
-        public Integration integration;
+        [HideInInspector] public Integration integration;
         
         public int relativeTorqueSamples;
         public float asymptoteDifferenceThreshold;
