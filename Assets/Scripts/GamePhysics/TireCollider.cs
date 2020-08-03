@@ -126,7 +126,7 @@ namespace GamePhysics
         }
         
 
-        private void ApplyForces(int numberOfHits)
+        /*private void ApplyForces(int numberOfHits)
         {
             if (numberOfHits == 0)
                 return;
@@ -159,7 +159,7 @@ namespace GamePhysics
             ApplyTorque(Mathf.Sign(forwardsSlip) * forwardForce.magnitude / hit.distance);
 
 
-            /*var relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+            var relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
             var slipVector = relativeVelocity - (-BottomOfTireRelativeVelocity);
             slipVector = Vector3.ProjectOnPlane(slipVector, Vector3.up); // we don't care about moving up or down
             // this is captured in the spring of the joint
@@ -190,7 +190,7 @@ namespace GamePhysics
                 var worldForceDirection = Vector3.Cross(Vector3.right, projectedNormal).normalized;
                 
                 _rigidbody.AddForce(forwardForce * worldForceDirection / numberOfHits);
-            }*/
+            }
         }
 
         private void ApplyTorque(float torque)
@@ -215,7 +215,7 @@ namespace GamePhysics
             }
             
             _parentRigidbody.AddTorque(motorTorque * -right);
-        }
+        }*/
 
         private int PopulateHitArray()
         {

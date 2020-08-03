@@ -78,7 +78,7 @@ namespace GamePhysics
                         negation *= -1;
                         currentSlipIndex *= -1;
                         lastSlipIndex *= -1;
-                        torqueIndex = relativeTorques.Length - torqueIndex; // negate it
+                        torqueIndex = relativeTorques.Length - torqueIndex - 1; // negate it
                         continue;
                     }
 
@@ -99,6 +99,9 @@ namespace GamePhysics
             public float GetSlipAfterTime(float deltaT, float currentSlip, float motorTorque, float sprungForce,
                 float radius, float momentOfInertia)
             {
+                if (sprungForce == 0)
+                    return currentSlip + motorTorque / momentOfInertia * radius * deltaT;
+                
                 deltaT *= sprungForce * radius * radius / momentOfInertia;
                 var relativeTorque = motorTorque / sprungForce / radius;
                 
