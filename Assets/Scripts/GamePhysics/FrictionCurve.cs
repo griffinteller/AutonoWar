@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using GameDirection;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Utility;
 
 namespace GamePhysics
@@ -21,14 +22,14 @@ namespace GamePhysics
             
             [NonSerialized] public FrictionCurve Curve;
 
-            public Integration(FrictionCurve curve, float[] relativeTorqueRange,
+            public Integration(FrictionCurve curve, float relativeTorqueRange,
                 int relativeTorqueSamples = 50, float asymptoteDifferenceThreshold = 0.01f, int slipSamples = 100)
             {
 
                 Curve = curve;
-                relativeTorques = MathUtil.Linspace(relativeTorqueRange[0], relativeTorqueRange[1],
+                relativeTorques = MathUtil.Linspace(-relativeTorqueRange, relativeTorqueRange,
                     relativeTorqueSamples);
-                relativeTorqueStep = (relativeTorqueRange[1] - relativeTorqueRange[0])
+                relativeTorqueStep = (relativeTorqueRange * 2)
                                      / (relativeTorqueSamples - 1);
 
                 startingSlip = Mathf.Sqrt(-Mathf.Log((asymptoteDifferenceThreshold / (curve.y2 - curve.y3)))
@@ -44,23 +45,73 @@ namespace GamePhysics
 
             private float GetSlipAfterTimeWithTorqueIndex(float adjustedDeltaT, float currentSlip, int torqueIndex)
             {
-                int lastSlipIndex;
-                var deltaTLeft = adjustedDeltaT - Mathf.Abs(ApproxDeltaTToNearestTestedSlip(currentSlip, torqueIndex,
-                    out lastSlipIndex));
-
-                while (deltaTLeft >= 0)
+                if (currentSlip >= slips[slips.Length - 1]) // not strictly necessary, but a shortcut
                 {
-                    var 
+                    var asymptoteDeltaT = matrix[torqueIndex, slips.Length - 1];
+                    if (asymptoteDeltaT < 0)
+                        return adjustedDeltaT / -asymptoteDeltaT * slipStep + currentSlip;
                 }
                 
+                int currentSlipIndex;
+                var deltaTLeft = adjustedDeltaT - ApproxDeltaTToNearestTestedSlip(currentSlip, torqueIndex,
+                    out currentSlipIndex);
+                var negation = 1;
+                var lastSlipIndex = currentSlipIndex;
+
+                while (deltaTLeft > 0)
+                {
+                    if (currentSlipIndex == slips.Length)
+                    {
+                        var asymptoteDeltaT = matrix[torqueIndex, slips.Length - 1];
+                        
+                        if (asymptoteDeltaT < 0)
+                            return deltaTLeft / -asymptoteDeltaT * slipStep + (currentSlipIndex + 1) * slipStep;
+
+                        lastSlipIndex = currentSlipIndex;
+                        currentSlipIndex = slips.Length - 1;
+                        deltaTLeft -= asymptoteDeltaT;
+                        continue;
+                    }
+
+                    if (currentSlipIndex < 0)
+                    {
+                        negation *= -1;
+                        currentSlipIndex *= -1;
+                        lastSlipIndex *= -1;
+                        torqueIndex = relativeTorques.Length - torqueIndex; // negate it
+                        continue;
+                    }
+
+                    var deltaTThisStep = matrix[torqueIndex, currentSlipIndex];
+                    lastSlipIndex = currentSlipIndex;
+                    currentSlipIndex += Mathf.RoundToInt(-Mathf.Sign(deltaTThisStep));
+                    deltaTLeft -= Mathf.Abs(deltaTThisStep);
+                }
+                
+                // lastSlipIndex is not guaranteed to be in range
+                var lastStepDeltaT = matrix[torqueIndex, lastSlipIndex];
+                var proportionOverShot = deltaTLeft / lastStepDeltaT;
+                var correction = -proportionOverShot * slipStep;
+
+                return negation * (currentSlipIndex * slipStep + correction);
             }
 
             public float GetSlipAfterTime(float deltaT, float currentSlip, float motorTorque, float sprungForce,
                 float radius, float momentOfInertia)
             {
                 deltaT *= sprungForce * radius * radius / momentOfInertia;
-            
+                var relativeTorque = motorTorque / sprungForce / radius;
                 
+                var torqueIndexLow = Mathf.Clamp((int) ((relativeTorque - relativeTorques[0]) / relativeTorqueStep),
+                    0, relativeTorques.Length - 2);
+                var torqueIndexHigh = torqueIndexLow + 1;
+                var t = (relativeTorque - relativeTorques[torqueIndexLow])
+                        / (relativeTorques[torqueIndexHigh] - relativeTorques[torqueIndexLow]);
+
+                var finalSlipLowTorque = GetSlipAfterTimeWithTorqueIndex(deltaT, currentSlip, torqueIndexLow);
+                var finalSlipHighTorque = GetSlipAfterTimeWithTorqueIndex(deltaT, currentSlip, torqueIndexHigh);
+
+                return Mathf.LerpUnclamped(finalSlipLowTorque, finalSlipHighTorque, t);
             }
 
             private int2 GetNearestTorqueIndices(float torque)
@@ -74,7 +125,7 @@ namespace GamePhysics
 
             public float ApproxDeltaTToNearestTestedSlip(float slip, int torqueIndex, out int finalSlipIndex)
             {
-                // this is always strictly greater than slip, but the math works out
+                // this isn't always strictly greater than slip, but the math works out
                 var nearestSlipIndexAbove = Mathf.Clamp((int) (slip / slipStep), 0, slips.Length - 1);
                 var totalDeltaT = matrix[torqueIndex, nearestSlipIndexAbove];
                 var t = 1 - (slips[nearestSlipIndexAbove] - slip) / slipStep;
@@ -119,7 +170,7 @@ namespace GamePhysics
         public void Setup()
         {
             s = Mathf.Sqrt(1 / (2 * Mathf.Log(2) * Mathf.Pow(x3 - x2, 2)));
-            integration = new Integration(this, new [] {-2 * y2, 2 * y2}, 
+            integration = new Integration(this, 2 * y2, 
                 relativeTorqueSamples, asymptoteDifferenceThreshold, slipSamples);
         }
 
