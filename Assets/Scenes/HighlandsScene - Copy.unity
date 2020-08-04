@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: bcc0e7baf0f1d004ca486a5c2712a368,
     type: 2}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 1631771739}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -119,6 +119,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -173,24 +175,10 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: -100
+  motorTorque: -1000
   steeringAngle: 0
-  forwardFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
-  sidewaysFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
+  forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   radPerSec: 0
 --- !u!1 &278035687
 GameObject:
@@ -239,6 +227,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -263,6 +252,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &278035690
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -318,6 +308,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -342,6 +333,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &301129640
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -443,6 +435,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -467,6 +460,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &842129170
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -588,6 +582,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -612,6 +607,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &963109893
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -767,6 +763,67 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!850595691 &1631771739
+LightingSettings:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Settings.lighting
+  serializedVersion: 2
+  m_GIWorkflowMode: 1
+  m_EnableBakedLightmaps: 1
+  m_EnableRealtimeLightmaps: 0
+  m_RealtimeEnvironmentLighting: 1
+  m_BounceScale: 1
+  m_AlbedoBoost: 1
+  m_IndirectOutputScale: 1
+  m_UsingShadowmask: 1
+  m_BakeBackend: 1
+  m_LightmapMaxSize: 1024
+  m_BakeResolution: 40
+  m_Padding: 2
+  m_TextureCompression: 1
+  m_AO: 0
+  m_AOMaxDistance: 1
+  m_CompAOExponent: 1
+  m_CompAOExponentDirect: 0
+  m_ExtractAO: 0
+  m_MixedBakeMode: 2
+  m_LightmapsBakeMode: 1
+  m_FilterMode: 1
+  m_LightmapParameters: {fileID: 0}
+  m_ExportTrainingData: 0
+  m_TrainingDataDestination: TrainingData
+  m_RealtimeResolution: 2
+  m_ForceWhiteAlbedo: 0
+  m_ForceUpdates: 0
+  m_FinalGather: 0
+  m_FinalGatherRayCount: 256
+  m_FinalGatherFiltering: 1
+  m_PVRCulling: 1
+  m_PVRSampling: 1
+  m_PVRDirectSampleCount: 48
+  m_PVRSampleCount: 512
+  m_PVREnvironmentSampleCount: 256
+  m_PVREnvironmentReferencePointCount: 2048
+  m_LightProbeSampleCountMultiplier: 4
+  m_PVRBounces: 4
+  m_PVRRussianRouletteStartBounce: 2
+  m_PVREnvironmentMIS: 1
+  m_PVRFilteringMode: 1
+  m_PVRDenoiserTypeDirect: 1
+  m_PVRDenoiserTypeIndirect: 1
+  m_PVRDenoiserTypeAO: 1
+  m_PVRFilterTypeDirect: 0
+  m_PVRFilterTypeIndirect: 0
+  m_PVRFilterTypeAO: 0
+  m_PVRFilteringGaussRadiusDirect: 1
+  m_PVRFilteringGaussRadiusIndirect: 5
+  m_PVRFilteringGaussRadiusAO: 2
+  m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+  m_PVRFilteringAtrousPositionSigmaIndirect: 2
+  m_PVRFilteringAtrousPositionSigmaAO: 1
 --- !u!1 &1890717198
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,24 +967,10 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: 100
+  motorTorque: 1000
   steeringAngle: 0
-  forwardFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
-  sidewaysFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
+  forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   radPerSec: 0
 --- !u!1 &2036411891
 GameObject:
@@ -976,6 +1019,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1000,6 +1044,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2036411894
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1055,6 +1100,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1079,6 +1125,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2044737037
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1138,24 +1185,10 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: -100
+  motorTorque: -1000
   steeringAngle: 0
-  forwardFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
-  sidewaysFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
+  forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   radPerSec: 0
 --- !u!1 &2084796700
 GameObject:
@@ -1204,6 +1237,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1228,6 +1262,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2084796703
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1578,24 +1613,10 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: 100
+  motorTorque: 1000
   steeringAngle: 0
-  forwardFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
-  sidewaysFriction:
-    adherentSlip: 0.5
-    adherentCoef: 0.95
-    peakSlip: 1.5
-    peakCoef: 1.1
-    asymtoteCoef: 0.5
-    asymtoteDecayRate: 2.5
-    stiffness: 2
+  forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   radPerSec: 0
 --- !u!23 &6468039188402117867
 MeshRenderer:
@@ -1612,6 +1633,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1636,6 +1658,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!23 &7912486838343304397
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1651,6 +1674,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1675,6 +1699,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &9031880293483610037
 Transform:
   m_ObjectHideFlags: 0

@@ -123,13 +123,16 @@ namespace GamePhysics
         public void FixedUpdate()
         {
             var numberOfHits = PopulateHitArray();
+            ApplyForces(numberOfHits);
         }
         
 
-        /*private void ApplyForces(int numberOfHits)
+        private void ApplyForces(int numberOfHits)
         {
+            _parentRigidbody.AddTorque(motorTorque * transform.right);
+            
             if (numberOfHits == 0)
-                return;
+                ApplyTorque(motorTorque);
 
             var t = transform;
             var right = t.right;
@@ -144,53 +147,21 @@ namespace GamePhysics
             var contactPointEdgeVelocity = radPerSec * radius * -forwardOnSurface;
             
             var forwardVelocityOnSurface = Vector3.Project(velocity, forwardOnSurface);
-            var sidewaysSlip = Vector3.Dot(velocity, rightOnSurface);
-            var forwardsSlip = Vector3.Dot(forwardVelocityOnSurface + contactPointEdgeVelocity, forwardOnSurface);
+            var sidewaysSlip = Vector3.Dot(velocity, -rightOnSurface);
+            var forwardsSlip = Vector3.Dot(forwardVelocityOnSurface + contactPointEdgeVelocity, -forwardOnSurface);
 
             var sprungWeight = (_parentRigidbody.mass / 4 + mass) * Physics.gravity.magnitude;
 
-            var forwardForce = -Mathf.Sign(forwardsSlip) * sprungWeight 
-                                                        * forwardFriction.GetCoefficientAt(forwardsSlip) * forwardOnSurface;
-            var sidewaysForce = -Mathf.Sign(sidewaysSlip) * sprungWeight 
+            var newForwardSlip = forwardFriction.integration.GetSlipAfterTime(Time.fixedDeltaTime, forwardsSlip,
+                motorTorque, sprungWeight, radius, MomentOfIntertia);
+            radPerSec = (forwardVelocityOnSurface.magnitude + newForwardSlip) / radius;
+
+            var forwardForce = ((forwardsSlip - newForwardSlip) / Time.fixedDeltaTime * MomentOfIntertia
+                / (radius * radius) + motorTorque / radius) * forwardOnSurface;
+            var sidewaysForce = Mathf.Sign(sidewaysSlip) * sprungWeight 
                                                           * sidewaysFriction.GetCoefficientAt(sidewaysSlip) * rightOnSurface;
             
-            //Debug.Log(forwardForce);
-            _parentRigidbody.AddForceAtPosition(forwardForce + sidewaysForce, t.position);
-            ApplyTorque(Mathf.Sign(forwardsSlip) * forwardForce.magnitude / hit.distance);
-
-
-            var relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
-            var slipVector = relativeVelocity - (-BottomOfTireRelativeVelocity);
-            slipVector = Vector3.ProjectOnPlane(slipVector, Vector3.up); // we don't care about moving up or down
-            // this is captured in the spring of the joint
-
-            var planeVelocity = Vector3.ProjectOnPlane(relativeVelocity, Vector3.up);
-
-            var forwardSlipProportion = slipVector.z / Mathf.Abs(planeVelocity.z);
-            var sidewaysSlipPropotion = slipVector.x / Mathf.Abs(planeVelocity.x);
-
-            var forwardCoefficient = forwardFriction.GetCoefficientAt(Mathf.Abs(forwardSlipProportion));
-            var sidewaysCoefficient = sidewaysFriction.GetCoefficientAt(Mathf.Abs(sidewaysSlipPropotion));
-            
-            print(name + ": " + forwardCoefficient);
-
-            var sprungWeight = _joint.currentForce.magnitude;
-
-            var forwardForce = -Mathf.Sign(slipVector.z) * forwardCoefficient * sprungWeight;
-            ApplyTorque(forwardForce * radius);
-
-            var sidewaysForce = -Mathf.Sign(slipVector.x) * sidewaysCoefficient * sprungWeight;
-            _rigidbody.AddForce(sidewaysForce * transform.right);
-
-            for (var i = 0; i < numberOfHits; i++)
-            {
-                var hit = _raycastHits[i];
-                var normal = hit.normal;
-                var projectedNormal = Vector3.ProjectOnPlane(normal, transform.right);
-                var worldForceDirection = Vector3.Cross(Vector3.right, projectedNormal).normalized;
-                
-                _rigidbody.AddForce(forwardForce * worldForceDirection / numberOfHits);
-            }
+            _parentRigidbody.AddForceAtPosition(forwardForce + sidewaysForce, hitPoint);
         }
 
         private void ApplyTorque(float torque)
@@ -198,24 +169,6 @@ namespace GamePhysics
             var delta =  torque / MomentOfIntertia * Time.fixedDeltaTime;
             radPerSec += delta;
         }
-
-        private void ApplyForcesToBody(float numberOfHits)
-        {
-            var t = transform;
-            var right = t.right;
-            var up = t.up;
-            
-            for (var i = 0; i < numberOfHits; i++)
-            {
-                var hit = _raycastHits[i];
-                var forceDirection = 
-                    Vector3.Cross(right, Vector3.Project(hit.normal, up)).normalized;
-                var force = forceDirection * motorTorque / hit.distance / numberOfHits;
-                _parentRigidbody.AddForceAtPosition(force, t.position);
-            }
-            
-            _parentRigidbody.AddTorque(motorTorque * -right);
-        }*/
 
         private int PopulateHitArray()
         {
