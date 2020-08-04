@@ -26,6 +26,7 @@ namespace GamePhysics
 
         public FrictionCurve forwardFriction;
         public FrictionCurve sidewaysFriction;
+        public float radPerSecLimit;
         
         public float radPerSec;
         public float Rpm => radPerSec / 2 / Mathf.PI / 60f;
@@ -113,6 +114,8 @@ namespace GamePhysics
             //_joint.projectionMode = JointProjectionMode.PositionAndRotation;
             _joint.enablePreprocessing = false;
             _joint.projectionMode = JointProjectionMode.PositionAndRotation;
+            _joint.projectionDistance = 0.01f;
+            _joint.projectionAngle = 5f;
 
             var drive = _joint.yDrive;
             drive.positionSpring = suspensionSpring;
@@ -124,15 +127,24 @@ namespace GamePhysics
         {
             var numberOfHits = PopulateHitArray();
             ApplyForces(numberOfHits);
+            CapRadPerSec();
         }
-        
+
+        private void CapRadPerSec()
+        {
+            radPerSec = Mathf.Clamp(radPerSec, -radPerSecLimit, radPerSecLimit);
+        }
+
 
         private void ApplyForces(int numberOfHits)
         {
             _parentRigidbody.AddTorque(motorTorque * transform.right);
-            
+
             if (numberOfHits == 0)
+            {
                 ApplyTorque(motorTorque);
+                return;
+            }
 
             var t = transform;
             var right = t.right;
@@ -154,7 +166,7 @@ namespace GamePhysics
 
             var newForwardSlip = forwardFriction.integration.GetSlipAfterTime(Time.fixedDeltaTime, forwardsSlip,
                 motorTorque, sprungWeight, radius, MomentOfIntertia);
-            radPerSec = (forwardVelocityOnSurface.magnitude + newForwardSlip) / radius;
+            radPerSec = (Vector3.Dot(forwardOnSurface, velocity) + newForwardSlip) / radius;
 
             var forwardForce = ((forwardsSlip - newForwardSlip) / Time.fixedDeltaTime * MomentOfIntertia
                 / (radius * radius) + motorTorque / radius) * forwardOnSurface;
@@ -176,7 +188,7 @@ namespace GamePhysics
             for (var i = 0; i < numberOfRaycasts; i++)
             {
                 var direction = Quaternion.AngleAxis(i * _degreesBetweenRaycasts, transform.right) 
-                                * Vector3.down;
+                                * -transform.up;
                 
                 if (Physics.Raycast(transform.position, direction, out var hit, _range))
                 {

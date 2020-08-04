@@ -175,10 +175,11 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: -1000
+  motorTorque: -500
   steeringAngle: 0
   forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  radPerSecLimit: 100
   radPerSec: 0
 --- !u!1 &278035687
 GameObject:
@@ -739,7 +740,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533719606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -419.4, y: 1.51, z: -104.3}
+  m_LocalPosition: {x: -419.4, y: 2.1, z: -104.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 842129167}
@@ -967,10 +968,11 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: 1000
+  motorTorque: 500
   steeringAngle: 0
   forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  radPerSecLimit: 100
   radPerSec: 0
 --- !u!1 &2036411891
 GameObject:
@@ -1185,10 +1187,11 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: -1000
+  motorTorque: -500
   steeringAngle: 0
   forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  radPerSecLimit: 100
   radPerSec: 0
 --- !u!1 &2084796700
 GameObject:
@@ -1613,10 +1616,11 @@ MonoBehaviour:
   suspensionDistance: 0.3
   numberOfRaycasts: 10
   groundingDistance: 0.01
-  motorTorque: 1000
+  motorTorque: 500
   steeringAngle: 0
   forwardFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
   sidewaysFriction: {fileID: 11400000, guid: 4aaa280630c2b9e42bd608550fa2a7c7, type: 2}
+  radPerSecLimit: 100
   radPerSec: 0
 --- !u!23 &6468039188402117867
 MeshRenderer:
