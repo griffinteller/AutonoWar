@@ -13,7 +13,8 @@ namespace Main
 {
     public class RobotStateSender : MonoBehaviour
     {
-        private const string MessageSeparator = ";";
+        private const string MessageSeparator                   = ";";
+        private const byte   MaxPosixConnectionAttemptsPerFrame = 5;
 
         private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
         {
@@ -22,18 +23,30 @@ namespace Main
             try
             {
                 var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
-
+                var tries                 = 0;
                 while (true)
+                {
+                    if (tries == MaxPosixConnectionAttemptsPerFrame)
+                    {
+                        #if UNITY_EDITOR
+                        Debug.Log("Rss connection giving up until next frame.");
+                        #endif
+                        
+                        return;
+                    }
+                    
                     try
                     {
-                        rssCast._clientStream =
-                            new FileStream("/tmp/" + rssCast.PipeName, FileMode.Open, FileAccess.Write);
+                        rssCast._clientStream = new FileStream(
+                            "/tmp/" + rssCast.PipeName, FileMode.Open, FileAccess.Write
+                        );
                         break;
                     }
                     catch (IOException e)
                     {
-                        Debug.Log("Couldn't connect rss: " + e);
+                        tries++;
                     }
+                }
 
                 rssCast._clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
                 rssCast._clientStream.Close();

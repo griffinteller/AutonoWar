@@ -56,9 +56,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 428431369170529367}
-  - {fileID: 7147369648861061552}
+  m_Children: []
   m_Father: {fileID: 182512891468472644}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -77,7 +75,6 @@ GameObject:
   - component: {fileID: 754502169862115075}
   - component: {fileID: 7812004616116019815}
   - component: {fileID: 2849167643997509586}
-  - component: {fileID: 821732043234492994}
   - component: {fileID: -691069952085206052}
   - component: {fileID: 6169384561132137689}
   - component: {fileID: 686880663218978992}
@@ -193,26 +190,7 @@ MonoBehaviour:
   - {fileID: 9126678377298066390, guid: 0796e104400d28744b1992392d73c9f3, type: 3}
   robotMain: {fileID: 3365832499811330419}
   structureRoot: {fileID: 171596509867255858}
-  tireMeshRoot: {fileID: 7147369648861061552}
-  wheelColliderPrefab: {fileID: 157531082362127546, guid: 1fdd45156f5b319418587cd000aeee03,
-    type: 3}
-  wheelColliderRoot: {fileID: 428431369170529367}
---- !u!114 &821732043234492994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4421177872403235923}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a706c80a273c1d04989f37232623b2e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dampingRatio: 0.8
-  forceShift: -0.05
-  naturalFrequency: 10
-  setSuspensionDistance: 1
+  tireRoot: {fileID: 2730901704424405784}
 --- !u!54 &-691069952085206052
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -226,9 +204,9 @@ Rigidbody:
   m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &6169384561132137689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,66 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bde77981a6b4214aed9573e1bbf1560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &6034424552130210897
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7147369648861061552}
-  m_Layer: 0
-  m_Name: Meshes
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7147369648861061552
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6034424552130210897}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2730901704424405784}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6591583031326451334
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 428431369170529367}
-  m_Layer: 0
-  m_Name: WheelColliders
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &428431369170529367
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6591583031326451334}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2730901704424405784}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7328779365200919031
 GameObject:
   m_ObjectHideFlags: 0

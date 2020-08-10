@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Cam;
 using GameDirection;
 using Networking;
@@ -25,14 +23,13 @@ namespace Main
         private static bool _showingBeacons;
 
         public static Action<Collider, RobotMain> OnTriggerEnterCallbacks = (collider, robotMain) => { };
-        private GameObject _beaconObject;
-        private GameDirector _gameDirector;
-        private Color _newColor;
-        private bool _partsAreLoaded;
-        private Rigidbody _rigidbody;
-        private Transform _robotBody;
-        private ScheduledFlip _scheduledFlipComponent;
-        private bool _shouldColor;
+        private       GameObject                  _beaconObject;
+        private       Color                       _newColor;
+        private       bool                        _partsAreLoaded;
+        private       Rigidbody                   _rigidbody;
+        private       Transform                   _robotBody;
+        private       ScheduledFlip               _scheduledFlipComponent;
+        private       bool                        _shouldColor;
 
         private SinglePlayerDirector _singlePlayerDirector;
 
@@ -58,7 +55,6 @@ namespace Main
         {
             _partsAreLoaded = true;
             GetComponent<ActionHandler>().LoadTiresIntoDict();
-            GetComponent<EasySuspension>().enabled = true;
             AddSphereTrigger();
 
             if (_shouldColor)
@@ -93,10 +89,9 @@ namespace Main
             SetMaximumAngularVelocities();
             InitializeScripts();
 
-            _beaconObject = transform.Find(BeaconName).gameObject;
-            _gameDirector = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<GameDirector>();
-            _robotBody = transform.GetChild(0);
-            _rigidbody = GetComponent<Rigidbody>();
+            _beaconObject           = transform.Find(BeaconName).gameObject;
+            _robotBody              = transform.GetChild(0);
+            _rigidbody              = GetComponent<Rigidbody>();
             _scheduledFlipComponent = GetComponent<ScheduledFlip>();
         }
 

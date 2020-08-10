@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+using UnityPhysics = UnityEngine.Physics;
 //[ExecuteInEditMode()]
 public class EasySuspension : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class EasySuspension : MonoBehaviour
             // the following line makes sure the spring force at maximum droop is exactly zero
             if (spring.targetPosition > 0 && setSuspensionDistance)
                 wc.suspensionDistance =
-                    wc.sprungMass * Physics.gravity.magnitude / (spring.targetPosition * spring.spring);
+                    wc.sprungMass * UnityPhysics.gravity.magnitude / (spring.targetPosition * spring.spring);
         }
     }
 
