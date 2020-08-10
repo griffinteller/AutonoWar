@@ -249,6 +249,43 @@ class LiDAR(object):
                 self.distance_matrix.append(container["array"])
 
 
+class TireDescription(object):
+
+    def __init__(self, tire_dict):
+
+        self.name = tire_dict["name"]
+        self.motor_power = tire_dict["motorPower"]
+        self.motor_torque = tire_dict["motorTorque"]
+        self.brake_torque = tire_dict["brakeTorque"]
+        self.rpm = tire_dict["rpm"]
+        self.suspension_extension = tire_dict["suspensionExtension"]
+        self.is_grounded = tire_dict["isGrounded"]
+        self.spring_force = tire_dict["springForce"]
+        self.longitudinal_slip = tire_dict["longitudinalSlip"]
+        self.lateral_slip = tire_dict["lateralSlip"]
+
+
+class Tires(object):
+
+    def __init__(self, info_object_reference, info_dict):
+
+        self.__info_object_reference = info_object_reference
+        tire_dicts = info_dict["tires"]["tires"]
+
+        self.__tires = dict()
+        for tire_dict in tire_dicts:
+
+            self.__tires[tire_dict["name"]] = TireDescription(tire_dict)
+
+    def __getitem__(self, item):
+
+        return self.__tires[item]
+
+    def __setitem__(self, key, value):
+
+        self.__tires[key] = value
+
+
 class RobotInfo(object):
 
     """Class containing information about the robot
@@ -288,6 +325,7 @@ class RobotInfo(object):
         self.gyroscope = Gyroscope(self, info_dict)
         self.lidar = LiDAR(self, info_dict)
         self.radar = Radar(self, info_dict)
+        self.tires = Tires(self, info_dict)
 
         self.timestamp = info_dict["timestamp"]
         self.is_it = info_dict["isIt"]
@@ -363,16 +401,16 @@ class RobotConnection:
         self.info.gyroscope = Gyroscope(self.info, self.__info_dict)  # flip coordinates immediately
         self.info.lidar = LiDAR(self.info, self.__info_dict)
 
-    def set_tire_torque(self, tire_name, torque):
+    def set_tire_motor_power(self, tire_name, power):
 
-        """Sets the torque of tire `tire_name` to `torque`.
+        """Sets the power of tire motor `tire_name` to `power, where `power` is in watts.
 
         Parameters
         ----------
         tire_name : str
             The tire on which to apply the torque
-        torque : float
-            Torque, in Newton-meters
+        power : float
+            Power, in watts
 
         Returns
         -------
@@ -380,9 +418,9 @@ class RobotConnection:
         """
 
         if self.info.coordinates_are_inverted:
-            torque *= -1
+            power *= -1
 
-        self.__queue_event("SET tire " + tire_name + " " + str(torque))
+        self.__queue_event("SET tire power " + tire_name + " " + str(power))
 
     def set_tire_steering(self, tire_name, bearing):
 
@@ -402,7 +440,11 @@ class RobotConnection:
         if self.info.coordinates_are_inverted:
             bearing *= -1
 
-        self.__queue_event("SET steering " + tire_name + " " + str(bearing))
+        self.__queue_event("SET tire steering " + tire_name + " " + str(bearing))
+
+    def set_tire_brake_torque(self, tire_name, torque):
+
+        self.__queue_event("SET tire brake " + tire_name + " " + str(torque))
 
     def disconnect(self):
 

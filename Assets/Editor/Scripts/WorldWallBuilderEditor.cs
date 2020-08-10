@@ -1,7 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using Utility;
 
-namespace Utility.Editor
+namespace Editor.Scripts
 {
     [CustomEditor(typeof(WorldWallBuilder))]
     public class WorldWallBuilderEditor : UnityEditor.Editor

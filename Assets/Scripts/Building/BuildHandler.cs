@@ -29,7 +29,7 @@ namespace Building
         }
 
         public void Update()
-        {
+        { 
             if (!interactable)
                 return;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Win32;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;

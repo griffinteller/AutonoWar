@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using GamePhysics.Tire;
 using UnityEngine;
 
 namespace Main
 {
     public class ActionHandler : MonoBehaviour
     {
-        private readonly Dictionary<string, TireComponent> _tireComponents =
+        public readonly Dictionary<string, TireComponent> TireComponents =
             new Dictionary<string, TireComponent>();
 
         private ResetState _resetState = ResetState.Normal;
@@ -34,7 +35,7 @@ namespace Main
         public void LoadTiresIntoDict()
         {
             foreach (var tireComponent in transform.GetComponentsInChildren<TireComponent>())
-                _tireComponents.Add(tireComponent.name, tireComponent);
+                TireComponents.Add(tireComponent.name, tireComponent);
         }
 
         public void Update()
@@ -64,14 +65,7 @@ namespace Main
 
         private void UndoReset()
         {
-            RemoveBrakeForceOnTires();
             _rigidbody.isKinematic = false;
-        }
-
-        private void RemoveBrakeForceOnTires()
-        {
-            foreach (var tire in _tireComponents)
-                tire.Value.WheelCollider.brakeTorque = 0;
         }
 
         public void ResetRobot()
@@ -91,25 +85,29 @@ namespace Main
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.isKinematic = true;
 
-            foreach (var tire in _tireComponents.Values)
+            foreach (var tire in TireComponents.Values)
             {
-                tire.WheelCollider.motorTorque = 0;
-                tire.WheelCollider.brakeTorque = 10000000000000000;
-                tire.ResetTireSteering();
+                tire.ResetState();
             }
         }
 
-        public void SetTireTorque(string tireName, float torque)
+        public void SetTirePower(string tireName, float power)
         {
-            var tireObject = _tireComponents[tireName + "Vis"];
-            tireObject.WheelCollider.motorTorque = torque;
+            var tireObject = TireComponents[tireName];
+            tireObject.SingleTireMotor.Power = power;
         }
 
         public void SetTireSteering(string tireName, float bearing)
         {
-            var tireComponent = _tireComponents[tireName + "Vis"];
+            var tireComponent = TireComponents[tireName];
 
-            tireComponent.bearing = bearing;
+            tireComponent.RotateToBearing(bearing);
+        }
+
+        public void SetTireBrake(string tireName, float torque)
+        {
+            var tireComponent = TireComponents[tireName];
+            tireComponent.BrakeTorque = torque;
         }
     }
 }

@@ -48,17 +48,15 @@ namespace Sensor
 
             var robotMain = _robotBody.transform.root.GetComponent<RobotMain>();
             _mask = (LayerMask) robotMain.LidarMask;
-            
-            Debug.Log(_mask);
 
             for (var i = 0; i < _matrixHeight; i++)
-            for (var j = 0; j < _matrixWidth; j++)
-            {
-                _localRaycastDirections[i * _matrixWidth + j] =
-                    Quaternion.AngleAxis(j * horizontalDensity, Vector3.up)
-                    * Quaternion.AngleAxis(verticalFOVBounds[0] + i * verticalDensity, Vector3.right)
-                    * Vector3.forward;
-            }
+                for (var j = 0; j < _matrixWidth; j++)
+                {
+                    _localRaycastDirections[i * _matrixWidth + j] =
+                        Quaternion.AngleAxis(j * horizontalDensity, Vector3.up)
+                        * Quaternion.AngleAxis(verticalFOVBounds[0] + i * verticalDensity, Vector3.right)
+                        * Vector3.forward;
+                }
 
             StartRaycastJobs();
             Update();
