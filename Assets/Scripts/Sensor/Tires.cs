@@ -31,10 +31,8 @@ namespace Sensor
 
         public Tires(GameObject robotBody)
         {
-            var tireDict = robotBody.transform.parent.GetComponent<ActionHandler>().TireComponents;
-            _tireComponents = new TireComponent[tireDict.Count];
-            tireDict.Values.CopyTo(_tireComponents, 0);
-            
+            _tireComponents = robotBody.GetComponentsInChildren<TireComponent>();
+
             tires = new TireDescription[_tireComponents.Length];
             
             Update();
