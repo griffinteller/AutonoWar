@@ -275,24 +275,30 @@ namespace Main
             var keyword = remainingCommand[0];
             remainingCommand.RemoveAt(0);
 
-            switch (keyword)
+            try
             {
-                case "power":
-                    
-                    _actionHandler.SetTirePower(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
-                    break;
-                
-                case "steering":
-                    
-                    _actionHandler.SetTireSteering(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
-                    break;
-                
-                case "brake":
+                switch (keyword)
+                {
+                    case "power":
 
-                    _actionHandler.SetTireBrake(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
-                    break;
+                        _actionHandler.SetTirePower(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+
+                    case "steering":
+
+                        _actionHandler.SetTireSteering(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+
+                    case "brake":
+
+                        _actionHandler.SetTireBrake(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+                }
             }
-            
+            catch (FormatException e)
+            {
+                Debug.LogError("Format exception! String was: " + remainingCommand[1]);
+            }
         }
     }
 }

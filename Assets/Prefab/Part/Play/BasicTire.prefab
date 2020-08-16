@@ -348,8 +348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attachedTireComponent: {fileID: 0}
-  maxPower: 7500
-  maxMotorTorque: 3000
+  maxPower: 15000
+  maxMotorTorque: 7500
   maxAngularVelocity: 100
   maxBrakeTorque: 500
   rotationalFriction: 0.05

@@ -3,7 +3,7 @@ from awconnection import RobotConnection
 r = RobotConnection()
 r.connect()
 
-power = 0
+power = 3000
 steering = 0
 brake = 0
 
