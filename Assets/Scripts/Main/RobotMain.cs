@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cam;
 using GameDirection;
 using Networking;
@@ -18,21 +19,34 @@ namespace Main
 
         private const float TintCombineAmount = 0.9f;
         private const float MinStuckAngularVelocity = 1f;
+        
         private static bool _showingBeacons;
 
         public static Action<Collider, RobotMain> OnTriggerEnterCallbacks = (collider, robotMain) => { };
-        private GameObject _beaconObject;
-        private GameDirector _gameDirector;
-        private Color _newColor;
-        private bool _partsAreLoaded;
-        private Rigidbody _rigidbody;
-        private Transform _robotBody;
-        private ScheduledFlip _scheduledFlipComponent;
-        private bool _shouldColor;
+        private       GameObject                  _beaconObject;
+        private       Color                       _newColor;
+        private       bool                        _partsAreLoaded;
+        private       Rigidbody                   _rigidbody;
+        private       Transform                   _robotBody;
+        private       ScheduledFlip               _scheduledFlipComponent;
+        private       bool                        _shouldColor;
 
         private SinglePlayerDirector _singlePlayerDirector;
 
         public int robotIndex;
+
+        public LayerMask? LidarMask
+        {
+            get
+            {
+                if (_singlePlayerDirector)
+                    return GenerateSinglePlayerMask(robotIndex);
+                if (robotNetworkBridge && robotNetworkBridge.isLocal)
+                    return LayerMask.GetMask("OtherMultiPlayerRobots", "LidarVisible");
+
+                return null;
+            }
+        }
 
         [FormerlySerializedAs("_robotNetworkBridge")]
         public RobotNetworkBridge robotNetworkBridge;
@@ -41,7 +55,6 @@ namespace Main
         {
             _partsAreLoaded = true;
             GetComponent<ActionHandler>().LoadTiresIntoDict();
-            GetComponent<EasySuspension>().enabled = true;
             AddSphereTrigger();
 
             if (_shouldColor)
@@ -76,11 +89,19 @@ namespace Main
             SetMaximumAngularVelocities();
             InitializeScripts();
 
-            _beaconObject = transform.Find(BeaconName).gameObject;
-            _gameDirector = GameObject.FindGameObjectWithTag("GameDirector").GetComponent<GameDirector>();
-            _robotBody = transform.GetChild(0);
-            _rigidbody = GetComponent<Rigidbody>();
+            _beaconObject           = transform.Find(BeaconName).gameObject;
+            _robotBody              = transform.GetChild(0);
+            _rigidbody              = GetComponent<Rigidbody>();
             _scheduledFlipComponent = GetComponent<ScheduledFlip>();
+        }
+
+        private static LayerMask GenerateSinglePlayerMask(int selfIndex)
+        {
+            var layerBuilder = new List<string> {"LidarVisible"};
+            for (var i = 0; i < SinglePlayerDirector.MaxControllableBots; i++)
+                if (i != selfIndex)
+                    layerBuilder.Add("SinglePlayerRobot" + i);
+            return LayerMask.GetMask(layerBuilder.ToArray());
         }
 
         private void AddSphereTrigger()
@@ -134,7 +155,7 @@ namespace Main
         {
             if (robotNetworkBridge && !robotNetworkBridge.isLocal
                 || _singlePlayerDirector
-                && !(_singlePlayerDirector.SelectedRobot == robotIndex))
+                && _singlePlayerDirector.SelectedRobot != robotIndex)
 
                 SetBeaconActive(_showingBeacons);
 

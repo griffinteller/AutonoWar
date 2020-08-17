@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Building;
 using Photon.Pun;
 using UnityEngine;
-using Utility;
 
 namespace Main
 {
@@ -19,9 +18,7 @@ namespace Main
 
         [SerializeField] private RobotMain robotMain;
         [SerializeField] private Transform structureRoot;
-        [SerializeField] private Transform tireMeshRoot;
-        [SerializeField] private GameObject wheelColliderPrefab;
-        [SerializeField] private Transform wheelColliderRoot;
+        [SerializeField] private Transform tireRoot;
 
         [PunRPC]
         public void BuildRobotRpc(object data)
@@ -58,6 +55,7 @@ namespace Main
 
         private void CreateParts(RobotStructure structure)
         {
+            var tires = new List<RobotPart>();
             foreach (var part in structure.parts)
                 switch (part.type)
                 {
@@ -68,13 +66,16 @@ namespace Main
 
                     case PartType.Tire:
 
-                        AddTirePart(part);
+                        tires.Add(part);
                         break;
 
                     default:
 
                         throw new NotImplementedException();
                 }
+            
+            foreach (var tire in tires) // so suspension can be set correctly
+                AddTirePart(tire);
         }
 
         private void AddStructuralPart(RobotPart part)
@@ -87,42 +88,18 @@ namespace Main
 
         private void AddTirePart(RobotPart part)
         {
-            var wheelCollider = AddWheelCollider(part);
-            AddTireMesh(part, wheelCollider);
+            AddTireMesh(part);
             _robotRigidbody.mass += part.mass;
         }
 
-        private WheelCollider AddWheelCollider(RobotPart part)
-        {
-            var wheelColliderInstance = Instantiate(
-                wheelColliderPrefab, wheelColliderRoot);
-            wheelColliderInstance.transform.localPosition = part.position;
-
-            wheelColliderInstance.name = part.name;
-
-            var wheelCollider = wheelColliderInstance.GetComponent<WheelCollider>();
-            wheelCollider.steerAngle = part.rotation.eulerAngles.y;
-
-            return wheelCollider;
-        }
-
-        private void AddTireMesh(RobotPart part, WheelCollider wheelCollider)
+        private void AddTireMesh(RobotPart part)
         {
             var tireObjectPrefab = _gamePartsDict[part.part];
 
-            var tireObjectInstance = Instantiate(
-                tireObjectPrefab, tireMeshRoot);
-            tireObjectInstance.name = part.name + "Vis";
+            var tireObjectInstance = Instantiate(tireObjectPrefab, tireRoot);
+            tireObjectInstance.name = part.name;
             tireObjectInstance.transform.localPosition = part.position;
             tireObjectInstance.transform.localRotation = part.rotation;
-
-            var tireMeshAnimator = tireObjectInstance.GetComponent<TireMeshAnimator>();
-            tireMeshAnimator.tireMeshRoot = tireMeshRoot;
-            tireMeshAnimator.wheelCollider = wheelCollider;
-
-            var tireComponent = tireObjectInstance.GetComponent<TireComponent>();
-            tireComponent.WheelCollider = wheelCollider;
-            tireComponent.baseSteerAngle = wheelCollider.steerAngle;
         }
     }
 }

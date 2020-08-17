@@ -23,13 +23,13 @@ TagManager:
   - 
   - 
   - LidarVisible
-  - Robots
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - OtherMultiPlayerRobots
+  - SelfMultiPlayerRobot
+  - SinglePlayerRobot0
+  - SinglePlayerRobot1
+  - SinglePlayerRobot2
+  - SinglePlayerRobot3
+  - SinglePlayerRobot4
   - 
   - 
   - 

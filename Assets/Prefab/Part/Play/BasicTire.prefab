@@ -55,6 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,6 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1244964786308779473
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 212465993580246236}
+  - component: {fileID: 6380441259180733126}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -111,6 +114,78 @@ Transform:
   m_Father: {fileID: 3923196539191495623}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6380441259180733126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244964786308779473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f873447f7346f4ad68d8c262e53ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCollider: {fileID: 0}
+--- !u!1 &2295268858525242458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8737304673378136886}
+  - component: {fileID: 2308792089522908333}
+  - component: {fileID: 5228602400007698697}
+  m_Layer: 0
+  m_Name: PhysicalCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8737304673378136886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2295268858525242458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3923196539191495623}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2308792089522908333
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2295268858525242458}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 0.92
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5228602400007698697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2295268858525242458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdf7979228d243bf8032b2dbd03f1d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCollider: {fileID: 0}
 --- !u!1 &2507080134120736427
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,6 +241,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -190,6 +266,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5299458965186968501
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,9 +276,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3923196539191495623}
-  - component: {fileID: 3226723001406992128}
-  - component: {fileID: 4734048834668821019}
-  - component: {fileID: 8195048015080138190}
+  - component: {fileID: 2681607767694209848}
+  - component: {fileID: 76085418468071315}
+  - component: {fileID: 2159360443868426215}
   m_Layer: 0
   m_Name: BasicTire
   m_TagString: Untagged
@@ -221,10 +298,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 212465993580246236}
+  - {fileID: 8737304673378136886}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3226723001406992128
+--- !u!114 &2681607767694209848
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,14 +311,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5299458965186968501}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782460a61c9c454b9fda77e87e8e3e01, type: 3}
+  m_Script: {fileID: 11500000, guid: 54c1ef7c609bcb708975c7bc6945d715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tireComponent: {fileID: 4734048834668821019}
-  innerMesh: {fileID: 212465993580246236}
-  tireMeshRoot: {fileID: 0}
-  wheelCollider: {fileID: 0}
---- !u!114 &4734048834668821019
+--- !u!114 &76085418468071315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,22 +323,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 5299458965186968501}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1416999b371041a993ba1d4cc6fa7c56, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a8c15e23dda44009efc43725f86ba19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSteerAngle: 0
-  bearing: 0
-  WheelCollider: {fileID: 0}
---- !u!65 &8195048015080138190
-BoxCollider:
+  connectedRigidbody: {fileID: 0}
+  radius: 0.45
+  mass: 20
+  width: 1
+  autoConfigureSuspension: 1
+  spring: 35000
+  damper: 4000
+  suspensionDistance: 0.3
+  sweepType: 2
+--- !u!114 &2159360443868426215
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5299458965186968501}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3406933, y: 0.42197776, z: 0.9126946}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f83b8de29bbc4839890eb367491a4c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attachedTireComponent: {fileID: 0}
+  maxPower: 15000
+  maxMotorTorque: 7500
+  maxAngularVelocity: 100
+  maxBrakeTorque: 500
+  rotationalFriction: 0.05
