@@ -1,9 +1,10 @@
 from awconnection import RobotConnection
+import time
 
 r = RobotConnection()
 r.connect()
 
-power = 3000
+power = 30000
 steering = 0
 brake = 0
 
@@ -26,6 +27,17 @@ r.set_tire_brake_torque("ml", brake)
 
 while True:
 
-    print(r.info.tires["1"].longitudinal_slip)
+    r.lock_info()
+
+    start_time = time.time()
+    start_x = r.info.gps.position.x
+    while time.time() - start_time < 10:
+
+        new_x = r.info.gps.position.x
+        if new_x != start_x:
+
+            print("WRONG! x was " + str(start_x) + "but now is " + str(new_x))
+
+    r.unlock_info()
 
 r.disconnect()

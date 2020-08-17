@@ -178,10 +178,6 @@ class Gyroscope(object):
 
         self.__info_object_reference = info_object_reference
 
-        if self.__info_object_reference.coordinates_are_inverted:
-            self.up *= -1
-            self.right *= -1
-
         self.is_upside_down = gyroscope_dict["isUpsideDown"]
 
 
@@ -238,15 +234,8 @@ class LiDAR(object):
 
         self.distance_matrix = []
 
-        if self.__info_object_reference.coordinates_are_inverted:
-
-            # flips up-down and left-right
-            for container in container_array[::-1]:
-                self.distance_matrix.append(container["array"][::-1])
-        else:
-
-            for container in container_array:
-                self.distance_matrix.append(container["array"])
+        for container in container_array:
+            self.distance_matrix.append(container["array"])
 
 
 class TireDescription(object):
@@ -318,8 +307,6 @@ class RobotInfo(object):
 
     def __init__(self, info_dict):
 
-        self.coordinates_are_inverted = False
-
         self.altimeter = Altimeter(self, info_dict)
         self.gps = GPS(self, info_dict)
         self.gyroscope = Gyroscope(self, info_dict)
@@ -384,23 +371,6 @@ class RobotConnection:
 
         time.sleep(RobotConnection.__QUEUE_INTERVAL)
 
-    def flip_coordinates(self):
-
-        """Rotates the internal coordinate system of the robot 180 degrees around the forward axis.
-
-        This can be helpful if your robot flips over and you want to continue driving with old code. This reverses
-        steering, torque, and lidar.
-
-        Returns
-        -------
-        None
-        """
-
-        self.info.coordinates_are_inverted = not self.info.coordinates_are_inverted
-
-        self.info.gyroscope = Gyroscope(self.info, self.__info_dict)  # flip coordinates immediately
-        self.info.lidar = LiDAR(self.info, self.__info_dict)
-
     def set_tire_motor_power(self, tire_name, power):
 
         """Sets the power of tire motor `tire_name` to `power, where `power` is in watts.
@@ -416,9 +386,6 @@ class RobotConnection:
         -------
         None
         """
-
-        if self.info.coordinates_are_inverted:
-            power *= -1
 
         self.__queue_event("SET tire power " + tire_name + " " + str(power))
 
@@ -437,8 +404,6 @@ class RobotConnection:
         -------
         None
         """
-        if self.info.coordinates_are_inverted:
-            bearing *= -1
 
         self.__queue_event("SET tire steering " + tire_name + " " + str(bearing))
 
@@ -543,10 +508,15 @@ class RobotConnection:
 
             tmp_info = RobotInfo(self.__info_dict)
 
-            if self.info:
-                tmp_info.coordinates_are_inverted = self.info.coordinates_are_inverted
+            if self.__info_coherent_lock:
 
-            self.info = tmp_info
+                self.__hidden_info = tmp_info
+                self.__hidden_dict = tmp_dict
+
+            else:
+
+                self.info = tmp_info
+                self.__info_dict = tmp_dict
 
             if not self.__get_connected:
 
@@ -584,10 +554,6 @@ class RobotConnection:
                 tmp_dict = json.loads(info_text)
 
                 tmp_info = RobotInfo(tmp_dict)
-
-                if self.info:
-
-                    tmp_info.coordinates_are_inverted = self.info.coordinates_are_inverted
 
                 if self.__info_coherent_lock:
 
