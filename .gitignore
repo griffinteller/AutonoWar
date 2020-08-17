@@ -73,3 +73,13 @@ crashlytics-build.properties
 .idea/**
 *.idea/**
 awconnection/.idea/
+
+awconnection/tests/
+
+awconnection/awconnection.egg-info/
+
+awconnection/build/
+
+awconnection/dist/
+
+awconnection/awconnection/__pycache__/

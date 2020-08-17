@@ -13,7 +13,8 @@ namespace Main
 {
     public class RobotStateSender : MonoBehaviour
     {
-        private const string MessageSeparator = ";";
+        private const string MessageSeparator                   = ";";
+        private const byte   MaxPosixConnectionAttemptsPerFrame = 5;
 
         private static readonly Action<object> ConnectUpdateAndWritePosix = rss =>
         {
@@ -22,18 +23,30 @@ namespace Main
             try
             {
                 var robotDescriptionBytes = GetRobotDescriptionBytes(rssCast._robotStateDescription); // json
-
+                var tries                 = 0;
                 while (true)
+                {
+                    if (tries == MaxPosixConnectionAttemptsPerFrame)
+                    {
+                        #if UNITY_EDITOR
+                        Debug.Log("Rss connection giving up until next frame.");
+                        #endif
+                        
+                        return;
+                    }
+                    
                     try
                     {
-                        rssCast._clientStream =
-                            new FileStream("/tmp/" + rssCast.PipeName, FileMode.Open, FileAccess.Write);
+                        rssCast._clientStream = new FileStream(
+                            "/tmp/" + rssCast.PipeName, FileMode.Open, FileAccess.Write
+                        );
                         break;
                     }
                     catch (IOException e)
                     {
-                        Debug.Log("Couldn't connect rss: " + e);
+                        tries++;
                     }
+                }
 
                 rssCast._clientStream.Write(robotDescriptionBytes, 0, robotDescriptionBytes.Length);
                 rssCast._clientStream.Close();
@@ -114,13 +127,13 @@ namespace Main
 
         private void WindowsUpdate()
         {
+            _robotStateDescription.Update();
+            
             if (!_connected &&
                 !SystemUtility.TryConnectPipeClientWindows((NamedPipeClientStream) _clientStream, out _connected))
                 // we are not connected and we can't connect
                 return; // therefore the API is not running
-
-            _robotStateDescription.Update();
-
+            
             try
             {
                 var robotDescriptionBytes = GetRobotDescriptionBytes(_robotStateDescription);
@@ -145,15 +158,15 @@ namespace Main
             _currentWriteTask = Task.Factory.StartNew(ConnectUpdateAndWritePosix, this);
         }
 
-        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescriptionDescription)
+        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescription)
         {
             return Encoding.ASCII.GetBytes(
-                JsonUtility.ToJson(robotDescriptionDescription) + MessageSeparator);
+                JsonUtility.ToJson(robotDescription) + MessageSeparator);
         }
 
-        private static string GetRobotDescription(RobotDescription robotDescriptionDescription)
+        private static string GetRobotDescription(RobotDescription robotDescription)
         {
-            return JsonUtility.ToJson(robotDescriptionDescription);
+            return JsonUtility.ToJson(robotDescription);
         }
 
         private void GetRoomVariables(

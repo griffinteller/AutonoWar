@@ -20,6 +20,7 @@ namespace GameDirection
         public int numControllableBots;
         public GameObject robotParentPrefab;
         public float startingHeight = 3f;
+        public const float MaxControllableBots = 5;
         public override GameModeEnum GameMode => GameModeEnum.SinglePlayer;
 
         public int SelectedRobot

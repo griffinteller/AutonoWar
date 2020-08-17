@@ -11,7 +11,8 @@ namespace Main
 {
     public class UserScriptInterpreter : MonoBehaviour
     {
-        private const char Separator = ';';
+        private const char Separator                     = ';';
+        private const byte MaxConnectionAttemptsPerFrame = 5;
 
         private static readonly Action<object> GetEventsActionWindows = usi =>
         {
@@ -79,17 +80,30 @@ namespace Main
         {
             var usiCast = (UserScriptInterpreter) usi;
 
+            var tries = 0;
             while (true)
+            {
+                if (tries == MaxConnectionAttemptsPerFrame)
+                {
+                    usiCast._connected = false;
+                    
+                    #if UNITY_EDITOR
+                    Debug.Log("Usi connection giving up until next frame.");
+                    #endif
+                    
+                    return;
+                }
+                
                 try
                 {
-                    usiCast._clientStream = new FileStream(
-                        "/tmp/" + usiCast.PipeName, FileMode.Open, FileAccess.Read);
+                    usiCast._clientStream = new FileStream("/tmp/" + usiCast.PipeName, FileMode.Open, FileAccess.Read);
                     break;
                 }
                 catch (IOException e)
                 {
-                    Debug.Log("Couldn't connect usi: " + e);
+                    tries++;
                 }
+            }
 
             usiCast._clientReader = new StreamReader(usiCast._clientStream);
 
@@ -106,13 +120,14 @@ namespace Main
         private StreamReader _clientReader;
         private Stream _clientStream;
 
-        private bool _connected;
-        private Task _currentGetEventsTask;
-        private Task _currentVerifyConnectionTask;
+        private bool                    _connected;
+        private Task                    _currentGetEventsTask;
+        private Task                    _currentVerifyConnectionTask;
+        private Task                    _currentPosixConnectionTask;
         private CancellationTokenSource _getEventsCancellationTokenSource;
-        private bool _justStarted = true;
-        private SimplePlatform _platform;
-        private RobotMain _robotMain;
+        private bool                    _justStarted = true;
+        private SimplePlatform          _platform;
+        private RobotMain               _robotMain;
 
         private string PipeName = "EventQueuePipe";
 
@@ -160,7 +175,7 @@ namespace Main
 
                 case SimplePlatform.Posix:
 
-                    Task.Factory.StartNew(ConnectToPipePosix, this);
+                    _currentPosixConnectionTask = Task.Factory.StartNew(ConnectToPipePosix, this);
                     break;
 
                 default:
@@ -194,7 +209,14 @@ namespace Main
         private void PosixUpdate()
         {
             if (!_connected)
-                return;
+            {
+                if (_currentGetEventsTask == null 
+                 || _currentPosixConnectionTask.IsCompleted 
+                 || _currentGetEventsTask.IsFaulted)
+                    InitStreams();
+                else
+                    return;
+            }
 
             if (_justStarted || _currentGetEventsTask.IsCompleted)
                 _currentGetEventsTask = Task.Factory.StartNew(GetEventsActionPosix, this);
@@ -220,7 +242,8 @@ namespace Main
             var argsList = new List<string>(args);
             var keyword = argsList[0];
 
-            if (!char.IsLetter(keyword[0])) keyword = keyword.Substring(1);
+            if (!char.IsLetter(keyword[0]))
+                keyword = keyword.Substring(1);
 
             argsList.RemoveAt(0);
             switch (keyword)
@@ -234,17 +257,47 @@ namespace Main
 
         private void Set(List<string> remainingCommand)
         {
-            switch (remainingCommand[0])
+            var keyword = remainingCommand[0];
+            remainingCommand.RemoveAt(0);
+            
+            switch (keyword)
             {
                 case "tire":
 
-                    _actionHandler.SetTireTorque(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
+                    //_actionHandler.SetTirePower(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
+                    Tire(remainingCommand);
                     break;
+            }
+        }
 
-                case "steering":
+        private void Tire(List<string> remainingCommand)
+        {
+            var keyword = remainingCommand[0];
+            remainingCommand.RemoveAt(0);
 
-                    _actionHandler.SetTireSteering(remainingCommand[1], (float) double.Parse(remainingCommand[2]));
-                    break;
+            try
+            {
+                switch (keyword)
+                {
+                    case "power":
+
+                        _actionHandler.SetTirePower(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+
+                    case "steering":
+
+                        _actionHandler.SetTireSteering(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+
+                    case "brake":
+
+                        _actionHandler.SetTireBrake(remainingCommand[0], (float) double.Parse(remainingCommand[1]));
+                        break;
+                }
+            }
+            catch (FormatException e)
+            {
+                Debug.LogError("Format exception! String was: " + remainingCommand[1]);
             }
         }
     }

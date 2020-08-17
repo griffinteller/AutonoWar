@@ -12,6 +12,8 @@ Properties {
         #pragma multi_compile_fog
 
         #define TERRAIN_SPLAT_ADDPASS
+    #include <Lighting.cginc>
+
         #include "TerrainSplatmapCommon.cginc"
 
         sampler2D _ColorMap;

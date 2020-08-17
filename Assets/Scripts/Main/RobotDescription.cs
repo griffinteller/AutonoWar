@@ -21,11 +21,12 @@ namespace Main
         public GPS gps;
 
         public Gyroscope gyroscope;
-        public bool isIt;
-        public Lidar lidar;
-        public Radar radar;
-        public float timestamp;
-        public bool hasGameStarted;
+        public bool      isIt;
+        public Lidar     lidar;
+        public Radar     radar;
+        public Tires     tires;
+        public float     timestamp;
+        public bool      hasGameStarted;
 
         public RobotDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0)
         {
@@ -34,6 +35,7 @@ namespace Main
             gps = new GPS(gameObject);
             altimeter = new Altimeter(gameObject);
             radar = new Radar(gameObject);
+            tires = new Tires(gameObject);
             this.gameMode = new GameModeEnumWrapper
             {
                 Index = (int) gameMode
@@ -57,6 +59,7 @@ namespace Main
             gps.Update();
             altimeter.Update();
             radar.Update();
+            tires.Update();
             timestamp = Time.fixedTime * 1000f;
 
             if (gameMode.Equals("Classic Tag")) 
