@@ -47,8 +47,8 @@ MonoBehaviour:
   partList:
   - {fileID: 8058126076455309461, guid: d476a153912010c4687c1c3099587713, type: 3}
   - {fileID: 5573408519385158023, guid: b8da59ced53948643939887eb2de7ce2, type: 3}
-  - {fileID: 3560349293789238487, guid: f8e442d5fbfb5ea4db76a66c41c3f42e, type: 3}
-  rootCube: {fileID: 3560349293789238487, guid: f8e442d5fbfb5ea4db76a66c41c3f42e,
+  - {fileID: 3307513653334981108, guid: 457a3bf85dfdefa48a237fd327983945, type: 3}
+  rootCube: {fileID: 3307513653334981108, guid: 457a3bf85dfdefa48a237fd327983945,
     type: 3}
   structure:
     name: 
