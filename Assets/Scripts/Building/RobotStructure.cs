@@ -39,6 +39,8 @@ namespace Building
     public class RobotStructure
     {
         public string name;
+        public float mass;
+        public List<string> tires = new List<string>();
         public RobotPart[] parts;
 
         public RobotStructure(string name, 
@@ -49,7 +51,13 @@ namespace Building
             parts = new RobotPart[partsBuildComponents.Count];
 
             for (var i = 0; i < partsBuildComponents.Count; i++)
+            {
                 parts[i] = partsBuildComponents[i].GetRobotPartDescription(robotCenterOfMass);
+                mass += parts[i].mass;
+                
+                if (parts[i].type == PartType.Tire)
+                    tires.Add(parts[i].name);
+            }
         }
 
         public string ToJson()

@@ -40,11 +40,13 @@ namespace Building
             if (!Input.GetKey(KeyCode.LeftShift))
                 return;
 
-            if (Input.GetMouseButtonDown(0)) RegisterMouseDown(); // we want to make sure we don't drag and then place.
+            if (Input.GetMouseButtonDown(0)) 
+                RegisterMouseDown(); // we want to make sure we don't drag and then place.
 
             if (Input.GetMouseButtonUp(0))
                 PlaceItemIfPossible();
-            else if (Input.GetMouseButtonUp(1)) RemoveItemIfPossible();
+            else if (Input.GetMouseButtonUp(1))
+                RemoveItemIfPossible();
         }
 
         private void RegisterMouseDown()
@@ -97,7 +99,8 @@ namespace Building
         {
             var parts = new List<BuildObjectComponent>();
 
-            foreach (Transform child in transform) parts.Add(child.GetComponent<BuildObjectComponent>());
+            foreach (Transform child in transform) 
+                parts.Add(child.GetComponent<BuildObjectComponent>());
 
             return parts;
         }

@@ -3,7 +3,7 @@ using Building;
 using UnityEngine;
 using Utility;
 
-namespace UI
+namespace UI.RobotDisplay
 {
     public class DesignLoaderDisplay : MonoBehaviour
     {
@@ -21,6 +21,18 @@ namespace UI
             LoadComponentListIntoDict();
             CreateParts();
             ScaleToFit();
+            //SetPivotToGeometricCenter();
+        }
+
+        private void SetPivotToGeometricCenter()
+        {
+            var worldMin = MeshUtility.GetMinWorldPointOfChildMeshes(gameObject);
+            var worldMax = MeshUtility.GetMaxWorldPointOfChildMeshes(gameObject);
+            var geometricCenter = (worldMax + worldMin) / 2;
+            var delta = geometricCenter - transform.position;
+
+            foreach (Transform child in transform)
+                child.position -= delta;
         }
 
         private void LoadComponentListIntoDict()

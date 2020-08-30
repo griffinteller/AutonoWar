@@ -136,7 +136,7 @@ namespace Utility
             return structure;
         }
         
-        public static RobotStructure[] GetAllRobotStructures()
+        public static List<RobotStructure> GetAllRobotStructures()
         {
             var robotDirectory = SystemUtility.GetAndCreateRobotsDirectory();
             var robotFiles = Directory.GetFiles(robotDirectory, 
@@ -161,7 +161,7 @@ namespace Utility
                 result.Add(structure);
             }
 
-            return result.ToArray();
+            return result;
         }
     }
 }

@@ -35,24 +35,40 @@ namespace Utility
         
         public static Vector3 GetCompoundMeshSize(GameObject gameObject)
         {
-            var meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
-            
-            if (meshFilters.Length == 0)
-                throw new ArgumentException("GameObject must have at least one mesh filter");
+            var totalMin = GetMinWorldPointOfChildMeshes(gameObject);
+            var totalMax = GetMaxWorldPointOfChildMeshes(gameObject);
 
+            return totalMax - totalMin;
+        }
+
+        public static Vector3 GetMinWorldPointOfChildMeshes(GameObject gameObject)
+        {
+            var meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
             var totalMin = GetMinWorldPointOfMesh(meshFilters[0]);
-            var totalMax = GetMaxWorldPointOfMesh(meshFilters[0]);
 
             for (var i = 1; i < meshFilters.Length; i++)
             {
                 var min = GetMinWorldPointOfMesh(meshFilters[i]);
-                var max = GetMaxWorldPointOfMesh(meshFilters[i]);
 
-                totalMin = Vector3.Min(totalMin, min);
-                totalMax = Vector3.Max(totalMax, max);
+                totalMin = Vector3.Min(totalMin, min); ;
             }
 
-            return totalMax - totalMin;
+            return totalMin;
+        }
+        
+        public static Vector3 GetMaxWorldPointOfChildMeshes(GameObject gameObject)
+        {
+            var meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+            var totalMax = GetMaxWorldPointOfMesh(meshFilters[0]);
+
+            for (var i = 1; i < meshFilters.Length; i++)
+            {
+                var max = GetMaxWorldPointOfMesh(meshFilters[i]);
+
+                totalMax = Vector3.Max(totalMax, max); ;
+            }
+
+            return totalMax;
         }
         
         private static Vector3 GetMinWorldPointOfMesh(MeshFilter meshFilter)

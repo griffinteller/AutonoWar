@@ -67,7 +67,7 @@ namespace Main
         private SimplePlatform _platform;
         private RobotMain _robotMain;
 
-        private RobotDescription _robotStateDescription;
+        private RobotStateDescription _robotStateDescription;
 
         private string PipeName = "RobotInfoPipe";
         public GameObject robotBody;
@@ -77,7 +77,7 @@ namespace Main
             _platform = SystemUtility.GetSimplePlatform();
 
             GetRoomVariables(out var gameMode, out var map, out var actorNumber);
-            _robotStateDescription = new RobotDescription(robotBody, gameMode, map, actorNumber);
+            _robotStateDescription = new RobotStateDescription(robotBody, gameMode, map, actorNumber);
 
             _robotMain = GetComponent<RobotMain>();
             PipeName += _robotMain.robotIndex;
@@ -158,15 +158,15 @@ namespace Main
             _currentWriteTask = Task.Factory.StartNew(ConnectUpdateAndWritePosix, this);
         }
 
-        private static byte[] GetRobotDescriptionBytes(RobotDescription robotDescription)
+        private static byte[] GetRobotDescriptionBytes(RobotStateDescription robotStateDescription)
         {
             return Encoding.ASCII.GetBytes(
-                JsonUtility.ToJson(robotDescription) + MessageSeparator);
+                JsonUtility.ToJson(robotStateDescription) + MessageSeparator);
         }
 
-        private static string GetRobotDescription(RobotDescription robotDescription)
+        private static string GetRobotDescription(RobotStateDescription robotStateDescription)
         {
-            return JsonUtility.ToJson(robotDescription);
+            return JsonUtility.ToJson(robotStateDescription);
         }
 
         private void GetRoomVariables(

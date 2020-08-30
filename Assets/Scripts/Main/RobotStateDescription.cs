@@ -8,7 +8,7 @@ using Gyroscope = Sensor.Gyroscope;
 namespace Main
 {
     [Serializable]
-    public class RobotDescription
+    public class RobotStateDescription
     {
         private int _id;
         private GameDirector _gameDirector;
@@ -28,7 +28,7 @@ namespace Main
         public float     timestamp;
         public bool      hasGameStarted;
 
-        public RobotDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0)
+        public RobotStateDescription(GameObject gameObject, GameModeEnum gameMode, MapEnum map, int actorNumber = 0)
         {
             lidar = new Lidar(gameObject);
             gyroscope = new Gyroscope(gameObject);
