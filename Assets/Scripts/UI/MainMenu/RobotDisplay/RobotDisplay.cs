@@ -16,6 +16,8 @@ namespace UI.MainMenu.RobotDisplay
         public RobotInfoPanel infoPanel;
         public Button editButton;
         public Button deleteButton;
+
+        public bool interactable;
         
         private const float Spacing = 8;
         private const float MouseSensitivity = 0.015f;
@@ -140,6 +142,9 @@ namespace UI.MainMenu.RobotDisplay
         private Vector3 _lastMousePos;
         private void KeyCheck()
         {
+            if (!interactable)
+                return;
+            
             if (Input.GetMouseButtonDown(0))
                 _lastMousePos = Input.mousePosition;
             
@@ -231,6 +236,11 @@ namespace UI.MainMenu.RobotDisplay
         public void EditSelectedRobot()
         {
             StartBuildSceneWithSettings(_structures[SelectedIndex].name);
+        }
+
+        public void SetInteractable(bool interactable = true)
+        {
+            this.interactable = interactable;
         }
     }
 }

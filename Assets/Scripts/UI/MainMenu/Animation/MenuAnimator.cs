@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UI.MainMenu.Animation
 {
@@ -9,6 +8,9 @@ namespace UI.MainMenu.Animation
     {
         public float baseDelay;
         public List<MenuItemAnimation> otherAnimations = new List<MenuItemAnimation>();
+
+        public UnityEvent onEnter;
+        public UnityEvent onExit;
 
         private List<MenuItemAnimation> childAnimations;
 
@@ -32,6 +34,8 @@ namespace UI.MainMenu.Animation
             gameObject.SetActive(true);
             foreach (var animation in childAnimations)
                 animation.Enter(baseDelay);
+            
+            onEnter.Invoke();
         }
 
         public void Exit()
@@ -47,6 +51,8 @@ namespace UI.MainMenu.Animation
                 else
                     animation.Exit(baseDelay);
             }
+            
+            onExit.Invoke();
         }
     }
 }
