@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Photon.Pun;
 using UI;
+using UI.Scoreboard;
 using UnityEngine;
 using Utility;
 

@@ -6,21 +6,34 @@ namespace Cam
     {
         private Camera _camera;
         public RectTransform viewport;
+        public RectTransform canvasTransform;
 
-        public void Start()
+        private RectTransform _parent;
+        
+        public void Awake()
         {
             _camera = GetComponent<Camera>();
+            _parent = viewport.parent.GetComponent<RectTransform>();
         }
 
         public void Update()
         {
-            var size = Vector2.Scale(viewport.rect.size, viewport.lossyScale);
-            var rect = new Rect(viewport.position.x, viewport.position.y, size.x, size.y);
-            rect.x -= viewport.pivot.x * size.x;
-            rect.y -= viewport.pivot.y * size.y;
+            var localSize = viewport.rect.size;
+            var worldBottomLeft = _parent.TransformPoint(
+                Vector2.Scale(viewport.anchorMin, _parent.rect.size) + viewport.offsetMin);
 
-            _camera.rect = new Rect(rect.x / Screen.width, rect.y / Screen.height,
-                rect.width / Screen.width, rect.height / Screen.height);
+            var canvasBottomLeft = canvasTransform.InverseTransformPoint(worldBottomLeft);
+            var canvasRelativeSize = canvasTransform.InverseTransformVector(
+                Vector3.Scale(localSize, viewport.lossyScale));
+
+            var canvasSize = canvasTransform.rect.size;
+            
+            var screenBottomLeft = new Vector2(canvasBottomLeft.x / canvasSize.x, 
+                canvasBottomLeft.y / canvasSize.y);
+            var screenSize = new Vector2(canvasRelativeSize.x / canvasSize.x, 
+                canvasRelativeSize.y / canvasSize.y);
+
+            _camera.rect = new Rect(screenBottomLeft, screenSize);
         }
     }
 }

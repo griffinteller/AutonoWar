@@ -13,6 +13,7 @@ TagManager:
   - Clock
   - Hud
   - GrandPrixEndPoint
+  - TopBarButtons
   layers:
   - Default
   - TransparentFX

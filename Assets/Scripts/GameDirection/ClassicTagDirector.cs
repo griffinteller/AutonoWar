@@ -6,6 +6,7 @@ using Networking;
 using Photon.Pun;
 using Photon.Realtime;
 using UI;
+using UI.Scoreboard;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;

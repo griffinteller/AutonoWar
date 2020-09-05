@@ -48,6 +48,9 @@ namespace Utility
 
         public static void DestroyAllChildren(Transform transform)
         {
+            if (transform.childCount == 0)
+                return;
+            
             foreach (Transform child in transform)
                 UnityEngine.Object.Destroy(child.gameObject);
         }

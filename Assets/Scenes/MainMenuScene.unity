@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 126270860}
   - component: {fileID: 126270859}
   - component: {fileID: 126270858}
+  - component: {fileID: 126270861}
   m_Layer: 5
   m_Name: RobotScreenCanvas
   m_TagString: Untagged
@@ -222,6 +223,21 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &126270861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126270856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40385f08b094b31b7ee1e2e7d7fb563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDelay: 0.1
+  otherAnimations:
+  - {fileID: 1254337764}
 --- !u!1 &146952795
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,13 +829,14 @@ GameObject:
   - component: {fileID: 461327260}
   - component: {fileID: 461327259}
   - component: {fileID: 461327258}
+  - component: {fileID: 461327262}
   m_Layer: 5
   m_Name: HomeScreenCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &461327258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -902,6 +919,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &461327262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461327257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40385f08b094b31b7ee1e2e7d7fb563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDelay: 0
+  otherAnimations: []
 --- !u!1 &487994868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,6 +1075,7 @@ GameObject:
   - component: {fileID: 734116094}
   - component: {fileID: 734116096}
   - component: {fileID: 734116095}
+  - component: {fileID: 734116097}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -1092,7 +1124,7 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.32
+    x: 0
     y: 0
     width: 1
     height: 1
@@ -1116,6 +1148,20 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &734116097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734116093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df2103f53eb4bb49abaaf86cfdee933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewport: {fileID: 1254337763}
+  canvasTransform: {fileID: 1780532213}
 --- !u!1001 &762111699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1950,6 +1996,7 @@ GameObject:
   - component: {fileID: 1116577651}
   - component: {fileID: 1116577653}
   - component: {fileID: 1116577654}
+  - component: {fileID: 1116577655}
   m_Layer: 5
   m_Name: RobotPanel
   m_TagString: Untagged
@@ -1978,7 +2025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1071, y: -163}
+  m_AnchoredPosition: {x: -2413, y: -163}
   m_SizeDelta: {x: 983.0242, y: 1372.3357}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1116577651
@@ -2059,6 +2106,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleText: {fileID: 1865116121}
   infoList: {fileID: 1572569854}
+--- !u!114 &1116577655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116577649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c6bb1ffe4fc46e49000f78dc08d70fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localDelta: {x: -1342, y: 0, z: 0}
 --- !u!1 &1139475980
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,6 +2153,8 @@ MonoBehaviour:
   newRobotObjectPrefab: {fileID: 3410788921494292685, guid: aaa5e74678564a8418b2c42a11f17960,
     type: 3}
   infoPanel: {fileID: 1116577654}
+  editButton: {fileID: 1749893516}
+  deleteButton: {fileID: 1945153801}
 --- !u!4 &1139475982
 Transform:
   m_ObjectHideFlags: 0
@@ -2325,6 +2387,68 @@ MonoBehaviour:
   unselectedColor: {r: 0.26666668, g: 0.35686275, b: 0.5176471, a: 1}
   selectedTextColor: {r: 0, g: 0, b: 0, a: 1}
   unselectedTextColor: {r: 1, g: 1, b: 1, a: 1}
+  onDeselect: []
+  onSelect: []
+--- !u!1 &1254337762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1254337763}
+  - component: {fileID: 1254337764}
+  m_Layer: 5
+  m_Name: RobotViewport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1254337763
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254337762}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1780532213}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.32, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1254337764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254337762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2720310fae4fd28518d047e7bfd76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onScreen:
+    serializedVersion: 2
+    x: 0.32
+    y: 0
+    width: 0.68
+    height: 1
+  offScreen:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &1314396762
 GameObject:
   m_ObjectHideFlags: 0
@@ -3281,7 +3405,7 @@ GameObject:
   - component: {fileID: 1749893517}
   - component: {fileID: 1749893516}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Edit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3349,7 +3473,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1749893517}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1139475981}
+        m_TargetAssemblyTypeName: UI.RobotDisplay.RobotDisplay, Assembly-Runtime
+        m_MethodName: EditSelectedRobot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1749893517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3615,6 +3751,7 @@ RectTransform:
   m_Children:
   - {fileID: 1845659539}
   - {fileID: 1331156594}
+  - {fileID: 1254337763}
   m_Father: {fileID: 2073378529}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3794,7 +3931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_ShowMaskGraphic: 1
 --- !u!114 &1803312335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3808,7 +3945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3915,7 +4052,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1390223257}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.99999994
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4239,7 +4376,7 @@ GameObject:
   - component: {fileID: 1945153802}
   - component: {fileID: 1945153801}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Delete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
