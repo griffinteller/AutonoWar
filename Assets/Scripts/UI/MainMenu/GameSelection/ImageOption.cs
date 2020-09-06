@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 namespace UI.MainMenu.GameSelection
 {
+    [RequireComponent(typeof(Button))]
     public class ImageOption : MonoBehaviour
     {
         [SerializeField] private Image image;
         [SerializeField] private TMP_Text text;
+        [SerializeField] private Image highlight;
 
         private ImageOptionPanel _parentPanel;
         private bool _selected;
@@ -18,7 +20,9 @@ namespace UI.MainMenu.GameSelection
             get => _selected;
             set
             {
-                _parentPanel.SetSelected();
+                var newValue = _parentPanel.SetSelected(this, value);
+                _selected = newValue;
+                highlight.gameObject.SetActive(_selected);
             }
         }
 
@@ -34,9 +38,10 @@ namespace UI.MainMenu.GameSelection
             set => text.text = value;
         }
 
-        public void Awake()
+        public void Start()
         {
-            _parentPanel = transform.parent.GetComponent<ImageOptionPanel>();
+            _parentPanel = transform.GetComponentInParent<ImageOptionPanel>();
+            GetComponent<Button>().onClick.AddListener(delegate { Selected = !Selected; });
         }
     }
 }
