@@ -371,9 +371,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1589127817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523951fbb61d4018af7025649866a973, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dcf54c4d7864beeba419fe3fb4cec9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  degree: 4
+  majorRadius: 10
+  minorRadius: 2
+  majorArc: 360
+  minorArc: 360
+  minorAngle: 180
 --- !u!33 &1589127819
 MeshFilter:
   m_ObjectHideFlags: 0

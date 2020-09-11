@@ -76,13 +76,13 @@ namespace Editor.Scripts
             {
                 var firstTriangleIndex = (row * edgesPerSide + col) * 2 * 3;
                 triangles[firstTriangleIndex] = row * verticesPerSide + col;
-                triangles[firstTriangleIndex + 1] = (row + 1) * verticesPerSide + col;
-                triangles[firstTriangleIndex + 2] = (row + 1) * verticesPerSide + col + 1; 
+                triangles[firstTriangleIndex + 1] = (row + 1) * verticesPerSide + col + 1;
+                triangles[firstTriangleIndex + 2] = (row + 1) * verticesPerSide + col;
                 
                 var secondTriangleIndex = (row * edgesPerSide + col) * 2 * 3 + 3;
                 triangles[secondTriangleIndex] = row * verticesPerSide + col;
-                triangles[secondTriangleIndex + 1] = (row + 1) * verticesPerSide + col + 1;
-                triangles[secondTriangleIndex + 2] = row * verticesPerSide + col + 1;
+                triangles[secondTriangleIndex + 1] = row * verticesPerSide + col + 1;
+                triangles[secondTriangleIndex + 2] = (row + 1) * verticesPerSide + col + 1;
             }
 
             return triangles;

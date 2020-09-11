@@ -1,0 +1,90 @@
+using UnityEngine;
+
+namespace GameTerrain.Torus
+{
+    public class TorusTerrainQuad : TerrainQuad
+    {
+        public float MajorRadius;
+        public float MinorRadius;
+        public float MajorArc; // degrees
+        public float MinorArc;
+        public float MinorAngle; // 0 is outside, 180 is inside
+
+        public override float VertexDistance => MajorVertexArc;
+        public float MajorVertexArc => MajorArc / (VerticesPerSide - 1);
+        public float MinorVertexArc => MinorArc / (VerticesPerSide - 1);
+
+        protected override Vector3[] GenerateBaseVertices()
+        {
+            var verticesPerSide = VerticesPerSide;
+            var majorVertexArc = MajorVertexArc;
+            var minorVertexArc = MinorVertexArc;
+            var result = new Vector3[TotalNumberOfVertices];
+
+            var i = 0;
+            for (var row = 0; row < verticesPerSide; row++)
+            {
+                var rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
+                var rowRadius = MajorRadius + MinorRadius * Mathf.Cos(Mathf.Deg2Rad * rowAngle);
+                var rowHeight = MinorRadius * Mathf.Sin(Mathf.Deg2Rad * rowAngle);
+                for (var col = 0; col < verticesPerSide; col++)
+                {
+                    var colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
+                    result[i].x = rowRadius * -Mathf.Sin(Mathf.Deg2Rad * colAngle);
+                    result[i].y = rowHeight;
+                    result[i].z = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
+
+                    i++;
+                }
+            }
+
+            return result;
+        }
+
+        protected override Vector3[] GenerateBaseNormals()
+        {
+            var verticesPerSide = VerticesPerSide;
+            var majorVertexArc = MajorVertexArc;
+            var minorVertexArc = MinorVertexArc;
+            var result = new Vector3[TotalNumberOfVertices];
+
+            var i = 0;
+            for (var row = 0; row < verticesPerSide; row++)
+            {
+                var rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
+                for (var col = 0; col < verticesPerSide; col++)
+                {
+                    var colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
+                    result[i] = Quaternion.Euler(0, -colAngle, 0)
+                                * Quaternion.Euler(-rowAngle, 0, 0)
+                                * Vector3.forward;
+                    i++;
+                }
+            }
+
+            return result;
+        }
+
+        protected override Vector2[] GenerateUv()
+        {
+            return GenerateStandardUv(VerticesPerSide);
+        }
+
+        public TorusTerrainQuad(byte degree, float majorRadius, float minorRadius, float majorArc, float minorArc,  
+            float minorAngle, TriangleCache cache, float[][] heightmap = null)
+        {
+            Degree = degree;
+            MajorRadius = majorRadius;
+            MinorRadius = minorRadius;
+            MajorArc = majorArc;
+            MinorArc = minorArc;
+            MinorAngle = minorAngle;
+            TriangleCacheObject = cache;
+
+            if (heightmap == null)
+                InitializeHeightmap();
+            else
+                Heightmap = heightmap;
+        }
+    }
+}

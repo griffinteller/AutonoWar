@@ -11,13 +11,14 @@ namespace GameTerrain
         public byte Degree { get; set; }
         public byte MipmapMask { get; set; }
         public float[][] Heightmap;
-        
-        public abstract Vector3[] BaseVertices { get; }
-        public abstract Vector3[] BaseNormals { get; }
-        public abstract Vector2[] Uv { get; }
 
-        private Mesh _mesh = new Mesh();
-        public Mesh Mesh => _mesh;
+        public Vector3[] BaseVertices { get; private set; }
+        public Vector3[] BaseNormals { get; private set; }
+        public Vector2[] Uv { get; private set; }
+
+        public abstract float VertexDistance { get; }
+
+        public Mesh Mesh { get; } = new Mesh();
 
         public int VerticesPerSide => (int) (Mathf.Pow(2, Degree) + 0.5f) + 1;
 
@@ -32,27 +33,16 @@ namespace GameTerrain
 
         protected TriangleCache TriangleCacheObject;
 
-        protected void GenerateMesh()
-        {
-            var totalNumberOfVertices = TotalNumberOfVertices;
-            var normals = BaseNormals;
-            var baseVertices = BaseVertices;
-            
-            var verts = new Vector3[totalNumberOfVertices];
+        protected abstract Vector3[] GenerateBaseVertices();
+        protected abstract Vector3[] GenerateBaseNormals();
+        protected abstract Vector2[] GenerateUv();
 
-            var i = 0;
-            foreach (var row in Heightmap)
-            foreach (var height in row)
-            {
-                verts[i] = height * normals[i] + baseVertices[i];
-                i++;
-            }
-            
-            _mesh.Clear();
-            _mesh.vertices = verts;
-            _mesh.triangles = TriangleCacheObject.Cache[Degree][MipmapMask];
-            _mesh.normals = normals;
-            _mesh.uv = Uv;
+        public void Generate()
+        {
+            BaseVertices = GenerateBaseVertices();
+            BaseNormals = GenerateBaseNormals();
+            Uv = GenerateUv();
+            RefreshMesh();
         }
 
         protected void InitializeHeightmap()
@@ -76,6 +66,39 @@ namespace GameTerrain
             }
 
             return result;
+        }
+
+        public void RefreshMesh()
+        {
+            var totalNumberOfVertices = TotalNumberOfVertices;
+
+            var verts = new Vector3[totalNumberOfVertices];
+
+            var i = 0;
+            foreach (var row in Heightmap)
+            foreach (var height in row)
+            {
+                verts[i] = height * BaseNormals[i] + BaseVertices[i];
+                i++;
+            }
+            
+            Mesh.Clear();
+            Mesh.vertices = verts;
+            Mesh.triangles = TriangleCacheObject.Cache[Degree][MipmapMask];
+            Mesh.uv = Uv;
+        }
+        
+        protected static Vector2[] GenerateStandardUv(int verticesPerSide)
+        {
+            var uv = new Vector2[verticesPerSide * verticesPerSide];
+
+            for (var row = 0; row < verticesPerSide; row++)
+            for (var col = 0; col < verticesPerSide; col++)
+                uv[row * verticesPerSide + col] = new Vector2(
+                    (float) col / verticesPerSide,
+                    1 - row / (float) verticesPerSide);
+
+            return uv;
         }
     }
 }
