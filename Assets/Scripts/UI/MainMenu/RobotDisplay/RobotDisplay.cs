@@ -24,7 +24,7 @@ namespace UI.MainMenu.RobotDisplay
         private const float SmoothTime = 0.2f;
 
         private List<RobotStructure> _structures;
-        private Dictionary<string, int> _structureIndicesByName = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _structureIndicesByName = new Dictionary<string, int>();
 
         private int _lastSelectedIndex = -2;
         private int _selectedIndex;
@@ -49,7 +49,23 @@ namespace UI.MainMenu.RobotDisplay
         public void Awake()
         {
             _structures = SystemUtility.GetAllRobotStructures();
+
+            GetRidOfCorruptStructures();
             GetStructureIndicesByName();
+        }
+
+        private void GetRidOfCorruptStructures()
+        {
+            // TODO: Add other checks to structures, and maybe delete corrupt ones? Haven't decided.
+        
+            var i = 0;
+            while (i < _structures.Count)
+            {
+                if (_structures[i].name.IsNullOrEmpty())
+                    _structures.RemoveAt(i);
+                else
+                    i++;
+            }
         }
 
         private void GetStructureIndicesByName()

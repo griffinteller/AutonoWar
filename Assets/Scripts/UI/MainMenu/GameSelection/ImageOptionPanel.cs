@@ -112,29 +112,29 @@ namespace UI.MainMenu.GameSelection
                 case SelectionMode.Single:
                     if (!select)
                     {
-                        selectedOptions.Clear();
+                        ClearSelectedOptions();
                         return false;
                     }
 
                     if (selectedOptions.Count == 1)
-                        selectedOptions.Clear();
+                        ClearSelectedOptions();
                     else if (selectedOptions.Count != 0)
                         throw new Exception("Selected options is not in a legal state. Mode is Single, " +
                                             "and length is " + selectedOptions.Count);
 
-                    selectedOptions.Add(option);
+                    AddSelectedOption(option);
                     return true;
 
                 case SelectionMode.Max:
                     if (!select)
                     {
-                        selectedOptions.Remove(option);
+                        RemoveSelectedOption(option);
                         return false;
                     }
                     
                     if (selectedOptions.Count < maxSelected)
                     {
-                        selectedOptions.Add(option);
+                        AddSelectedOption(option);
                         return true;
                     }
 
@@ -142,19 +142,40 @@ namespace UI.MainMenu.GameSelection
                         throw new Exception("Selected options is not in a legal state. Mode is Max, " +
                                             "and length is " + selectedOptions.Count);
 
+                    option.Selected = false;
                     return false; // we are at the max, so we didn't add one
                 
                 case SelectionMode.Any:
                     if (select)
-                        selectedOptions.Add(option);
+                        AddSelectedOption(option);
                     else
-                        selectedOptions.Remove(option);
+                        RemoveSelectedOption(option);
 
                     return select;
                 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void AddSelectedOption(ImageOption option)
+        {
+            option.Selected = true;
+            selectedOptions.Add(option);
+        }
+
+        private void RemoveSelectedOption(ImageOption option)
+        {
+            option.Selected = false;
+            selectedOptions.Remove(option);
+        }
+
+        private void ClearSelectedOptions()
+        {
+            foreach (var option in selectedOptions)
+                option.Selected = false;
+            
+            selectedOptions.Clear();
         }
     }
 }

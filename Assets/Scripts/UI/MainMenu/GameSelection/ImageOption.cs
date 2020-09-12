@@ -20,8 +20,7 @@ namespace UI.MainMenu.GameSelection
             get => _selected;
             set
             {
-                var newValue = _parentPanel.SetSelected(this, value);
-                _selected = newValue;
+                _selected = value;
                 highlight.gameObject.SetActive(_selected);
             }
         }
@@ -41,7 +40,7 @@ namespace UI.MainMenu.GameSelection
         public void Start()
         {
             _parentPanel = transform.GetComponentInParent<ImageOptionPanel>();
-            GetComponent<Button>().onClick.AddListener(delegate { Selected = !Selected; });
+            GetComponent<Button>().onClick.AddListener(delegate { _parentPanel.SetSelected(this, !_selected); });
         }
     }
 }
