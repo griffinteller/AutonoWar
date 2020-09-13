@@ -9,7 +9,7 @@ setuptools.setup(
     name='awconnection',
     license="MIT",
     description='An interface between Python and AutonoWar',
-    version='v0.3.5',
+    version='v0.3.5.1',
     long_description=README,
     url='https://github.com/griffinteller/awconnection',
     packages=setuptools.find_packages(),

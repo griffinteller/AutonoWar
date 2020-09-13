@@ -266,6 +266,13 @@ class Tires(object):
 
             self.__tires[tire_dict["name"]] = TireDescription(tire_dict)
 
+        self.names = set(self.__tires.keys())
+
+    def __iter__(self):
+
+        for tire in self.__tires.values():
+            yield tire
+
     def __getitem__(self, item):
 
         return self.__tires[item]
