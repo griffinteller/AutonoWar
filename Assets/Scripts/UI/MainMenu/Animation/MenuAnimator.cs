@@ -16,17 +16,10 @@ namespace UI.MainMenu.Animation
 
         public void Start()
         {
-            var buttonsParent = FindObjectOfType<TopBarButtons>();
-            buttonsParent.onSelect[transform.GetSiblingIndex()].AddListener(Enter);
-            buttonsParent.onDeselect[transform.GetSiblingIndex()].AddListener(Exit);
-            
             childAnimations = new List<MenuItemAnimation>(GetComponentsInChildren<MenuItemAnimation>());
             
             foreach (var animation in otherAnimations)
                 childAnimations.Add(animation);
-            
-            if (buttonsParent.SelectedIndex != transform.GetSiblingIndex())
-                gameObject.SetActive(false);
         }
 
         public void Enter()
