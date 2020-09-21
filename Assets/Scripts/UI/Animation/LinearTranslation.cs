@@ -9,18 +9,16 @@ namespace UI.Animation
         
         public override void Play(float duration, Action onCompleteCallback = null)
         {
-            var animation = LeanTween.moveLocal(gameObject, transform.localPosition - localDelta, duration);
-            
-            if (onCompleteCallback != null)
-                animation.setOnComplete(onCompleteCallback);
+            LeanTween
+                .moveLocal(target, target.transform.localPosition + localDelta, duration)
+                .setOnComplete(onCompleteCallback);
         }
 
         public override void Reverse(float duration, Action onCompleteCallback = null)
         {
-            var animation = LeanTween.moveLocal(gameObject, transform.localPosition + localDelta, duration);
-            
-            if (onCompleteCallback != null)
-                animation.setOnComplete(onCompleteCallback);
+            LeanTween
+                .moveLocal(target, target.transform.localPosition - localDelta, duration)
+                .setOnComplete(onCompleteCallback);
         }
     }
 }

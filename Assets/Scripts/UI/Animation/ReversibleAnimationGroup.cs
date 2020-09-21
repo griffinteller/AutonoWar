@@ -6,14 +6,40 @@ namespace UI.Animation
     {
         public override void Play(float duration, Action onCompleteCallback = null)
         {
-            foreach (var animation in animations)
-                animation.Play(duration, onCompleteCallback);
+            if (animations.Count == 0)
+            {
+                onCompleteCallback?.Invoke();
+                return;
+            }
+
+            for (var i = 0; i < animations.Count - 1; i++)
+                animations[i].Play(duration);
+            
+            animations[animations.Count - 1].Play(duration, onCompleteCallback);
         }
 
         public void Reverse(float duration, Action onCompleteCallback = null)
         {
-            foreach (var animation in animations)
-                animation.Reverse(duration, onCompleteCallback);
+            if (animations.Count == 0)
+            {
+                onCompleteCallback?.Invoke();
+                return;
+            }
+
+            for (var i = 0; i < animations.Count - 1; i++)
+                animations[i].Reverse(duration);
+            
+            animations[animations.Count - 1].Reverse(duration, onCompleteCallback);
+        }
+
+        public void PlayFromEditor(float duration)
+        {
+            Play(duration);
+        }
+
+        public void ReverseFromEditor(float duration)
+        {
+            Reverse(duration);
         }
     }
 }

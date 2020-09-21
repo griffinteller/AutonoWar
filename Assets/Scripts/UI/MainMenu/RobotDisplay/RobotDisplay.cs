@@ -81,7 +81,6 @@ namespace UI.MainMenu.RobotDisplay
             else
             {
                 var robotName = PlayerPrefs.GetString(PlayerPrefKeys.SelectedRobotNameKey);
-                print(robotName);
                 if (robotName.IsNullOrEmpty())
                     SelectedIndex = -1;
                 else
