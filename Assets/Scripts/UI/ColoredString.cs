@@ -59,7 +59,7 @@ namespace UI
             ColoredString[] result = new ColoredString[arr.Length];
             
             for (int i = 0; i < arr.Length; i++)
-                result[i] = new ColoredString(arr[i], 0);
+                result[i] = new ColoredString(arr[i], color);
             
             return result;
         }
