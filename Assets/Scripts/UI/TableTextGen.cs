@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using JetBrains.Annotations;
@@ -14,30 +15,35 @@ namespace UI
         public int color;
 
         public TableTextGen(
-            ColoredString[] columns, 
+            ColoredString[] columns = null, 
             int color = 0, 
             int width = -1,
             [CanBeNull] List<ColoredString[]> data = null) // width of -1 means min width
         {
-            this.columns = columns;
+            this.columns = columns ?? new ColoredString[0];
             this.data = data ?? new List<ColoredString[]>();
             this.color = color;
             this.width = width;
         }
-
+        
         public string Generate()
-        {
-            string minWidth = GenerateMinWidth();
-
-            return minWidth; // TODO: support custom widths
-        }
-
-        private string GenerateMinWidth()
         {
             ColoredString separator = new ColoredString("|", color);
             
             StringBuilder titleLineBuilder = new StringBuilder(); // build title line first
+            
             int[] maxColumnWidths = GetMaxComlumnWidths();
+            int minWidth = 0;
+            
+            foreach (int width in maxColumnWidths)
+                minWidth += width + 3;
+            
+            minWidth -= 1; // because there is no "|" at the end
+            
+            if (width < minWidth)
+                throw new ArgumentException("Width must be larger than min width!");
+            
+            int spacesToAdd = width - minWidth;
             
             for (int i = 0; i < columns.Length; i++)
             {
@@ -48,7 +54,7 @@ namespace UI
                 
                 titleLineBuilder.Append(" " 
                                         + column 
-                                        + new string(' ', delta + 1) 
+                                        + new string(' ', delta + 1 + (i < spacesToAdd ? 1 : 0)) 
                                         + (i + 1 == columns.Length ? "" : separator.RawString));
             }
 
@@ -68,21 +74,14 @@ namespace UI
 
                     lineBuilder.Append(" " 
                                        + datum 
-                                       + new string(' ', delta + 1) 
+                                       + new string(' ', delta + 1 + (i < spacesToAdd ? 1 : 0)) 
                                        + (col + 1 == columns.Length ? "" : separator.RawString));
                 }
-
-                lineBuilder.Remove(lineBuilder.Length - 1, 1);
             }
-
-            int totalWidth = 0;
-            foreach (int width in maxColumnWidths)
-                totalWidth += width + 3;
-            totalWidth -= 1; // because there is no "|" at the end
 
             StringBuilder finalBuilder = new StringBuilder();
             finalBuilder.AppendLine(titleLineBuilder.ToString());
-            finalBuilder.AppendLine(new string('-', totalWidth));
+            finalBuilder.AppendLine(new string('-', width));
             
             foreach (StringBuilder lineBuilder in dataLineBuilders)
                 finalBuilder.AppendLine(lineBuilder.ToString());

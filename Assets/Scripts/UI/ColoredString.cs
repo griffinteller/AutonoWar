@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace UI
 {
@@ -67,6 +68,11 @@ namespace UI
         public override string ToString()
         {
             return RawString;
+        }
+
+        public static int HexFromColor(Color color)
+        {
+            return ((int) (color.r * 255) << 16) + ((int) (color.g * 255) << 8) + (int) (color.b * 255);
         }
     }
 }
