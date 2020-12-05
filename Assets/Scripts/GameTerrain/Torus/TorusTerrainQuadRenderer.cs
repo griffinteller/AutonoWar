@@ -13,9 +13,8 @@ namespace GameTerrain.Torus
         
         protected override TerrainQuad GenerateQuad(TriangleCache cache)
         {
-            var quad = new TorusTerrainQuad(degree, majorRadius, minorRadius, majorArc, minorArc, minorAngle, cache);
+            TorusTerrainQuad quad = new TorusTerrainQuad(degree, majorRadius, minorRadius, majorArc, minorArc, minorAngle, cache);
             quad.Generate();
-
             return quad;
         }
     }

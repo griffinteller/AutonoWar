@@ -26,7 +26,7 @@ namespace GameTerrain
         {
             get
             {
-                var verticesPerSide = VerticesPerSide;
+                int verticesPerSide = VerticesPerSide;
                 return verticesPerSide * verticesPerSide;
             }
         }
@@ -49,13 +49,13 @@ namespace GameTerrain
         {
             Heightmap = new float[VerticesPerSide][];
             
-            for (var i = 0; i < Heightmap.Length; i++)
+            for (int i = 0; i < Heightmap.Length; i++)
                 Heightmap[i] = new float[Heightmap.Length];
         }
 
         public static float[][] GetRandomHeights(int degree, (float, float) range)
         {
-            var verticesOnASide = (int) (Mathf.Pow(2, degree) + 0.5f) + 1;
+            int verticesOnASide = (int) (Mathf.Pow(2, degree) + 0.5f) + 1;
 
             var result = new float[verticesOnASide][];
             for (var i = 0; i < verticesOnASide; i++)
@@ -86,6 +86,7 @@ namespace GameTerrain
             Mesh.vertices = verts;
             Mesh.triangles = TriangleCacheObject.Cache[Degree][MipmapMask];
             Mesh.uv = Uv;
+            Mesh.RecalculateNormals();
         }
         
         protected static Vector2[] GenerateStandardUv(int verticesPerSide)

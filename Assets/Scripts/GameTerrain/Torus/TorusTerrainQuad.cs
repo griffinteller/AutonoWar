@@ -16,20 +16,20 @@ namespace GameTerrain.Torus
 
         protected override Vector3[] GenerateBaseVertices()
         {
-            var verticesPerSide = VerticesPerSide;
-            var majorVertexArc = MajorVertexArc;
-            var minorVertexArc = MinorVertexArc;
-            var result = new Vector3[TotalNumberOfVertices];
+            int verticesPerSide = VerticesPerSide;
+            float majorVertexArc = MajorVertexArc;
+            float minorVertexArc = MinorVertexArc;
+            Vector3[] result = new Vector3[TotalNumberOfVertices];
 
-            var i = 0;
-            for (var row = 0; row < verticesPerSide; row++)
+            int i = 0;
+            for (int row = 0; row < verticesPerSide; row++)
             {
-                var rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
-                var rowRadius = MajorRadius + MinorRadius * Mathf.Cos(Mathf.Deg2Rad * rowAngle);
-                var rowHeight = MinorRadius * Mathf.Sin(Mathf.Deg2Rad * rowAngle);
-                for (var col = 0; col < verticesPerSide; col++)
+                float rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
+                float rowRadius = MajorRadius + MinorRadius * Mathf.Cos(Mathf.Deg2Rad * rowAngle);
+                float rowHeight = MinorRadius * Mathf.Sin(Mathf.Deg2Rad * rowAngle);
+                for (int col = 0; col < verticesPerSide; col++)
                 {
-                    var colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
+                    float colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
                     result[i].x = rowRadius * -Mathf.Sin(Mathf.Deg2Rad * colAngle);
                     result[i].y = rowHeight;
                     result[i].z = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
@@ -43,18 +43,18 @@ namespace GameTerrain.Torus
 
         protected override Vector3[] GenerateBaseNormals()
         {
-            var verticesPerSide = VerticesPerSide;
-            var majorVertexArc = MajorVertexArc;
-            var minorVertexArc = MinorVertexArc;
-            var result = new Vector3[TotalNumberOfVertices];
+            int verticesPerSide = VerticesPerSide;
+            float majorVertexArc = MajorVertexArc;
+            float minorVertexArc = MinorVertexArc;
+            Vector3[] result = new Vector3[TotalNumberOfVertices];
 
-            var i = 0;
-            for (var row = 0; row < verticesPerSide; row++)
+            int i = 0;
+            for (int row = 0; row < verticesPerSide; row++)
             {
-                var rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
-                for (var col = 0; col < verticesPerSide; col++)
+                float rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
+                for (int col = 0; col < verticesPerSide; col++)
                 {
-                    var colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
+                    float colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
                     result[i] = Quaternion.Euler(0, -colAngle, 0)
                                 * Quaternion.Euler(-rowAngle, 0, 0)
                                 * Vector3.forward;

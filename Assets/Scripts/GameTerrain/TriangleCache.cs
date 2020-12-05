@@ -18,8 +18,8 @@ namespace GameTerrain
 
         public void OnEnable()
         {
-            var bytes = cacheFile.bytes;
-            var memoryStream = new MemoryStream(bytes);
+            byte[] bytes = cacheFile.bytes;
+            MemoryStream memoryStream = new MemoryStream(bytes);
             Cache = (int[][][]) new BinaryFormatter().Deserialize(memoryStream);
         }
     }

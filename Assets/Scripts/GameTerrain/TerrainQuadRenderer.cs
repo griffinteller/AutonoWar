@@ -11,7 +11,7 @@ namespace GameTerrain
         
         public void Start()
         {
-            var triangleCache = GetComponentInParent<TerrainController>().TriangleCache;
+            TriangleCache triangleCache = GetComponentInParent<TerrainController>().TriangleCache;
             Quad = GenerateQuad(triangleCache);
             GetComponent<MeshFilter>().mesh = Quad.Mesh;
         }
