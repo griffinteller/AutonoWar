@@ -5,7 +5,8 @@ namespace GameTerrain
 {
     public class TerrainController : MonoBehaviour
     {
-        [SerializeField] private TriangleCache triangleCache;
+        [SerializeField] protected TriangleCache triangleCache;
+        [SerializeField] protected Material material;
 
         public TriangleCache TriangleCache
         {

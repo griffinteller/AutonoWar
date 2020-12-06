@@ -9,6 +9,7 @@ namespace GameTerrain.Torus
         public float MajorArc; // degrees
         public float MinorArc;
         public float MinorAngle; // 0 is outside, 180 is inside
+        public float MajorAngle;
 
         public override float VertexDistance => MajorVertexArc;
         public float MajorVertexArc => MajorArc / (VerticesPerSide - 1);
@@ -29,7 +30,7 @@ namespace GameTerrain.Torus
                 float rowHeight = MinorRadius * Mathf.Sin(Mathf.Deg2Rad * rowAngle);
                 for (int col = 0; col < verticesPerSide; col++)
                 {
-                    float colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
+                    float colAngle = MajorAngle + (-col + verticesPerSide / 2) * majorVertexArc;
                     result[i].x = rowRadius * -Mathf.Sin(Mathf.Deg2Rad * colAngle);
                     result[i].y = rowHeight;
                     result[i].z = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
@@ -71,7 +72,7 @@ namespace GameTerrain.Torus
         }
 
         public TorusTerrainQuad(byte degree, float majorRadius, float minorRadius, float majorArc, float minorArc,  
-            float minorAngle, TriangleCache cache, float[][] heightmap = null)
+            float majorAngle, float minorAngle, TriangleCache cache, float[][] heightmap = null)
         {
             Degree = degree;
             MajorRadius = majorRadius;
@@ -79,6 +80,7 @@ namespace GameTerrain.Torus
             MajorArc = majorArc;
             MinorArc = minorArc;
             MinorAngle = minorAngle;
+            MajorAngle = majorAngle;
             TriangleCacheObject = cache;
 
             if (heightmap == null)

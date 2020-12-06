@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace GameTerrain
 {
+    [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(MeshFilter))]
     public abstract class TerrainQuadRenderer : MonoBehaviour
     {
         public TerrainQuad Quad { get; private set; }
