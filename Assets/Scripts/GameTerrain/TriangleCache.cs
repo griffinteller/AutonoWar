@@ -10,6 +10,13 @@ namespace GameTerrain
     {
         /*
          * This is just for a normal quad. Will rename later.
+         *
+         * Masking:
+         *
+         * Top    - 0b0001
+         * Right  - 0b0010
+         * Bottom - 0b0100
+         * Left   - 0b1000
          */
 
         public TextAsset cacheFile;

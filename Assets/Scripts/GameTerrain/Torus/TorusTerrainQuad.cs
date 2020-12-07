@@ -25,12 +25,12 @@ namespace GameTerrain.Torus
             int i = 0;
             for (int row = 0; row < verticesPerSide; row++)
             {
-                float rowAngle = MinorAngle + (row - verticesPerSide / 2) * minorVertexArc;
+                float rowAngle = MinorAngle + (-row + verticesPerSide / 2) * minorVertexArc;
                 float rowRadius = MajorRadius + MinorRadius * Mathf.Cos(Mathf.Deg2Rad * rowAngle);
                 float rowHeight = MinorRadius * Mathf.Sin(Mathf.Deg2Rad * rowAngle);
                 for (int col = 0; col < verticesPerSide; col++)
                 {
-                    float colAngle = MajorAngle + (-col + verticesPerSide / 2) * majorVertexArc;
+                    float colAngle = MajorAngle + (col - verticesPerSide / 2) * majorVertexArc;
                     result[i].x = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
                     result[i].y = rowHeight;
                     result[i].z = rowRadius * Mathf.Sin(Mathf.Deg2Rad * colAngle);
