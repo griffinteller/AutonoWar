@@ -31,9 +31,9 @@ namespace GameTerrain.Torus
                 for (int col = 0; col < verticesPerSide; col++)
                 {
                     float colAngle = MajorAngle + (-col + verticesPerSide / 2) * majorVertexArc;
-                    result[i].x = rowRadius * -Mathf.Sin(Mathf.Deg2Rad * colAngle);
+                    result[i].x = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
                     result[i].y = rowHeight;
-                    result[i].z = rowRadius * Mathf.Cos(Mathf.Deg2Rad * colAngle);
+                    result[i].z = rowRadius * Mathf.Sin(Mathf.Deg2Rad * colAngle);
 
                     i++;
                 }
@@ -57,8 +57,8 @@ namespace GameTerrain.Torus
                 {
                     float colAngle = (-col + verticesPerSide / 2) * majorVertexArc;
                     result[i] = Quaternion.Euler(0, -colAngle, 0)
-                                * Quaternion.Euler(-rowAngle, 0, 0)
-                                * Vector3.forward;
+                                * Quaternion.Euler(0, 0, rowAngle)
+                                * Vector3.right;
                     i++;
                 }
             }

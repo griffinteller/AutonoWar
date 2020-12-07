@@ -248,10 +248,18 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: c4b6ddfb457d6aa4895d9c21225f70dc, type: 2}
   majorRadius: 1000
   minorRadius: 500
-  quadDegree: 3
-  minorQuadDensity: 5
-  majorQuadDensity: 15
-  terrainQualityRefrencer: {fileID: 0}
+  minorQuadDensity: 20
+  majorQuadDensity: 50
+  terrainQualityRefrencer: {fileID: 349653247}
+  lodDistances:
+  - 0
+  - 50
+  - 100
+  - 200
+  - 400
+  - 800
+  - 1200
+  lodDegrees: 07060504030201
 --- !u!4 &171441804
 Transform:
   m_ObjectHideFlags: 0
@@ -277,6 +285,7 @@ GameObject:
   - component: {fileID: 349653247}
   - component: {fileID: 349653246}
   - component: {fileID: 349653245}
+  - component: {fileID: 349653248}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -349,6 +358,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &349653248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349653244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &1399149860
 GameObject:
   m_ObjectHideFlags: 0

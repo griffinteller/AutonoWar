@@ -19,5 +19,10 @@ namespace GameTerrain.Flat
             
             return quad;
         }
+
+        protected override Vector3 GetLocalCenter()
+        {
+            return Vector3.zero; // This is not correct but i need this to compile and it doesn't matter yet.
+        }
     }
 }

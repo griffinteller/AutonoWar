@@ -8,7 +8,6 @@ namespace GameTerrain.Torus
     {
         [SerializeField] private float majorRadius;
         [SerializeField] private float minorRadius;
-        [SerializeField] private byte quadDegree;
         [SerializeField] private int minorQuadDensity;
         [SerializeField] private int majorQuadDensity;
 
@@ -16,11 +15,11 @@ namespace GameTerrain.Torus
 
         public float MajorRadius => majorRadius;
         public float MinorRadius => minorRadius;
-        public byte QuadDegree => quadDegree;
         public int MinorQuadDensity => minorQuadDensity;
         public int MajorQuadDensity => majorQuadDensity;
         
-        
+        public float[] lodDistances; // anything >= to will have corresponding degree
+        public byte[] lodDegrees;
 
         private float _minorQuadArc;
         private float _majorQuadArc;
@@ -36,6 +35,34 @@ namespace GameTerrain.Torus
             _minorQuadArc = 360f / minorQuadDensity;
 
             GenerateQuadRenderers();
+        }
+
+        public void Update()
+        {
+            foreach (TorusTerrainQuadRenderer[] longitude in _renderers)
+            foreach (TorusTerrainQuadRenderer renderer in longitude)
+            {
+                float distance = Vector3.Distance(
+                    terrainQualityRefrencer.transform.position,
+                    transform.TransformPoint(renderer.LocalCenter));
+
+                byte degree = GetDegreeFromDistance(distance);
+
+                if (degree == renderer.degree)
+                    continue;
+
+                renderer.degree = degree;
+                renderer.RefreshMesh();
+            }
+        }
+
+        private byte GetDegreeFromDistance(float distance)
+        {
+            for (int i = 0; i < lodDistances.Length - 1; i++)
+                if (distance > lodDistances[i] && distance < lodDistances[i + 1])
+                    return lodDegrees[i];
+
+            return lodDegrees[lodDegrees.Length - 1];
         }
 
         private void GenerateQuadRenderers()
@@ -57,7 +84,7 @@ namespace GameTerrain.Torus
                 rendererTransform.localRotation = Quaternion.identity;
 
                 TorusTerrainQuadRenderer renderer = rendererObj.GetComponent<TorusTerrainQuadRenderer>();
-                renderer.degree = quadDegree;
+                renderer.degree = lodDegrees[lodDegrees.Length - 1];
                 renderer.majorArc = _majorQuadArc;
                 renderer.minorArc = _minorQuadArc;
                 renderer.majorRadius = majorRadius;
@@ -66,6 +93,8 @@ namespace GameTerrain.Torus
                 renderer.minorAngle = quadRow * _minorQuadArc;
 
                 renderer.GetComponent<MeshRenderer>().material = material;
+
+                _renderers[quadCol][quadRow] = renderer;
             }
         }
     }

@@ -5,7 +5,7 @@ namespace GameTerrain
     public abstract class TerrainQuad
     {
         /*
-         * Degree - 0 for 2x2, 1 for 3x3, 2 for 5x5, etc (side is 2^degree + 1)
+         * Degree - 1 for 3x3, 2 for 5x5, etc (side is 2^degree + 1) (minmum 1)
          */
 
         public byte Degree { get; set; }
