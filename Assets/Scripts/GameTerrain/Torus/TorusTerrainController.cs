@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 
@@ -39,6 +40,8 @@ namespace GameTerrain.Torus
 
         public void Update()
         {
+            HashSet<TorusTerrainQuadRenderer> needToRefresh = new HashSet<TorusTerrainQuadRenderer>();
+            
             foreach (TorusTerrainQuadRenderer[] longitude in _renderers)
             foreach (TorusTerrainQuadRenderer renderer in longitude)
             {
@@ -52,8 +55,47 @@ namespace GameTerrain.Torus
                     continue;
 
                 renderer.degree = degree;
-                renderer.RefreshMesh();
+                needToRefresh.Add(renderer);
             }
+            
+            for (int longitude = 0; longitude < _renderers.Length; longitude++)
+            for (int latitude = 0; latitude < _renderers[0].Length; latitude++)
+            {
+                TorusTerrainQuadRenderer renderer = _renderers[longitude][latitude];
+                byte mask = GetMipmapMask(longitude, latitude);
+                
+                if (renderer.MipmapMask == mask)
+                    continue;
+
+                renderer.MipmapMask = mask;
+                needToRefresh.Add(renderer);
+            }
+            
+            foreach (TorusTerrainQuadRenderer renderer in needToRefresh)
+                renderer.RefreshMesh();
+        }
+
+        private byte GetMipmapMask(int longitude, int latitude)
+        {
+            int longitudes = _renderers.Length;
+            int latitudes = _renderers[0].Length;
+            
+            byte mask = 0;
+            int degree = _renderers[longitude][latitude].degree;
+
+            if (_renderers[longitude][(latitude + 1) % latitudes].degree < degree)
+                mask |= 1;
+
+            if (_renderers[(longitude + 1) % longitudes][latitude].degree < degree)
+                mask |= 2;
+            
+            if (_renderers[longitude][(latitude - 1 + latitudes) % latitudes].degree < degree) // negative modulos are broken
+                mask |= 4;
+            
+            if (_renderers[(longitude - 1 + longitudes) % longitudes][latitude].degree < degree)
+                mask |= 8;
+
+            return mask;
         }
 
         private byte GetDegreeFromDistance(float distance)

@@ -16,6 +16,8 @@ namespace GameTerrain
         } // center of the quad relative to the center of the terrain
         // should NOT change with degree
 
+        public byte MipmapMask { get; set; }
+
         protected abstract TerrainQuad GenerateQuad(TriangleCache cache);
         protected abstract Vector3 GetLocalCenter();
 

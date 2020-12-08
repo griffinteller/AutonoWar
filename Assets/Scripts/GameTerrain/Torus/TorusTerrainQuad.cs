@@ -72,7 +72,7 @@ namespace GameTerrain.Torus
         }
 
         public TorusTerrainQuad(byte degree, float majorRadius, float minorRadius, float majorArc, float minorArc,  
-            float majorAngle, float minorAngle, TriangleCache cache, float[][] heightmap = null)
+            float majorAngle, float minorAngle, TriangleCache cache, byte mipmapMask = 0, float[][] heightmap = null)
         {
             Degree = degree;
             MajorRadius = majorRadius;
@@ -81,6 +81,7 @@ namespace GameTerrain.Torus
             MinorArc = minorArc;
             MinorAngle = minorAngle;
             MajorAngle = majorAngle;
+            MipmapMask = mipmapMask;
             TriangleCacheObject = cache;
 
             if (heightmap == null)

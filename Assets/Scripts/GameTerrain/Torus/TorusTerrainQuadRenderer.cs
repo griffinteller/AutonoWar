@@ -16,7 +16,7 @@ namespace GameTerrain.Torus
         {
             TorusTerrainQuad quad = new TorusTerrainQuad(
                 degree, majorRadius, minorRadius, majorArc, 
-                minorArc, majorAngle, minorAngle, cache);
+                minorArc, majorAngle, minorAngle, cache, MipmapMask);
             quad.Generate();
 
             return quad;
