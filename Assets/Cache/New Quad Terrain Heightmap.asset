@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e6b79f8a8e4d48a7dd5761813fd936, type: 3}
+  m_Name: New Quad Terrain Heightmap
+  m_EditorClassIdentifier: 
+  heights: 
+  _longitudinalDensity: 0
+  _latitudinalDensity: 0
+  _maxDegree: 0
+  rawHeightmap: {fileID: 2800000, guid: 97e371d827c14fb4484eacddd9a246ee, type: 3}
