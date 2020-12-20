@@ -9,6 +9,7 @@ namespace Utility
     public static class SystemUtility
     {
         public const string RobotDirectoryName = "Robots";
+        public static string AbsoluteCachePath => Application.dataPath + "/Cache/";
 
         public static SimplePlatform GetSimplePlatform()
         {

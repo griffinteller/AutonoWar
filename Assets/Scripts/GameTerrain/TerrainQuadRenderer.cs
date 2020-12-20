@@ -1,44 +1,78 @@
 using System;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace GameTerrain
 {
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(MeshFilter))]
-    public abstract class TerrainQuadRenderer : MonoBehaviour
+    public class TerrainQuadRenderer : MonoBehaviour
     {
-        public TerrainQuad Quad { get; private set; }
+        
+        public                 NativeArray<Vector3> Vertices;
+        public byte                 LOD;
+        public byte                 EdgeMask;
+        [NonSerialized] public TriangleCache        TriangleCache;
+        [NonSerialized] public UvCache              UvCache;
+        
+        public float4 localCenter;
+        public int    longitude;
+        public int    latitude;
 
-        public Vector3 LocalCenter
-        {
-            get => _localCenter;
-            private set => _localCenter = value;
-        } // center of the quad relative to the center of the terrain
-        // should NOT change with degree
-
-        public byte MipmapMask { get; set; }
-
-        protected abstract TerrainQuad GenerateQuad(TriangleCache cache);
-        protected abstract Vector3 GetLocalCenter();
-
-        private TriangleCache _triangleCache;
         private MeshFilter _meshFilter;
-        [SerializeField] private Vector3 _localCenter;
 
-        public void Start()
+        public void Awake()
         {
-            _triangleCache = GetComponentInParent<TerrainController>().TriangleCache;
-            _meshFilter = GetComponent<MeshFilter>();
-
-            LocalCenter = GetLocalCenter();
-            
-            RefreshMesh();
+            _meshFilter      = GetComponent<MeshFilter>();
+            _meshFilter.mesh = new Mesh();
         }
 
-        public void RefreshMesh()
+        public void FullyRefreshMesh()
         {
-            Quad = GenerateQuad(_triangleCache);
-            _meshFilter.mesh = Quad.Mesh;
+            /*
+             * This should only be done after doing a vertex job, and should be done directly after completion,
+             * since the Vertices array is allocated as TempJob
+             */
+            
+            Mesh mesh = new Mesh();
+            
+            mesh.Clear();
+            mesh.vertices = Vertices.ToArray();
+            mesh.triangles = TriangleCache.Cache[LOD][EdgeMask];
+            mesh.uv = UvCache.Cache[LOD];
+            mesh.RecalculateNormals();
+
+            _meshFilter.mesh = mesh;
+
+            Vertices.Dispose();
+        }
+
+        public void RefreshTriangles()
+        {
+            /*
+             * This should be run when the edge mask has changed, but not the lod
+             */
+            
+            Mesh    mesh  = _meshFilter.sharedMesh;
+            Vector3[] verts = mesh.vertices;
+            
+            mesh.Clear();
+            mesh.vertices  = verts;
+            mesh.triangles = TriangleCache.Cache[LOD][EdgeMask];
+            mesh.uv        = UvCache.Cache[LOD];
+            mesh.RecalculateNormals();
+        }
+
+        public void OnDisable()
+        {
+            if (Vertices.IsCreated)
+                Vertices.Dispose();
+        }
+
+        public void OnApplicationQuit()
+        {
+            OnDisable();
         }
     }
 }

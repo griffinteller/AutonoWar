@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e6b79f8a8e4d48a7dd5761813fd936, type: 3}
-  m_Name: New Quad Terrain Heightmap
+  m_Script: {fileID: 11500000, guid: 62c54a3a0b2f438cb08a19995f770288, type: 3}
+  m_Name: UvCache
   m_EditorClassIdentifier: 
-  heights: 
-  _longitudinalDensity: 0
-  _latitudinalDensity: 0
-  _maxDegree: 0
-  rawHeightmap: {fileID: 2800000, guid: 97e371d827c14fb4484eacddd9a246ee, type: 3}
+  cacheFile: {fileID: 4900000, guid: 238e4082bd7aac543ba971a548ef2406, type: 3}
+  maxDegree: 7
+  fileName: UvCache

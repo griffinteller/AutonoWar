@@ -9,13 +9,16 @@ namespace Editor.Scripts
     {
         public override void OnInspectorGUI()
         {
+            QuadTerrainHeightmap heightmap = (QuadTerrainHeightmap) target;
+            
             DrawDefaultInspector();
 
             if (GUILayout.Button("Generate"))
             {
-                ((QuadTerrainHeightmap) target).Generate();
+                heightmap.Generate();
             }
-
+            
+            GUILayout.Label("Current stored heightmap length: " + heightmap.heightsStored.Length);
         }
     }
 }

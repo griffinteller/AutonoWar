@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Utility
@@ -18,6 +19,16 @@ namespace Utility
                 result[i] = start + commonDifference * i;
 
             return result;
+        }
+
+        public static float4 Vec3ToFloat4(Vector3 vec3)
+        {
+            return new float4(vec3.x, vec3.y, vec3.z, 0);
+        }
+
+        public static Vector3 Float4ToVec3(float4 flt4)
+        {
+            return new Vector3(flt4.x, flt4.y, flt4.z);
         }
     }
 }

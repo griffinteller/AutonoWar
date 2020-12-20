@@ -21,4 +21,13 @@ namespace Utility
         public static implicit operator Color(SerializableColor sColor) => sColor.GetColor();
         public static implicit operator SerializableColor(Color color) => new SerializableColor(color);
     }
+
+    [Serializable]
+    public struct SerializableVector2
+    {
+        public float x;
+        public float y;
+        
+        
+    }
 }

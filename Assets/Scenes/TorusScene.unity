@@ -241,25 +241,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 171441802}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b74518950d0b49ef954cbb6338050236, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fcfdca24e1b49838ffb83374c1dc4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triangleCache: {fileID: 11400000, guid: 0b5c48ab4c7913f43bf42b541be50244, type: 2}
   material: {fileID: 2100000, guid: c4b6ddfb457d6aa4895d9c21225f70dc, type: 2}
-  majorRadius: 1000
-  minorRadius: 500
-  minorQuadDensity: 20
-  majorQuadDensity: 50
-  terrainQualityRefrencer: {fileID: 349653247}
-  lodDistances:
+  longitudes: 10
+  latitudes: 4
+  lodReference: {fileID: 349653247}
+  triangleCacheReference:
+    m_AssetGUID: 0b5c48ab4c7913f43bf42b541be50244
+    m_SubObjectName: 
+    m_SubObjectType: 
+  heightmapReference:
+    m_AssetGUID: 6c2a5b29adf02d14280692ded614edae
+    m_SubObjectName: 
+    m_SubObjectType: 
+  uvCacheReference:
+    m_AssetGUID: 35b9528b099172d4a8f06296a730fd52
+    m_SubObjectName: 
+    m_SubObjectType: 
+  lodDistancesSerialized:
   - 0
   - 50
   - 100
   - 200
   - 400
-  - 800
-  - 1200
-  lodDegrees: 07060504030201
+  - 1000
+  lodsByDistanceSerialized: 070605040302
+  majorRadius: 1000
+  minorRadius: 300
+  majorArc: 0
+  minorArc: 0
 --- !u!4 &171441804
 Transform:
   m_ObjectHideFlags: 0
@@ -352,7 +364,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 349653244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

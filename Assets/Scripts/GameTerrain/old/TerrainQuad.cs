@@ -10,7 +10,6 @@ namespace GameTerrain
 
         public byte Degree { get; set; }
         public byte MipmapMask { get; set; }
-        public float[][] Heightmap;
 
         public Vector3[] BaseVertices { get; private set; }
         public Vector3[] BaseNormals { get; private set; }
@@ -43,14 +42,6 @@ namespace GameTerrain
             BaseNormals = GenerateBaseNormals();
             Uv = GenerateUv();
             RefreshMesh();
-        }
-
-        protected void InitializeHeightmap()
-        {
-            Heightmap = new float[VerticesPerSide][];
-            
-            for (int i = 0; i < Heightmap.Length; i++)
-                Heightmap[i] = new float[Heightmap.Length];
         }
 
         public static float[][] GetRandomHeights(int degree, (float, float) range)

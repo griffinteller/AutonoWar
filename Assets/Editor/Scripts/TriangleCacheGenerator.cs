@@ -6,6 +6,7 @@ using GameTerrain;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEngine;
+using Utility;
 
 namespace Editor.Scripts
 {
@@ -17,7 +18,6 @@ namespace Editor.Scripts
         public int[][][] Cache;
 
         public const string CachePath = "Assets/Cache/";
-        public static string AbsoluteCachePath => Application.dataPath + "/Cache/";
 
         [MenuItem("Window/Triangle Cache Generator")]
         public static void ShowWindow()
@@ -41,7 +41,7 @@ namespace Editor.Scripts
 
         private void Write()
         {
-            FileStream file = new FileStream(AbsoluteCachePath + fileName + ".txt",
+            FileStream file = new FileStream(SystemUtility.AbsoluteCachePath + fileName + ".txt",
                 FileMode.Create, 
                 FileAccess.Write);
             new BinaryFormatter().Serialize(file, Cache);
