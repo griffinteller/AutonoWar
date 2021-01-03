@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -70,6 +71,17 @@ namespace Utility
         public static Vector3 Vector3Abs(Vector3 vector)
         {
             return new Vector3(Mathf.Abs(vector.x), Mathf.Abs(vector.y), Mathf.Abs(vector.y));
+        }
+
+        public static bool TryDispose<T>(this NativeArray<T> array) 
+            where T : struct
+        {
+            bool disposable = array.IsCreated;
+
+            if (disposable)
+                array.Dispose();
+
+            return disposable;
         }
     }
 }

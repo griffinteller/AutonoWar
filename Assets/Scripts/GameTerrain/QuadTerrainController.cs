@@ -20,8 +20,8 @@ namespace GameTerrain
         
         public static readonly int[] VerticesPerDegree = {4, 9, 25, 81, 289, 1089, 4225, 16641};
 
-        public Material material;
-
+        public Shader shader;
+        
         [SerializeField] protected int            longitudes;
         [SerializeField] protected int            latitudes;
         
@@ -70,17 +70,18 @@ namespace GameTerrain
 
         public void OnDisable()
         {
-            if (!Loaded) // can't dispose of arrays that were never allocated
+            if (!Loaded)
                 return;
             
             _researchJobHandle.Complete();
             _verticesJobHandle.Complete();
 
-            LODs.Dispose();  // TODO: implement try dispose
-            _edgeMasks.Dispose();
-            _dirtyRenderers.Dispose();
-            _lodDistances.Dispose();
-            _lodsByDistance.Dispose();
+            LODs.TryDispose(); 
+            LocalCenters.TryDispose();
+            _edgeMasks.TryDispose();
+            _dirtyRenderers.TryDispose();
+            _lodDistances.TryDispose();
+            _lodsByDistance.TryDispose();
             
             Addressables.Release(_triangleCacheHandle);
             Addressables.Release(_heightmapHandle);
@@ -131,6 +132,9 @@ namespace GameTerrain
             {
                 _researchJobHandle.Complete();
                 ScheduleVerticesJobs();
+                _verticesJobHandle         = JobHandle.CombineDependencies(
+                    _verticesJobHandle,
+                    SchedulePostVerticesJobs());
                 _justScheduledResearchJobs = false;
             }
         }
@@ -145,6 +149,11 @@ namespace GameTerrain
                     _verticesJobHandle = JobHandle.CombineDependencies(_verticesJobHandle, handle);
                 }
             }
+        }
+
+        public virtual JobHandle SchedulePostVerticesJobs()
+        {
+            return new JobHandle();
         }
 
         private void InitializeNativeArrays()
@@ -162,9 +171,6 @@ namespace GameTerrain
         private void ScheduleResearchJobs()
         {
             float4 referencePos = MathUtil.Vec3ToFloat4(transform.InverseTransformPoint(lodReference.position));
-
-            if (_dirtyRenderers.IsCreated)
-                _dirtyRenderers.Dispose();
 
             _dirtyRenderers = new NativeArray<byte>(NumberOfRenderers, Allocator.TempJob);
 
@@ -204,7 +210,7 @@ namespace GameTerrain
                 switch (_dirtyRenderers[i])
                 {
                     case 0:
-                        return;
+                        break;
                     
                     case 1:
                         renderer.RefreshTriangles();
@@ -217,6 +223,8 @@ namespace GameTerrain
                         break;
                 }
             }
+            
+            _dirtyRenderers.Dispose();
         }
 
         private void UpdateLocalCenters()
@@ -279,19 +287,19 @@ namespace GameTerrain
         {
             int renderers = EdgeMasks.Length;
             
-            int topIndex    = renderer - Latitudes;
-            int rightIndex  = renderer + 1;
-            int bottomIndex = renderer + Latitudes;
-            int leftIndex   = renderer - 1;
+            int topIndex    = renderer + 1;
+            int rightIndex  = renderer + Latitudes;
+            int bottomIndex = renderer - 1;
+            int leftIndex   = renderer - Latitudes;
 
-            if (topIndex < 0)
-                topIndex += renderers;
+            if (topIndex >= renderers)
+                topIndex -= renderers;
 
             if (rightIndex >= renderers)
                 rightIndex -= renderers;
 
-            if (bottomIndex >= renderers)
-                bottomIndex -= renderers;
+            if (bottomIndex < 0)
+                bottomIndex += renderers;
 
             if (leftIndex < 0)
                 leftIndex += renderers;

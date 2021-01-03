@@ -244,9 +244,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fcfdca24e1b49838ffb83374c1dc4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: c4b6ddfb457d6aa4895d9c21225f70dc, type: 2}
-  longitudes: 10
-  latitudes: 4
+  shader: {fileID: -6465566751694194690, guid: 089846ee07b740242bb5c3fd1f09d1c8, type: 3}
+  longitudes: 49
+  latitudes: 15
   lodReference: {fileID: 349653247}
   triangleCacheReference:
     m_AssetGUID: 0b5c48ab4c7913f43bf42b541be50244
@@ -262,16 +262,23 @@ MonoBehaviour:
     m_SubObjectType: 
   lodDistancesSerialized:
   - 0
-  - 50
-  - 100
-  - 200
   - 400
-  - 1000
+  - 800
+  - 2000
+  - 3000
+  - 4000
   lodsByDistanceSerialized: 070605040302
   majorRadius: 1000
   minorRadius: 300
   majorArc: 0
   minorArc: 0
+  tileSize: {x: 4, y: 4}
+  colsPerQuad: 1
+  splatmap0: {fileID: 2800000, guid: 61b2c1c0a4262d646ba58615e881b853, type: 3}
+  layer0: {fileID: 2800000, guid: 88deb56d051711642b51904620ec423f, type: 3}
+  layer1: {fileID: 2800000, guid: 25d7ddc4054044542abc4bcf423ddeaf, type: 3}
+  layer2: {fileID: 2800000, guid: 0c6d81df6b6ab3a4eaed79eca91100d2, type: 3}
+  layer3: {fileID: 2800000, guid: d9b1e2f1439ad284bb7c78d8be9ef13b, type: 3}
 --- !u!4 &171441804
 Transform:
   m_ObjectHideFlags: 0
@@ -364,7 +371,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 349653244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.692, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -486,10 +493,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399149860}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.1245115, y: -0.19053502, z: 0.17516793, w: 0.9578672}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 17.775, y: -19.725, z: 17.612}

@@ -2,7 +2,7 @@ using System;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Utility;
 # if UNITY_EDITOR
 
 using UnityEditor;
@@ -56,8 +56,7 @@ namespace GameTerrain
 
         public void OnDisable()
         {
-            if (Heights.IsCreated)
-                Heights.Dispose();
+            Heights.TryDispose();
         }
 
         public void OnDestroy()
@@ -86,16 +85,18 @@ namespace GameTerrain
             int pixelsWide = stretchedHeightmap.width;
             int pixelsHeight = stretchedHeightmap.height;
             
-            heightsStored = new float[quadDensity.x * _verticesPerLongitude];
+            Debug.Log(pixelsWide + " " + pixelsHeight);
             
+            heightsStored = new float[quadDensity.x * _verticesPerLongitude];
+
             for (int longitude = 0; longitude < quadDensity.x; longitude++)
             for (int latitude = 0; latitude < quadDensity.y; latitude++)
             for (int row = 0; row < _verticesPerSide; row++)
             for (int col = 0; col < _verticesPerSide; col++)
             {
-                int pixelX = (longitude * _verticesPerSide + col - _verticesPerSide / 2 + originPos.x +
+                int pixelX = (longitude * (_verticesPerSide - 1) + col - _verticesPerSide / 2 + originPos.x +
                               pixelsWide) % pixelsWide;
-                int pixelY = (latitude * _verticesPerSide - row - _verticesPerSide / 2 + originPos.y +
+                int pixelY = (latitude * (_verticesPerSide - 1) - row + _verticesPerSide / 2 - originPos.y +
                               pixelsHeight) % pixelsHeight;
                 heightsStored[longitude * _verticesPerLongitude
                         + latitude * _verticesPerQuad
@@ -103,9 +104,26 @@ namespace GameTerrain
                         + col] = stretchedHeightmap.GetPixel(pixelX, pixelY).r * maxPossibleHeight;
             }
             
+            //GenerateGradient();
+            
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private void GenerateGradient()
+        {
+            for (int longitude = 0; longitude < quadDensity.x; longitude++)
+            for (int latitude = 0; latitude < quadDensity.y; latitude++)
+            for (int row = 0; row < _verticesPerSide; row++)
+            for (int col = 0; col < _verticesPerSide; col++)
+            {
+                heightsStored[longitude * _verticesPerLongitude
+                            + latitude  * _verticesPerQuad
+                            + row       * _verticesPerSide
+                            + col] = col / (float) _verticesPerSide
+                                   * maxPossibleHeight;
+            }
         }
         
         # endif

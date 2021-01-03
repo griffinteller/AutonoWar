@@ -11,9 +11,17 @@ namespace GameTerrain.Torus
     {
         public float majorRadius;
         public float minorRadius;
-        public float majorArc;
+        public float majorArc; // degrees
         public float minorArc;
-        
+
+        [Header("Shader Settings")] public Vector2   tileSize;
+        public                             int       colsPerQuad;
+        public                             Texture2D splatmap0;
+        public                             Texture2D layer0;
+        public                             Texture2D layer1;
+        public                             Texture2D layer2;
+        public                             Texture2D layer3;
+
         public override void OnEnable()
         {
             base.OnEnable();
@@ -35,7 +43,7 @@ namespace GameTerrain.Torus
 
                 renderer.transform.parent = transform;
 
-                renderer.GetComponent<MeshRenderer>().material = material;
+                
 
                 renderer.longitude   = longitude;
                 renderer.latitude    = latitude;
@@ -53,10 +61,40 @@ namespace GameTerrain.Torus
                 renderer.TriangleCache = TriangleCache;
                 renderer.UvCache       = UvCache;
 
+                renderer.GetComponent<MeshRenderer>().material = GetRendererMaterial(renderer);
+                
                 terrainQuadRenderers[longitude * latitudes + latitude] = renderer;
             }
 
             return terrainQuadRenderers;
+        }
+
+        /*
+        * Should be called as the very last step of renderer generation
+        */
+        private Material GetRendererMaterial(TerrainQuadRenderer renderer)
+        {
+            Material material = new Material(shader);
+            material.SetFloat("_mRad", minorRadius);
+            material.SetFloat("_MRad", majorRadius);
+            material.SetInt("_Longs", longitudes);
+            material.SetInt("_Lats", latitudes);
+            material.SetInt("_Long", renderer.longitude);
+            material.SetInt("_Lat", renderer.latitude);
+
+            float normTileSizeOnOutside = tileSize.x / (majorArc * Mathf.Deg2Rad * (majorRadius + minorRadius));
+            int   rowsPerQuad           = (int) (minorArc * Mathf.Deg2Rad * minorRadius / tileSize.y + 0.5f);
+
+            material.SetInt("_RowsPerQuad", rowsPerQuad);
+            material.SetInt("_ColsPerQuad", colsPerQuad);
+            material.SetFloat("_NormTileSizeOnOutside", normTileSizeOnOutside);
+            material.SetTexture("_Splatmap0", splatmap0);
+            material.SetTexture("_Layer0", layer0);
+            material.SetTexture("_Layer1", layer1);
+            material.SetTexture("_Layer2", layer2);
+            material.SetTexture("_Layer3", layer3);
+
+            return material;
         }
 
         public override JobHandle ScheduleVerticesJob(int rendererIndex)
@@ -110,10 +148,10 @@ namespace GameTerrain.Torus
 
         public void Execute()
         {
-            int longitude = RendererIndex / Latitudes;
-            int latitude  = RendererIndex % Latitudes;
-            int heightmapStartIndex = (int) math.pow(math.pow(2, HeightmapMapMaxDegree) + 1, 2)
-                                    * RendererIndex;
+            int longitude                = RendererIndex / Latitudes;
+            int latitude                 = RendererIndex % Latitudes;
+            int heightmapVerticesPerSide = (int) (math.pow(2, HeightmapMapMaxDegree) + 0.5f) + 1;
+            int heightmapStartIndex = heightmapVerticesPerSide * heightmapVerticesPerSide * RendererIndex;
             int heightmapStep = (int) (math.pow(2, HeightmapMapMaxDegree - LOD) + 0.5f); // if we are at a low
                                                                                              // lod, then we should skip
                                                                                              // some heightmap info
@@ -141,13 +179,29 @@ namespace GameTerrain.Torus
 
                     float4 normal = math.mul(
                         majorRot, 
-                        MinorRadius * new float4(math.cos(minorAngle), math.sin(minorAngle), 0, 0));
+                        new float4(math.cos(minorAngle), math.sin(minorAngle), 0, 0));
 
                     int    vertexIndex = row * verticesPerSide + col;
-                    float4 vertex = basePos + normal * Heightmap[heightmapStartIndex + vertexIndex * heightmapStep];
+                    float4 vertex = basePos + normal * Heightmap[
+                        heightmapStartIndex 
+                      + row * heightmapStep * heightmapVerticesPerSide 
+                      + col * heightmapStep];
                     
                     Vertices[vertexIndex] = MathUtil.Float4ToVec3(vertex);
                 }
         }
     }
+
+    /*public struct GenerateTorusNormalsJob : IJob
+    {
+        [ReadOnly] public NativeArray<Vector3> Vertices;
+        [ReadOnly] public NativeArray<int>
+        
+        [ReadOnly] public NativeArray<Vector3> TopVertices;
+        [ReadOnly] public NativeArray<Vector3> RightVertices;
+        [ReadOnly] public NativeArray<Vector3> BottomVertices;
+        [ReadOnly] public NativeArray<Vector3> LeftVertices;
+
+        public NativeArray<Vector3> Normals;
+    }*/
 }
