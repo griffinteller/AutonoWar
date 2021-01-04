@@ -32,7 +32,7 @@ namespace Assets.WorldCreatorUnityBridge.Source
         if (!WorldCreatorImportActive)
           return;
         ModelImporter modelImporter = assetImporter as ModelImporter;
-        modelImporter.importMaterials = false;
+        modelImporter.materialImportMode = ModelImporterMaterialImportMode.None;
       }
     }
 
