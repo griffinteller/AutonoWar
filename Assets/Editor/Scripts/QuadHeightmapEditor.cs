@@ -17,8 +17,6 @@ namespace Editor.Scripts
             {
                 heightmap.Generate();
             }
-            
-            GUILayout.Label("Current stored heightmap length: " + heightmap.heightsStored.Length);
         }
     }
 }

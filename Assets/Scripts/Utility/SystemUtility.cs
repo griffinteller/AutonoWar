@@ -4,12 +4,28 @@ using System.IO;
 using System.IO.Pipes;
 using UnityEngine;
 
+# if UNITY_EDITOR
+
+using UnityEditor;
+
+# endif
+
 namespace Utility
 {
     public static class SystemUtility
     {
-        public const string RobotDirectoryName = "Robots";
+        public const  string RobotDirectoryName = "Robots";
         public static string AbsoluteCachePath => Application.dataPath + "/Cache/";
+        public static string AbsoluteProjectPath       => Path.Combine(Application.dataPath, "../");
+        
+# if UNITY_EDITOR
+        
+        public static string GetAssetDirectory(UnityEngine.Object asset)
+        {
+            return Path.Combine(AssetDatabase.GetAssetPath(asset), "../");
+        }
+        
+# endif
 
         public static SimplePlatform GetSimplePlatform()
         {
@@ -83,7 +99,8 @@ namespace Utility
 
         private static string AddPlatformSlashes(string str)
         {
-            if (GetSimplePlatform() == SimplePlatform.Windows) return "\\" + str + "\\";
+            if (GetSimplePlatform() == SimplePlatform.Windows) 
+                return "\\" + str + "\\";
 
             return "/" + str + "/";
         }

@@ -35,8 +35,8 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
-  - m_GUID: 6c2a5b29adf02d14280692ded614edae
-    m_Address: Assets/Terrain/Heightmap/Heightmap.asset
+  - m_GUID: 3fc827027072619499ac32b518075f81
+    m_Address: Assets/Terrain/AlienTorus/Heightmap.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}

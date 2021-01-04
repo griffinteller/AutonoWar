@@ -116,7 +116,7 @@ namespace GameTerrain.Torus
                 MajorArcRad           = math.radians(majorArc),
                 MinorArcRad           = math.radians(minorArc),
                 LOD                   = LODs[rendererIndex],
-                HeightmapMapMaxDegree = Heightmap.MaxDegree,
+                HeightmapMapMaxDegree = Heightmap.maxDegree,
                 Heightmap             = Heightmap.Heights,
                 Vertices = Renderers[rendererIndex].Vertices
                 

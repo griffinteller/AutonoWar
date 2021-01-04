@@ -1,8 +1,12 @@
 using System;
+using System.IO;
+using System.IO.Compression;
+using System.Runtime.Serialization.Formatters.Binary;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
+
 # if UNITY_EDITOR
 
 using UnityEditor;
@@ -20,20 +24,19 @@ namespace GameTerrain
          * TODO: add ability to create separate cached ScriptObjs that are loaded when needed
          * 
          */
-        
-        [HideInInspector] public float[] heightsStored; // longitude, latitude, row, col
-        
-        [SerializeField] private Vector2Int quadDensity;
-        [SerializeField] private byte maxDegree;
+        public TextAsset  storageFile;
+        public Vector2Int quadDensity;
+        public byte       maxDegree;
+        public Texture2D  rawHeightmap;
+        public Vector2Int originPos;
+        public float      maxPossibleHeight;
+        public string     storageFileName;
 
-        [NonSerialized] public NativeArray<float> Heights;
+        public NativeArray<float> Heights; // longitude, latitude, row, col
 
         private int _verticesPerSide;
         private int _verticesPerQuad;
         private int _verticesPerLongitude;
-
-        public Vector2Int QuadDensity => quadDensity;
-        public byte MaxDegree => maxDegree;
 
         public void OnEnable()
         {
@@ -47,11 +50,12 @@ namespace GameTerrain
             }
             
             # endif
-            
-            Heights = new NativeArray<float>(heightsStored, Allocator.Persistent);
-            
-            // TODO: somehow dereference stored heightmap without saving deletion to disk
-            // heightsStored = null; // dereferences old array so it will be gc-ed
+
+            byte[]        bytes         = storageFile.bytes;
+            MemoryStream  memStream     = new MemoryStream(bytes);
+            DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress);
+            float[]       data          = (float[]) new BinaryFormatter().Deserialize(deflateStream);
+            Heights = new NativeArray<float>(data, Allocator.Persistent);
         }
 
         public void OnDisable()
@@ -64,7 +68,7 @@ namespace GameTerrain
             OnDisable();
         }
 
-        # if UNITY_EDITOR
+# if UNITY_EDITOR
         
         public void Awake()
         {
@@ -72,10 +76,6 @@ namespace GameTerrain
             _verticesPerQuad = _verticesPerSide * _verticesPerSide;
             _verticesPerLongitude = _verticesPerQuad * quadDensity.y;
         }
-        
-        [SerializeField] private Texture2D rawHeightmap;
-        [SerializeField] private Vector2Int originPos;
-        [SerializeField] private float maxPossibleHeight;
 
         public void Generate()
         {
@@ -87,7 +87,7 @@ namespace GameTerrain
             
             Debug.Log(pixelsWide + " " + pixelsHeight);
             
-            heightsStored = new float[quadDensity.x * _verticesPerLongitude];
+            float[] heights = new float[quadDensity.x * _verticesPerLongitude];
 
             for (int longitude = 0; longitude < quadDensity.x; longitude++)
             for (int latitude = 0; latitude < quadDensity.y; latitude++)
@@ -98,34 +98,32 @@ namespace GameTerrain
                               pixelsWide) % pixelsWide;
                 int pixelY = (latitude * (_verticesPerSide - 1) - row + _verticesPerSide / 2 - originPos.y +
                               pixelsHeight) % pixelsHeight;
-                heightsStored[longitude * _verticesPerLongitude
+                heights[longitude * _verticesPerLongitude
                         + latitude * _verticesPerQuad
                         + row * _verticesPerSide
                         + col] = stretchedHeightmap.GetPixel(pixelX, pixelY).r * maxPossibleHeight;
             }
+
+            string storageAssetPath = SystemUtility.GetAssetDirectory(this) + storageFileName;
+            FileStream storageStream = new FileStream(
+                SystemUtility.AbsoluteProjectPath + storageAssetPath,
+                FileMode.Create,
+                FileAccess.Write);
+
+            DeflateStream deflateStream = new DeflateStream(storageStream, CompressionMode.Compress);
+            new BinaryFormatter().Serialize(deflateStream, heights);
+            deflateStream.Close();
             
-            //GenerateGradient();
+            AssetDatabase.Refresh();
+
+            storageFile = AssetDatabase.LoadAssetAtPath<TextAsset>(storageAssetPath);
             
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
 
-        private void GenerateGradient()
-        {
-            for (int longitude = 0; longitude < quadDensity.x; longitude++)
-            for (int latitude = 0; latitude < quadDensity.y; latitude++)
-            for (int row = 0; row < _verticesPerSide; row++)
-            for (int col = 0; col < _verticesPerSide; col++)
-            {
-                heightsStored[longitude * _verticesPerLongitude
-                            + latitude  * _verticesPerQuad
-                            + row       * _verticesPerSide
-                            + col] = col / (float) _verticesPerSide
-                                   * maxPossibleHeight;
-            }
-        }
+# endif
         
-        # endif
     }
 }
