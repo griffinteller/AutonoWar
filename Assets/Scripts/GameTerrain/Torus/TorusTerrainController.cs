@@ -4,6 +4,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using Utility;
+using static System.Single;
 
 namespace GameTerrain.Torus
 {
@@ -25,7 +26,7 @@ namespace GameTerrain.Torus
         public override void OnEnable()
         {
             base.OnEnable();
-
+            
             majorArc = 360f / longitudes;
             minorArc = 360f / latitudes;
         }
@@ -60,6 +61,8 @@ namespace GameTerrain.Torus
 
                 renderer.TriangleCache = TriangleCache;
                 renderer.UvCache       = UvCache;
+
+                renderer.calculateNormals = false;
 
                 renderer.GetComponent<MeshRenderer>().material = GetRendererMaterial(renderer);
                 
@@ -101,13 +104,15 @@ namespace GameTerrain.Torus
         {
             TerrainQuadRenderer renderer = Renderers[rendererIndex];
 
-            if (renderer.Vertices.IsCreated)
-                renderer.Vertices.Dispose();
+            renderer.Vertices.TryDispose();
+            renderer.Normals.TryDispose();
 
-            byte lod = LODs[rendererIndex];
+            byte lod      = LODs[rendererIndex];
+            byte edgeMask = EdgeMasks[rendererIndex];
             renderer.Vertices = new NativeArray<Vector3>(VerticesPerDegree[lod], Allocator.TempJob);
+            renderer.Normals  = new NativeArray<Vector3>(VerticesPerDegree[lod], Allocator.TempJob);
             
-            GenerateTorusVerticesJob job = new GenerateTorusVerticesJob
+            GenerateTorusVerticesJob vertexJob = new GenerateTorusVerticesJob
             {
                 Latitudes             = latitudes,
                 RendererIndex         = rendererIndex,
@@ -115,14 +120,28 @@ namespace GameTerrain.Torus
                 MinorRadius           = minorRadius,
                 MajorArcRad           = math.radians(majorArc),
                 MinorArcRad           = math.radians(minorArc),
-                LOD                   = LODs[rendererIndex],
+                LOD                   = lod,
                 HeightmapMapMaxDegree = Heightmap.maxDegree,
                 Heightmap             = Heightmap.Heights,
-                Vertices = Renderers[rendererIndex].Vertices
+                Vertices              = renderer.Vertices
                 
             };
 
-            JobHandle handle = job.Schedule();
+            GenerateTorusNormalsJob normalsJob = new GenerateTorusNormalsJob
+            {
+                MajorArcRad = math.radians(majorArc),
+                MinorArcRad = math.radians(minorArc),
+                Long = renderer.longitude,
+                Lat = renderer.latitude,
+                EdgesPerSide = (int) (math.pow(2, lod) + 0.5f),
+                Vertices  = renderer.Vertices,
+                Triangles = TriangleCache.Cache[lod][edgeMask],
+                Normals   = renderer.Normals
+            };
+            
+
+            JobHandle vertexHandle = vertexJob.Schedule();
+            JobHandle handle       = normalsJob.Schedule(vertexHandle);
 
             return handle;
         }
@@ -187,21 +206,147 @@ namespace GameTerrain.Torus
                       + row * heightmapStep * heightmapVerticesPerSide 
                       + col * heightmapStep];
                     
-                    Vertices[vertexIndex] = MathUtil.Float4ToVec3(vertex);
+                    Vertices[vertexIndex] = vertex.xyz;
                 }
         }
     }
 
-    /*public struct GenerateTorusNormalsJob : IJob
+    [BurstCompile(FloatMode = FloatMode.Fast)]
+    public struct GenerateTorusNormalsJob : IJob
     {
-        [ReadOnly] public NativeArray<Vector3> Vertices;
-        [ReadOnly] public NativeArray<int>
+        public float MajorArcRad;
+        public float MinorArcRad;
+        public int Long;
+        public int Lat;
+        public int EdgesPerSide;
         
-        [ReadOnly] public NativeArray<Vector3> TopVertices;
+        [ReadOnly] public NativeArray<Vector3> Vertices;
+        [ReadOnly] public NativeArray<int>     Triangles;
+        
+        /*[ReadOnly] public NativeArray<Vector3> TopVertices;
         [ReadOnly] public NativeArray<Vector3> RightVertices;
         [ReadOnly] public NativeArray<Vector3> BottomVertices;
         [ReadOnly] public NativeArray<Vector3> LeftVertices;
+        
+        [ReadOnly] public NativeArray<int> TopTriangles;
+        [ReadOnly] public NativeArray<int> RightTriangles;
+        [ReadOnly] public NativeArray<int> BottomTriangles;
+        [ReadOnly] public NativeArray<int> LeftTriangles;*/
 
         public NativeArray<Vector3> Normals;
-    }*/
+
+        public void Execute()
+        {
+            NativeArray<float4> verticesFlt4     = new NativeArray<float4>(Vertices.Length, Allocator.Temp);
+            NativeArray<float4> normalsFlt4      = new NativeArray<float4>(Normals.Length, Allocator.Temp);
+            NativeArray<bool>   accessedVertices = new NativeArray<bool>(Vertices.Length, Allocator.Temp);
+            
+            verticesFlt4.FromVector3s(Vertices);
+
+            for (int vertex = 0; vertex < Triangles.Length; vertex += 3)
+            {
+                int     v0Index = Triangles[vertex];
+                int     v1Index = Triangles[vertex + 1];
+                int     v2Index = Triangles[vertex + 2];
+                
+                float4 normal  = GetFaceNormal(
+                    verticesFlt4[v0Index], verticesFlt4[v1Index], verticesFlt4[v2Index]);
+
+                normalsFlt4[v0Index] += normal;
+                normalsFlt4[v1Index] += normal;
+                normalsFlt4[v2Index] += normal;
+
+                accessedVertices[v0Index] = true;
+                accessedVertices[v1Index] = true;
+                accessedVertices[v2Index] = true;
+            }
+
+            for (int normal = 0; normal < Normals.Length; normal++)
+            {
+                float4  normFlt4 = normalsFlt4[normal];
+                if (!accessedVertices[normal])
+                    Normals[normal] = Vector3.zero;
+                else
+                {
+                    Vector3 normVec3 = math.normalize(normFlt4).xyz;
+                    Normals[normal] = normVec3;
+                }
+            }
+
+            /*float vertAngleStep  = MinorArcRad / EdgesPerSide;
+            float horizAngleStep = MajorArcRad / EdgesPerSide;
+
+            float leftAngle   = MajorArcRad * (Long - 0.5f);
+            float rightAngle  = MajorArcRad * (Long + 0.5f);
+            float topAngle    = MinorArcRad * (Lat  + 0.5f);
+            float bottomAngle = MinorArcRad * (Lat  - 0.5f);
+
+            float4 topUnrotVector = new float4(
+                math.cos(topAngle),
+                math.sin(topAngle),
+                0,
+                0);
+
+            float4 bottomUnrotVector = new float4(
+                math.cos(bottomAngle),
+                math.sin(bottomAngle),
+                0,
+                0);
+
+            float4x4 majorRot;
+            
+            // top edge
+            for (int vertex = 0; vertex < EdgesPerSide + 1; vertex++)
+            {
+                majorRot = float4x4.RotateY(-(leftAngle + vertex * horizAngleStep));
+                Normals[vertex] = math.normalize(math.mul(majorRot, topUnrotVector)).xyz;
+            }
+
+            // bottom edge
+            int startIndex = Normals.Length - EdgesPerSide - 1;
+            for (int vertex = 0; vertex < EdgesPerSide + 1; vertex++)
+            {
+                majorRot = float4x4.RotateY(-(leftAngle + vertex * horizAngleStep));
+                Normals[startIndex + vertex] = math.normalize(math.mul(majorRot, bottomUnrotVector)).xyz;
+            }
+            
+            // left edge
+            majorRot = float4x4.RotateY(-leftAngle);
+            for (int vertex = 0; vertex < EdgesPerSide + 1; vertex++)
+            {
+                float    vertAngle = topAngle - vertex * vertAngleStep;
+                Normals[vertex * (EdgesPerSide + 1)] = math.normalize(math.mul(
+                    majorRot, 
+                    new float4(
+                        math.cos(vertAngle),
+                        math.sin(vertAngle),
+                        0,
+                        0))).xyz;
+            }
+
+            // right edge
+            majorRot   = float4x4.RotateY(-rightAngle);
+            startIndex = EdgesPerSide;
+            for (int vertex = 0; vertex < EdgesPerSide + 1; vertex++)
+            {
+                float vertAngle = topAngle - vertex * vertAngleStep;
+                Normals[startIndex + vertex * (EdgesPerSide + 1)] = math.normalize(math.mul(
+                    majorRot, 
+                    new float4(
+                        math.cos(vertAngle),
+                        math.sin(vertAngle),
+                        0,
+                        0))).xyz;
+            }*/
+
+            verticesFlt4.Dispose();
+            normalsFlt4.Dispose();
+            accessedVertices.Dispose();
+        }
+
+        public static float4 GetFaceNormal(float4 p1, float4 p2, float4 p3)
+        {
+            return math.normalize(new float4(math.cross((p2 - p1).xyz, (p3 - p1).xyz), 0));
+        }
+    }
 }

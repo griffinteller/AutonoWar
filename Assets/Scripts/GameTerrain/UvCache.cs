@@ -1,12 +1,12 @@
-using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using Utility;
+using Unity.Mathematics;
 
 # if UNITY_EDITOR
-using Unity.Mathematics;
+
 using UnityEditor;
-using Utility;
 
 # endif
 
@@ -20,6 +20,14 @@ namespace GameTerrain
 
         public void OnEnable()
         {
+            
+# if UNITY_EDITOR
+
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+            
+# endif
+            
             byte[] bytes = cacheFile.bytes;
             MemoryStream memoryStream = new MemoryStream(bytes);
             float2[][] floatCache = (float2[][]) new BinaryFormatter().Deserialize(memoryStream);
@@ -36,7 +44,7 @@ namespace GameTerrain
             }
         }
         
-        # if UNITY_EDITOR
+# if UNITY_EDITOR
 
         [SerializeField] private int maxDegree;
         [SerializeField] private string fileName;
@@ -64,8 +72,8 @@ namespace GameTerrain
                 for (int row = 0; row < verticesPerSide; row++)
                 for (int col = 0; col < verticesPerSide; col++)
                     uv[row * verticesPerSide + col] = new Vector2(
-                        (float) col / verticesPerSide,
-                        1 - row / (float) verticesPerSide);
+                        (float) col / (verticesPerSide - 1),
+                        1 - row / (float) (verticesPerSide - 1));
 
                 result[degree] = uv;
             }
@@ -73,6 +81,6 @@ namespace GameTerrain
             return result;
         }
 
-        # endif
+# endif
     }
 }

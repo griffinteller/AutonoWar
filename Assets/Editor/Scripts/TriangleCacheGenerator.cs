@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using GameTerrain;
 using UnityEditor;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using Utility;
 
@@ -96,17 +94,17 @@ namespace Editor.Scripts
         {
             int verticesPerSide = (int) (Mathf.Pow(2, degree) + 0.5f) + 1;
             int edgesPerSide = verticesPerSide - 1;
-            int[] triangles = new int[edgesPerSide * edgesPerSide * 2 * 3];
+            int[] triangles = new int[(edgesPerSide - 2) * (edgesPerSide - 2) * 2 * 3];
             
             for (int row = 1; row < edgesPerSide - 1; row++)
             for (int col = 1; col < edgesPerSide - 1; col++)
             {
-                int firstTriangleIndex = (row * edgesPerSide + col) * 2 * 3;
+                int firstTriangleIndex = ((row - 1) * (edgesPerSide - 2) + (col - 1)) * 2 * 3;
                 triangles[firstTriangleIndex] = row * verticesPerSide + col;
                 triangles[firstTriangleIndex + 1] = (row + 1) * verticesPerSide + col + 1;
                 triangles[firstTriangleIndex + 2] = (row + 1) * verticesPerSide + col;
                 
-                int secondTriangleIndex = (row * edgesPerSide + col) * 2 * 3 + 3;
+                int secondTriangleIndex = firstTriangleIndex + 3;
                 triangles[secondTriangleIndex] = row * verticesPerSide + col;
                 triangles[secondTriangleIndex + 1] = row * verticesPerSide + col + 1;
                 triangles[secondTriangleIndex + 2] = (row + 1) * verticesPerSide + col + 1;

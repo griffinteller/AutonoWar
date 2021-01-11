@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -21,14 +23,26 @@ namespace Utility
             return result;
         }
 
-        public static float4 Vec3ToFloat4(Vector3 vec3)
+        public static void FromFloat4s(this NativeArray<Vector3> vector3s, NativeArray<float4> float4s)
         {
-            return new float4(vec3.x, vec3.y, vec3.z, 0);
+            for (int i = 0; i < vector3s.Length; i++)
+                vector3s[i] = float4s[i].xyz;
+        }
+        
+        public static void FromVector3s(this NativeArray<float4> float4s, NativeArray<Vector3> vector3s)
+        {
+            for (int i = 0; i < float4s.Length; i++)
+                float4s[i] = (Vector4) vector3s[i];
         }
 
-        public static Vector3 Float4ToVec3(float4 flt4)
+        public static bool All(this bool4 b4)
         {
-            return new Vector3(flt4.x, flt4.y, flt4.z);
+            return b4.x && b4.y && b4.z && b4.w;
+        }
+        
+        public static bool Any(this bool4 b4)
+        {
+            return b4.x || b4.y || b4.z || b4.w;
         }
     }
 }

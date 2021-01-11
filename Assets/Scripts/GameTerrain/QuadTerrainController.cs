@@ -38,12 +38,12 @@ namespace GameTerrain
         protected QuadTerrainHeightmap  Heightmap;
         protected UvCache               UvCache;
         protected NativeArray<byte>     LODs;
+        public   NativeArray<byte>     EdgeMasks;
         protected TerrainQuadRenderer[] Renderers;
 
         private AsyncOperationHandle<TriangleCache>        _triangleCacheHandle;
         private AsyncOperationHandle<QuadTerrainHeightmap> _heightmapHandle;
         private AsyncOperationHandle<UvCache>              _uvCacheHandle;
-        private NativeArray<byte>                          _edgeMasks;
         private NativeArray<byte>                          _dirtyRenderers; // 00 - not dirty; 01 - just triangles;
                                                                             // >=10 - vertices and tris
         private NativeArray<float> _lodDistances;
@@ -73,21 +73,31 @@ namespace GameTerrain
             if (!Loaded)
                 return;
             
-            _researchJobHandle.Complete();
-            _verticesJobHandle.Complete();
+            JobHandle.CompleteAll(ref _researchJobHandle, ref _verticesJobHandle);
 
-            LODs.TryDispose(); 
-            LocalCenters.TryDispose();
-            _edgeMasks.TryDispose();
-            _dirtyRenderers.TryDispose();
-            _lodDistances.TryDispose();
-            _lodsByDistance.TryDispose();
+            DisposeNativeArrays();
             
+            foreach (TerrainQuadRenderer renderer in Renderers)
+                renderer.DisposeNativeArrays();
+            
+            Heightmap.DisposeNativeArrays();
+            TriangleCache.DisposeNativeArrays();
+
             Addressables.Release(_triangleCacheHandle);
             Addressables.Release(_heightmapHandle);
             Addressables.Release(_uvCacheHandle);
             
             Loaded = false;
+        }
+
+        public void DisposeNativeArrays()
+        {
+            LODs.TryDispose(); 
+            LocalCenters.TryDispose();
+            EdgeMasks.TryDispose();
+            _dirtyRenderers.TryDispose();
+            _lodDistances.TryDispose();
+            _lodsByDistance.TryDispose();
         }
 
         public void OnApplicationQuit()
@@ -160,7 +170,7 @@ namespace GameTerrain
         {
             int renderers = NumberOfRenderers;
             
-            _edgeMasks      = new NativeArray<byte>(renderers, Allocator.Persistent);
+            EdgeMasks      = new NativeArray<byte>(renderers, Allocator.Persistent);
             _lodDistances   = new NativeArray<float>(lodDistancesSerialized, Allocator.Persistent);
             _lodsByDistance = new NativeArray<byte>(lodsByDistanceSerialized, Allocator.Persistent);
             
@@ -170,7 +180,7 @@ namespace GameTerrain
 
         private void ScheduleResearchJobs()
         {
-            float4 referencePos = MathUtil.Vec3ToFloat4(transform.InverseTransformPoint(lodReference.position));
+            float4 referencePos = (Vector4) transform.InverseTransformPoint(lodReference.position);
 
             _dirtyRenderers = new NativeArray<byte>(NumberOfRenderers, Allocator.TempJob);
 
@@ -187,7 +197,7 @@ namespace GameTerrain
             GetWrappedEdgeMasksJob edgeMasksJob = new GetWrappedEdgeMasksJob
             {
                 DirtyRenderers = _dirtyRenderers,
-                EdgeMasks      = _edgeMasks,
+                EdgeMasks      = EdgeMasks,
                 LODs           = LODs,
                 Latitudes      = latitudes
             };
@@ -204,8 +214,8 @@ namespace GameTerrain
             for (int i = 0; i < Renderers.Length; i++)
             {
                 TerrainQuadRenderer renderer = Renderers[i];
-                renderer.LOD      = LODs[i];
-                renderer.EdgeMask = _edgeMasks[i];
+                renderer.lod      = LODs[i];
+                renderer.edgeMask = EdgeMasks[i];
 
                 switch (_dirtyRenderers[i])
                 {

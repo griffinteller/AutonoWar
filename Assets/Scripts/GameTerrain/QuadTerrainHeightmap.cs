@@ -58,14 +58,9 @@ namespace GameTerrain
             Heights = new NativeArray<float>(data, Allocator.Persistent);
         }
 
-        public void OnDisable()
+        public void DisposeNativeArrays()
         {
             Heights.TryDispose();
-        }
-
-        public void OnDestroy()
-        {
-            OnDisable();
         }
 
 # if UNITY_EDITOR

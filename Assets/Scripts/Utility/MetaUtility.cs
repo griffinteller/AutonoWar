@@ -76,12 +76,16 @@ namespace Utility
         public static bool TryDispose<T>(this NativeArray<T> array) 
             where T : struct
         {
-            bool disposable = array.IsCreated;
-
-            if (disposable)
+            try
+            {
                 array.Dispose();
 
-            return disposable;
+                return true;
+            }
+            catch (ObjectDisposedException)
+            {
+                return false;
+            }
         }
     }
 }

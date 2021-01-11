@@ -13,8 +13,8 @@ namespace GameTerrain
 
         public                 NativeArray<Vector3> Vertices;
         public                 NativeArray<Vector3> Normals;
-        public                 byte                 LOD;
-        public                 byte                 EdgeMask;
+        public                 byte                 lod = 1;
+        public                 byte                 edgeMask;
         public                 bool                 calculateNormals = true;
         [NonSerialized] public TriangleCache        TriangleCache;
         [NonSerialized] public UvCache              UvCache;
@@ -42,8 +42,8 @@ namespace GameTerrain
             
             mesh.Clear();
             mesh.vertices = Vertices.ToArray();
-            mesh.triangles = TriangleCache.Cache[LOD][EdgeMask];
-            mesh.uv = UvCache.Cache[LOD];
+            mesh.triangles = TriangleCache.Cache[lod][edgeMask].ToArray();
+            mesh.uv = UvCache.Cache[lod];
 
             if (calculateNormals)
                 mesh.RecalculateNormals();
@@ -52,7 +52,7 @@ namespace GameTerrain
 
             _meshFilter.mesh = mesh;
 
-            Vertices.Dispose();
+            Vertices.TryDispose();
             Normals.TryDispose();
         }
 
@@ -69,20 +69,15 @@ namespace GameTerrain
             
             mesh.Clear();
             mesh.vertices  = verts;
-            mesh.triangles = TriangleCache.Cache[LOD][EdgeMask];
-            mesh.uv        = UvCache.Cache[LOD];
+            mesh.triangles = TriangleCache.Cache[lod][edgeMask].ToArray();
+            mesh.uv        = UvCache.Cache[lod];
             mesh.normals   = normals;
         }
 
-        public void OnDisable()
+        public void DisposeNativeArrays()
         {
             Vertices.TryDispose();
             Normals.TryDispose();
-        }
-
-        public void OnApplicationQuit()
-        {
-            OnDisable();
         }
     }
 }
