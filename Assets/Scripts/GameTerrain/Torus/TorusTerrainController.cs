@@ -17,6 +17,8 @@ namespace GameTerrain.Torus
 
         [Header("Shader Settings")] public Vector2   tileSize;
         public                             int       colsPerQuad;
+        public                             bool      useHeightmapOffset;
+        public                             Vector2   offset;
         public                             Texture2D splatmap0;
         public                             Texture2D layer0;
         public                             Texture2D layer1;
@@ -96,6 +98,11 @@ namespace GameTerrain.Torus
             material.SetTexture("_Layer1", layer1);
             material.SetTexture("_Layer2", layer2);
             material.SetTexture("_Layer3", layer3);
+
+            if (useHeightmapOffset)
+                offset = Heightmap.offset;
+            
+            material.SetVector("_Offset", offset);
 
             return material;
         }

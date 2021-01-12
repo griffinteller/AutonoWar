@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using Utility;
 
 # if UNITY_EDITOR
@@ -28,7 +26,7 @@ namespace GameTerrain
         public Vector2Int quadDensity;
         public byte       maxDegree;
         public Texture2D  rawHeightmap;
-        public Vector2Int originPos;
+        public Vector2    offset;
         public float      maxPossibleHeight;
         public string     storageFileName;
 
@@ -76,12 +74,13 @@ namespace GameTerrain
         {
             Awake();
             
-            Texture2D stretchedHeightmap = rawHeightmap; // TODO: add support for automatically stretching textures
-            int pixelsWide = stretchedHeightmap.width;
-            int pixelsHeight = stretchedHeightmap.height;
-            
-            Debug.Log(pixelsWide + " " + pixelsHeight);
-            
+            Texture2D  stretchedHeightmap = rawHeightmap; // TODO: add support for automatically stretching textures
+            int        pixelsWide = stretchedHeightmap.width;
+            int        pixelsHeight = stretchedHeightmap.height;
+            Vector2Int originPos = new Vector2Int(
+                Mathf.RoundToInt(pixelsWide * offset.x), 
+                Mathf.RoundToInt(pixelsHeight * offset.y));
+
             float[] heights = new float[quadDensity.x * _verticesPerLongitude];
 
             for (int longitude = 0; longitude < quadDensity.x; longitude++)

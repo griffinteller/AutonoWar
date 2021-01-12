@@ -347,7 +347,7 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
   heightmapReference:
-    m_AssetGUID: 3fc827027072619499ac32b518075f81
+    m_AssetGUID: 66161f4695982954898d3591836b10d6
     m_SubObjectName: 
     m_SubObjectType: 
   uvCacheReference:
@@ -368,11 +368,13 @@ MonoBehaviour:
   minorArc: 0
   tileSize: {x: 4, y: 4}
   colsPerQuad: 10
-  splatmap0: {fileID: 2800000, guid: 61b2c1c0a4262d646ba58615e881b853, type: 3}
-  layer0: {fileID: 2800000, guid: 88deb56d051711642b51904620ec423f, type: 3}
-  layer1: {fileID: 2800000, guid: 25d7ddc4054044542abc4bcf423ddeaf, type: 3}
-  layer2: {fileID: 2800000, guid: 0c6d81df6b6ab3a4eaed79eca91100d2, type: 3}
-  layer3: {fileID: 2800000, guid: d9b1e2f1439ad284bb7c78d8be9ef13b, type: 3}
+  useHeightmapOffset: 1
+  offset: {x: 0, y: 0.5}
+  splatmap0: {fileID: 2800000, guid: 77b7595da8e61c442bb5a6970877230d, type: 3}
+  layer0: {fileID: 2800000, guid: 7163ba15d2d48b34ab3bda5aab75c0dd, type: 3}
+  layer1: {fileID: 2800000, guid: e0b8fa17a1972e1439587822ca60c219, type: 3}
+  layer2: {fileID: 2800000, guid: 0e1ed875ee5cc7b44bbdf6ba570e833b, type: 3}
+  layer3: {fileID: 2800000, guid: d5ff30a005fe1f64f89aee35f22d322f, type: 3}
 --- !u!4 &171441804
 Transform:
   m_ObjectHideFlags: 0
