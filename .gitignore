@@ -83,3 +83,9 @@ awconnection/build/
 awconnection/dist/
 
 awconnection/awconnection/__pycache__/
+
+Assets/Cache/
+
+Assets/Terrain/
+
+Assets/Scenes/LightingData/

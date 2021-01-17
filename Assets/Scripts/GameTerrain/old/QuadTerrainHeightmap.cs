@@ -1,17 +1,21 @@
-# if UNITY_EDITOR
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using Utility;
 
-namespace GameTerrain
+namespace GameTerrain.old
 {
-
-    [CreateAssetMenu(fileName = "New Heightmap", menuName = "Quad Terrain Heightmap", order = 0)]
     public class QuadTerrainHeightmap : ScriptableObject
     {
+        
+        /*
+         *
+         * TODO: add ability to create separate cached ScriptObjs that are loaded when needed
+         * 
+         */
         public TextAsset  storageFile;
         public Vector2Int quadDensity;
         public byte       maxDegree;
@@ -20,20 +24,39 @@ namespace GameTerrain
         public float      maxPossibleHeight;
         public string     storageFileName;
 
+        public NativeArray<float> Heights; // longitude, latitude, row, col
+
         private int _verticesPerSide;
         private int _verticesPerQuad;
         private int _verticesPerLongitude;
 
-        public float[] LoadHeightmap()
+        public void OnEnable()
         {
+            # if UNITY_EDITOR
+
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                Debug.Log("Not playing! Cancelling heightmap load...");
+
+                return;
+            }
+            
+            # endif
+
             byte[]        bytes         = storageFile.bytes;
             MemoryStream  memStream     = new MemoryStream(bytes);
             DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress);
             float[]       data          = (float[]) new BinaryFormatter().Deserialize(deflateStream);
-
-            return data;
+            Heights = new NativeArray<float>(data, Allocator.Persistent);
         }
 
+        public void DisposeNativeArrays()
+        {
+            Heights.TryDispose();
+        }
+
+# if UNITY_EDITOR
+        
         public void Awake()
         {
             _verticesPerSide = (int) (Mathf.Pow(2, maxDegree) + 0.5f) + 1;
@@ -87,7 +110,8 @@ namespace GameTerrain
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
-    }
-}
 
 # endif
+        
+    }
+}

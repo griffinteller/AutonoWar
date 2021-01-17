@@ -1,5 +1,5 @@
-using UnityEditor;
 using GameTerrain;
+using UnityEditor;
 using UnityEngine;
 
 namespace Editor.Scripts
@@ -9,14 +9,10 @@ namespace Editor.Scripts
     {
         public override void OnInspectorGUI()
         {
-            QuadTerrainHeightmap heightmap = (QuadTerrainHeightmap) target;
-            
             DrawDefaultInspector();
-
+            
             if (GUILayout.Button("Generate"))
-            {
-                heightmap.Generate();
-            }
+                ((QuadTerrainHeightmap) target).Generate();
         }
     }
 }

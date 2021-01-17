@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using GameTerrain;
+using GameTerrain.old;
 using UnityEditor;
 using UnityEngine;
 using Utility;

@@ -41,12 +41,6 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
-  - m_GUID: 66161f4695982954898d3591836b10d6
-    m_Address: Assets/Terrain/Toroidia/ToroidiaHeightmap.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 080b4bf9ecf693d45b9abe47eabffcea, type: 2}
   m_SchemaSet:

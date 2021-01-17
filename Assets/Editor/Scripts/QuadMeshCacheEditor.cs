@@ -1,19 +1,18 @@
 using GameTerrain;
-using GameTerrain.old;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor.Scripts
 {
-    [CustomEditor(typeof(UvCache))]
-    public class UvCacheEditor : UnityEditor.Editor
+    [CustomEditor(typeof(QuadMeshCache))]
+    public class QuadMeshCacheEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
             
             if (GUILayout.Button("Generate"))
-                ((UvCache) target).GenerateCache();
+                ((QuadMeshCache) target).Generate();
         }
     }
 }

@@ -24,6 +24,11 @@ namespace Utility
         {
             return Path.Combine(AssetDatabase.GetAssetPath(asset), "../");
         }
+
+        public static string GetAbsoluteAssetDirectory(UnityEngine.Object asset)
+        {
+            return Path.Combine(AbsoluteProjectPath + AssetDatabase.GetAssetPath(asset), "../");
+        }
         
 # endif
 
