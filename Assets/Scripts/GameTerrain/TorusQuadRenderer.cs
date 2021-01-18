@@ -1,10 +1,5 @@
-using System;
-using System.IO;
-using Unity.Collections;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
-using Utility;
 
 namespace GameTerrain
 {
@@ -16,7 +11,9 @@ namespace GameTerrain
         public int                    latitude;
         public byte                   edgeMask;
 
-        private LODGroup _lodGroup;
+        private LODGroup       _lodGroup;
+        private MeshFilter[]   _meshFilters;
+        private MeshRenderer[] _meshRenderers;
 
         public int RendererIndex => longitude * parentController.latitudes + latitude;
 
@@ -26,6 +23,55 @@ namespace GameTerrain
         }
 
 # if UNITY_EDITOR
+
+        public void ApplyMaterial(TorusMaterialInfo info)
+        {
+            for (int lod = 0; lod < parentController.Lods; lod++)
+            {
+                int      degree   = parentController.lodQuadDegrees[lod];
+                Material material = GetRendererMaterial(info, degree);
+                _meshRenderers[lod].material = material;
+            }
+        }
+        
+        private Material GetRendererMaterial(TorusMaterialInfo info, int degree)
+        {
+            float majorQuadArc = parentController.majorQuadArc;
+            float minorQuadArc = parentController.minorQuadArc;
+            float majorRadius  = parentController.majorRadius;
+            float minorRadius  = parentController.minorRadius;
+            
+            Material material = new Material(info.Shader);
+            material.SetFloat("_mRad", minorRadius);
+            material.SetFloat("_MRad", majorRadius);
+            material.SetInt("_Longs", parentController.longitudes);
+            material.SetInt("_Lats", parentController.latitudes);
+            material.SetInt("_Long", longitude);
+            material.SetInt("_Lat", latitude);
+
+            float normTileSizeOnOutside = info.TileSize.x / (majorQuadArc * Mathf.Deg2Rad * (majorRadius + minorRadius));
+            int   rowsPerQuad           = (int) (minorQuadArc * Mathf.Deg2Rad * minorRadius / info.TileSize.y + 0.5f);
+
+            material.SetInt("_RowsPerQuad", rowsPerQuad);
+            material.SetInt("_ColsPerQuad", info.ColsPerQuad);
+            material.SetFloat("_NormTileSizeOnOutside", normTileSizeOnOutside);
+            material.SetTexture("_Splatmap0", info.Splatmap0);
+            material.SetTexture("_Layer0", info.Layer0);
+            material.SetTexture("_Layer1", info.Layer1);
+            material.SetTexture("_Layer2", info.Layer2);
+            material.SetTexture("_Layer3", info.Layer3);
+
+            if (info.UseHeightmapOffset)
+                info.Offset = parentController.heightmap.offset;
+            
+            material.SetVector("_Offset", info.Offset);
+            material.SetInt("_LOD", 7 - degree); /* we actually do want to do this, and not find the 
+                                                            corresponding lod, since the texture lod should have to do
+                                                            with the real density of vertices
+                                                            */
+
+            return material;
+        }
         
         public void GenerateMeshes()
         {
@@ -33,6 +79,8 @@ namespace GameTerrain
             
             int    numberOfLods = parentController.Lods;
             LOD[]  lods         = new LOD[numberOfLods];
+            _meshFilters   = new MeshFilter[numberOfLods];
+            _meshRenderers = new MeshRenderer[numberOfLods];
 
             for (int lod = 0; lod < numberOfLods; lod++)
             {
@@ -55,19 +103,20 @@ namespace GameTerrain
                 mesh.normals = GenerateNormals(degree, mesh.vertices, mesh.triangles);
 
                 meshFilter.mesh       = mesh;
-                meshRenderer.material = parentController.material;
 
-                lods[lod] = new LOD(parentController.lodViewPercentages[lod], new Renderer[] {meshRenderer});
+                lods[lod]         = new LOD(
+                    parentController.lodViewPercentages[lod], 
+                    new Renderer[] {meshRenderer});
+                
+                _meshFilters[lod]   = meshFilter;
+                _meshRenderers[lod] = meshRenderer;
             }
             
             _lodGroup.SetLODs(lods);
             _lodGroup.RecalculateBounds();
 
-            foreach (Transform child in transform)
-            {
-                MeshRenderer renderer = child.GetComponent<MeshRenderer>();
+            foreach (MeshRenderer renderer in _meshRenderers)
                 renderer.scaleInLightmap *= parentController.lightmapScale;
-            }
         }
         
         private Vector3[] GenerateVertices(int degree)
@@ -153,6 +202,87 @@ namespace GameTerrain
             return Vector3.Cross(v1 - v0, v2 - v0);
         }
 
+        public void ApplyNormalArrays(Vector3[][] normalArrays)
+        {
+            for (int lod = 0; lod < parentController.Lods; lod++)
+                _meshFilters[lod].sharedMesh.normals = normalArrays[lod];
+        }
+
+        public Vector3[][] GetAdjustedNormalArrays()
+        {
+            int         lods   = parentController.Lods;
+            Vector3[][] result = new Vector3[lods][];
+
+            for (int lod = 0; lod < lods; lod++)
+                result[lod] = AdjustSeamNormalsAtLOD(lod);
+
+            return result;
+        }
+        
+        private Vector3[] AdjustSeamNormalsAtLOD(int lod)
+        {
+            // calculates new normals, but doesn't apply them, because other adjacent renderers need to calculate using
+            // old ones
+            
+            int numberOfRenderers = parentController.renderers.Length;
+            int longitudes        = parentController.longitudes;
+            int latitudes         = parentController.latitudes;
+            int degree            = parentController.lodQuadDegrees[lod];
+            int verticesPerSide   = (int) (math.pow(2, degree) + 0.5f) + 1;
+
+            Vector3[] topMeshNormals = 
+                parentController.renderers[(longitude * latitudes + latitude + 1) % numberOfRenderers]
+                                ._meshFilters[lod].sharedMesh.normals;
+            Vector3[] rightMeshNormals =
+                parentController.renderers[((longitude + 1) * latitudes + latitude) % numberOfRenderers]
+                                ._meshFilters[lod].sharedMesh.normals;
+            Vector3[] bottomMeshNormals =
+                parentController.renderers[(longitude * latitudes + latitude - 1 + numberOfRenderers) % numberOfRenderers]
+                                ._meshFilters[lod].sharedMesh.normals;
+            Vector3[] leftMeshNormals =
+                parentController.renderers[((longitude - 1) * latitudes + latitude + numberOfRenderers) % numberOfRenderers]
+                                ._meshFilters[lod].sharedMesh.normals;
+
+            Mesh    sharedMesh = _meshFilters[lod].sharedMesh;
+            Vector3[] normals    = sharedMesh.normals;
+            
+            // top normals
+            int penultimateRow = verticesPerSide * (verticesPerSide - 1);
+            for (int vertex = 0; vertex < verticesPerSide; vertex++)
+                normals[vertex] += topMeshNormals[penultimateRow + vertex];
+
+            // right normals
+            for (int vertex = verticesPerSide - 1; vertex < verticesPerSide * verticesPerSide; vertex += verticesPerSide)
+                normals[vertex] += rightMeshNormals[vertex - (verticesPerSide - 1)];
+            
+            // bottom normals
+            for (int vertex = penultimateRow; vertex < verticesPerSide * verticesPerSide; vertex++)
+                normals[vertex] += bottomMeshNormals[vertex - penultimateRow];
+            
+            // left normals 
+            for (int vertex = 0; vertex < verticesPerSide * verticesPerSide; vertex += verticesPerSide)
+                normals[vertex] += leftMeshNormals[vertex + (verticesPerSide - 1)];
+            
+            // normalize 
+            
+            // top normals
+            for (int vertex = 0; vertex < verticesPerSide; vertex++)
+                normals[vertex] = normals[vertex].normalized;
+
+            // right normals
+            for (int vertex = verticesPerSide - 1; vertex < verticesPerSide * verticesPerSide; vertex += verticesPerSide)
+                normals[vertex] = normals[vertex].normalized;
+            
+            // bottom normals
+            for (int vertex = penultimateRow; vertex < verticesPerSide * verticesPerSide; vertex++)
+                normals[vertex] = normals[vertex].normalized;
+            
+            // left normals 
+            for (int vertex = 0; vertex < verticesPerSide * verticesPerSide; vertex += verticesPerSide)
+                normals[vertex] = normals[vertex].normalized;
+
+            return normals;
+        }
 # endif
     }
 }

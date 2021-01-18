@@ -30,6 +30,9 @@ namespace GameTerrain
             MemoryStream  memStream     = new MemoryStream(bytes);
             DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress);
             float[]       data          = (float[]) new BinaryFormatter().Deserialize(deflateStream);
+            
+            Debug.Log(data);
+            Debug.Log(quadDensity * maxDegree);
 
             return data;
         }

@@ -58,14 +58,13 @@ namespace Utility
         
         public static void DestroyImmediateAllChildren(Transform transform)
         {
-            foreach (Transform child in transform)
-                UnityEngine.Object.DestroyImmediate(child.gameObject);
+            while (transform.childCount > 0)
+                UnityEngine.Object.DestroyImmediate(transform.GetChild(0).gameObject);
         }
         
         public static void DestroyImmediateAllChildren(GameObject gameObject)
         {
-            foreach (Transform child in gameObject.transform)
-                UnityEngine.Object.DestroyImmediate(child.gameObject);
+            DestroyImmediateAllChildren(gameObject.transform);
         }
 
         public static Vector3 Vector3Abs(Vector3 vector)
