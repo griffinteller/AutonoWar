@@ -11,15 +11,15 @@ namespace GameTerrain
         public int                    latitude;
         public byte                   edgeMask;
 
-        private LODGroup       _lodGroup;
-        private MeshFilter[]   _meshFilters;
-        private MeshRenderer[] _meshRenderers;
+        [HideInInspector] [SerializeField] private LODGroup       lodGroup;
+        [HideInInspector] [SerializeField] private MeshFilter[]   meshFilters;
+        [HideInInspector] [SerializeField] private MeshRenderer[] meshRenderers;
 
         public int RendererIndex => longitude * parentController.latitudes + latitude;
 
         public void Awake()
         {
-            _lodGroup = GetComponent<LODGroup>();
+            lodGroup = GetComponent<LODGroup>();
         }
 
 # if UNITY_EDITOR
@@ -30,7 +30,7 @@ namespace GameTerrain
             {
                 int      degree   = parentController.lodQuadDegrees[lod];
                 Material material = GetRendererMaterial(info, degree);
-                _meshRenderers[lod].material = material;
+                meshRenderers[lod].material = material;
             }
         }
         
@@ -79,8 +79,8 @@ namespace GameTerrain
             
             int    numberOfLods = parentController.Lods;
             LOD[]  lods         = new LOD[numberOfLods];
-            _meshFilters   = new MeshFilter[numberOfLods];
-            _meshRenderers = new MeshRenderer[numberOfLods];
+            meshFilters   = new MeshFilter[numberOfLods];
+            meshRenderers = new MeshRenderer[numberOfLods];
 
             for (int lod = 0; lod < numberOfLods; lod++)
             {
@@ -108,14 +108,14 @@ namespace GameTerrain
                     parentController.lodViewPercentages[lod], 
                     new Renderer[] {meshRenderer});
                 
-                _meshFilters[lod]   = meshFilter;
-                _meshRenderers[lod] = meshRenderer;
+                meshFilters[lod]   = meshFilter;
+                meshRenderers[lod] = meshRenderer;
             }
             
-            _lodGroup.SetLODs(lods);
-            _lodGroup.RecalculateBounds();
+            lodGroup.SetLODs(lods);
+            lodGroup.RecalculateBounds();
 
-            foreach (MeshRenderer renderer in _meshRenderers)
+            foreach (MeshRenderer renderer in meshRenderers)
                 renderer.scaleInLightmap *= parentController.lightmapScale;
         }
         
@@ -205,7 +205,7 @@ namespace GameTerrain
         public void ApplyNormalArrays(Vector3[][] normalArrays)
         {
             for (int lod = 0; lod < parentController.Lods; lod++)
-                _meshFilters[lod].sharedMesh.normals = normalArrays[lod];
+                meshFilters[lod].sharedMesh.normals = normalArrays[lod];
         }
 
         public Vector3[][] GetAdjustedNormalArrays()
@@ -232,18 +232,18 @@ namespace GameTerrain
 
             Vector3[] topMeshNormals = 
                 parentController.renderers[(longitude * latitudes + latitude + 1) % numberOfRenderers]
-                                ._meshFilters[lod].sharedMesh.normals;
+                                .meshFilters[lod].sharedMesh.normals;
             Vector3[] rightMeshNormals =
                 parentController.renderers[((longitude + 1) * latitudes + latitude) % numberOfRenderers]
-                                ._meshFilters[lod].sharedMesh.normals;
+                                .meshFilters[lod].sharedMesh.normals;
             Vector3[] bottomMeshNormals =
                 parentController.renderers[(longitude * latitudes + latitude - 1 + numberOfRenderers) % numberOfRenderers]
-                                ._meshFilters[lod].sharedMesh.normals;
+                                .meshFilters[lod].sharedMesh.normals;
             Vector3[] leftMeshNormals =
                 parentController.renderers[((longitude - 1) * latitudes + latitude + numberOfRenderers) % numberOfRenderers]
-                                ._meshFilters[lod].sharedMesh.normals;
+                                .meshFilters[lod].sharedMesh.normals;
 
-            Mesh    sharedMesh = _meshFilters[lod].sharedMesh;
+            Mesh    sharedMesh = meshFilters[lod].sharedMesh;
             Vector3[] normals    = sharedMesh.normals;
             
             // top normals
