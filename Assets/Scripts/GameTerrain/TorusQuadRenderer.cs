@@ -11,12 +11,27 @@ namespace GameTerrain
         public int                    latitude;
         public byte                   edgeMask;
 
-        [HideInInspector] [SerializeField] private LODGroup       lodGroup;
-        [HideInInspector] [SerializeField] private MeshFilter[]   meshFilters;
-        [HideInInspector] [SerializeField] private MeshRenderer[] meshRenderers;
+        [HideInInspector] public LODGroup       lodGroup;
+        [HideInInspector] public MeshFilter[]   meshFilters;
+        [HideInInspector] public MeshRenderer[] meshRenderers;
+        [HideInInspector] public MeshCollider meshCollider;
 
         public int RendererIndex => longitude * parentController.latitudes + latitude;
 
+        public Vector3 LocalCenter
+        {
+            get
+            {
+                float majorAngle = longitude * parentController.majorQuadArc;
+                float minorAngleRad = latitude * parentController.minorQuadArc * Mathf.Deg2Rad;
+                return Quaternion.Euler(0, -majorAngle, 0)
+                       * new Vector3(
+                           parentController.majorRadius + parentController.minorRadius * Mathf.Cos(minorAngleRad),
+                           parentController.minorRadius * Mathf.Sin(minorAngleRad),
+                           0);
+            }
+        }
+        
         public void Awake()
         {
             lodGroup = GetComponent<LODGroup>();
@@ -32,6 +47,13 @@ namespace GameTerrain
                 Material material = GetRendererMaterial(info, degree);
                 meshRenderers[lod].material = material;
             }
+        }
+
+        public void SetCollider(PhysicMaterial material)
+        {
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+            meshCollider.sharedMesh = meshFilters[0].sharedMesh;
+            meshCollider.enabled = false;
         }
         
         private Material GetRendererMaterial(TorusMaterialInfo info, int degree)

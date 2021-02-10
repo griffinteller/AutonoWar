@@ -18,6 +18,11 @@ namespace GameTerrain
         public int      latitudes;
         public float[]  lodViewPercentages = {0.5f, 0.25f, 0.125f, 0.0625f, 0f};
         public int[]    lodQuadDegrees = {7, 6, 5, 4, 3};
+        
+        [Header("Collider Settings")] 
+        
+        public float colliderEnableDistance = 50f;
+        public Transform colliderReference;
 
         [Header("Info, do not edit from editor")] 
         
@@ -33,14 +38,14 @@ namespace GameTerrain
             majorQuadArc = 360f / longitudes;
             minorQuadArc = 360f / latitudes;
         }
-        
+
 # if UNITY_EDITOR
 
         [Header("Generation Only")] 
         
         public QuadTerrainHeightmap heightmap;
         public QuadMeshCache quadMeshCache;
-        public float         lightmapScale = 0.003f;
+        public float         lightmapScale = 1f;
 
         [Header("Shader Settings")] public Shader    shader;
         public                             Vector2   tileSize;
@@ -52,6 +57,8 @@ namespace GameTerrain
         public                             Texture2D layer1;
         public                             Texture2D layer2;
         public                             Texture2D layer3;
+
+        [Header("Physics Settings")] public PhysicMaterial physicMaterial;
 
         [NonSerialized] public float[]     Heights;
         [NonSerialized] public int[][]     Triangles;
@@ -100,6 +107,33 @@ namespace GameTerrain
             SaveMaterials();
         }
 
+        public void Update()
+        {
+            UpdateCollidersEnabled();
+        }
+
+        private void UpdateCollidersEnabled()
+        {
+            // TODO: consider making this asynchronus? depends on performance
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                TorusQuadRenderer renderer = renderers[i];
+                Vector3 center = renderer.LocalCenter;
+                if (Vector3.Distance(
+                    colliderReference.position,
+                    transform.TransformPoint(center)) < colliderEnableDistance)
+                {
+                    renderer.meshCollider.enabled = true;
+                    Debug.Log("Enabling a collider!");
+                }
+                else
+                {
+                    renderer.meshCollider.enabled = false;
+                }
+            }
+        }
+
         public void Generate()
         {
             Awake();
@@ -129,6 +163,8 @@ namespace GameTerrain
                 renderer.GenerateMeshes();
 
                 renderers[longitude * latitudes + latitude] = renderer;
+                
+                renderer.SetCollider(physicMaterial);
             }
 
             AdjustSeamNormals();
@@ -176,7 +212,7 @@ namespace GameTerrain
         private void SaveMeshes()
         {
             PrefabStage        prefabStage  = PrefabStageUtility.GetCurrentPrefabStage();
-            UnityEngine.Object prefabSource = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+            Object prefabSource = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
 
             string prefabPath = prefabStage != null ?
                 prefabStage.assetPath :
