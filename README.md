@@ -45,10 +45,6 @@ On recent macOS versions, apps not built on windows don't always get flagged as 
 + `cd` **into** the app itself (e.g. `cd "/Users/John Doe/Desktop/AutonoWar-x.y.z.app"`)
 + Make the app executable: `chmod +x Contents/MacOS/*`
 
-Santa's Naughty List
---------------------
-For any googlers out there, if you try to install this on a gmac, google's antivirus "Santa" will automatically mark new builds as malware. Trust me, I'm not doing anything nefarious. To get it to run, upvote it, and then send an email to another googler with alpha access to upvote it. You can also just send an email to astroteller@gmail.com.
-
 Documentation
 -------------
 
