@@ -2,6 +2,10 @@
 
 A game focused on realtime competition between user-programmed robots.
 
+
+![Example Video](https://github.com/griffinteller/AutonoWar/assets/13922490/48b4926a-30c0-4d41-9224-ff13592dda80)
+
+
 **Note to alpha-testers**: This is an alpha! It's buggy, and it's unstable. Things may break, things may disappear. Expect breaking changes in the future.
 
 Installation
